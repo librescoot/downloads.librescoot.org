@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Downloads - LibreScoot</title>
+    <meta name="description" content="Download LibreScoot firmware images and offline map data for your unu Scooter Pro.">
+    <style>
+        /* Reset */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fff;
+        }
+
+        a { color: #667eea; }
+        a:hover { color: #5a67d8; }
+        code {
+            background: #e9ecef;
+            padding: 0.1rem 0.35rem;
+            border-radius: 3px;
+            font-size: 0.88em;
+        }
+
+        /* Layout */
+        .container { max-width: 920px; margin: 0 auto; padding: 0 20px; }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1rem 0;
+        }
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header a { color: white; text-decoration: none; }
+        .header-brand { font-weight: 700; font-size: 1.1rem; }
+        .header-links { display: flex; gap: 1.25rem; font-size: 0.9rem; }
+        .header-links a { opacity: 0.85; transition: opacity 0.2s; }
+        .header-links a:hover { opacity: 1; color: white; }
+
+        /* Page */
+        main { padding: 2.5rem 0 4rem; min-height: calc(100vh - 150px); }
+        h1 { font-size: 2rem; color: #2c3e50; margin-bottom: 0.35rem; }
+        .lead { font-size: 1.05rem; color: #666; margin-bottom: 2.5rem; }
+
+        /* Section headings */
+        .section { margin-bottom: 3rem; }
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.4rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .section-title svg { width: 22px; height: 22px; color: #667eea; }
+        .section > p { color: #555; font-size: 0.95rem; margin-bottom: 1rem; }
+        .section > p a { color: #667eea; }
+
+        /* Hint text */
+        .hint { font-size: 0.88rem; color: #666; margin-bottom: 1rem; }
+
+        /* Channel headings */
+        .channel-heading {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #34495e;
+            margin: 1.5rem 0 0.5rem;
+        }
+        .channel-heading:first-child { margin-top: 0; }
+
+        /* Channel badges */
+        .badge {
+            display: inline-block;
+            font-size: 0.72rem;
+            padding: 0.15rem 0.45rem;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+        .badge-stable  { background: #d4edda; color: #155724; }
+        .badge-testing { background: #fff3cd; color: #856404; }
+        .badge-nightly { background: #f8d7da; color: #721c24; }
+
+        /* Firmware release cards */
+        .fw-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 0.6rem;
+            background: #fafafa;
+            overflow: hidden;
+        }
+        .fw-card[open] { background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .fw-card summary {
+            padding: 0.75rem 1.1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            list-style: none;
+            user-select: none;
+        }
+        .fw-card summary::-webkit-details-marker { display: none; }
+        .fw-card summary:hover { background: rgba(102,126,234,0.04); }
+        .fw-title {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #2c3e50;
+        }
+        .fw-date { font-size: 0.82rem; color: #888; }
+        .fw-body {
+            padding: 0 1.1rem 1.1rem;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        /* Board columns */
+        .boards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            margin-top: 0.75rem;
+        }
+        .board h4 {
+            font-size: 0.88rem;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            padding-bottom: 0.3rem;
+            border-bottom: 1px solid #eee;
+        }
+        .asset {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.45rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .asset:last-child { border-bottom: none; }
+        .asset-label { font-size: 0.85rem; font-weight: 500; color: #2c3e50; }
+        .asset-size { font-size: 0.75rem; color: #999; }
+        .dl-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.65rem;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            transition: background 0.15s;
+            white-space: nowrap;
+        }
+        .dl-btn:hover { background: #5a67d8; color: white; }
+        .dl-btn svg { width: 13px; height: 13px; }
+        .fw-footer {
+            margin-top: 0.75rem;
+            padding-top: 0.6rem;
+            border-top: 1px solid #f0f0f0;
+            font-size: 0.82rem;
+        }
+        .fw-footer a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            color: #667eea;
+            text-decoration: none;
+        }
+        .fw-footer a:hover { color: #5a67d8; }
+        .fw-footer svg { width: 13px; height: 13px; }
+
+        /* Map table */
+        .map-table {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .map-row {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.6rem 1.1rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .map-row:last-child { border-bottom: none; }
+        .map-row:nth-child(even) { background: #fafafa; }
+        .map-head {
+            background: #f0f2f5 !important;
+            font-weight: 600;
+            font-size: 0.82rem;
+            color: #2c3e50;
+            border-bottom-color: #e0e0e0 !important;
+        }
+        .map-name { font-weight: 500; font-size: 0.9rem; color: #2c3e50; }
+        .map-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.6rem;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            border: 1px solid #e0e0e0;
+            transition: all 0.15s;
+            white-space: nowrap;
+        }
+        .map-btn:hover { background: #667eea; color: white; border-color: #667eea; }
+        .map-btn svg { width: 13px; height: 13px; }
+        .map-source { font-size: 0.78rem; color: #999; margin-top: 0.6rem; }
+
+        /* Loading / empty */
+        .loading { text-align: center; color: #888; padding: 2rem; font-size: 0.95rem; }
+        .empty { color: #888; font-style: italic; padding: 1rem 0; }
+
+        /* Footer */
+        .footer {
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+            padding: 1.5rem 0;
+            font-size: 0.85rem;
+            color: #888;
+        }
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .footer a { color: #667eea; text-decoration: none; }
+        .footer a:hover { color: #5a67d8; }
+        .footer-links { display: flex; gap: 1rem; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .boards { grid-template-columns: 1fr; }
+            .fw-card summary { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
+            .map-row { grid-template-columns: 1fr; gap: 0.35rem; padding: 0.7rem 1rem; }
+            .map-head { display: none; }
+            .map-name { font-weight: 600; }
+            .map-btn { justify-content: center; }
+            .header-links { gap: 0.75rem; font-size: 0.82rem; }
+        }
+        @media (max-width: 480px) {
+            .asset { flex-direction: column; align-items: flex-start; gap: 0.35rem; }
+            .header-inner { flex-direction: column; gap: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container header-inner">
+            <a href="https://librescoot.org" class="header-brand">LibreScoot</a>
+            <nav class="header-links">
+                <a href="https://librescoot.org/docs/install.html">Installation</a>
+                <a href="https://librescoot.org/changelog.html">Changelog</a>
+                <a href="https://librescoot.org/docs/">Docs</a>
+                <a href="https://discord.gg/VrumFruSzJ">Discord</a>
+                <a href="https://github.com/librescoot">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <h1>Downloads</h1>
+            <p class="lead">Firmware images and offline map data for LibreScoot.</p>
+
+            <!-- ── Firmware ────────────────────────────────── -->
+            <div class="section">
+                <h2 class="section-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
+                    Firmware
+                </h2>
+                <p>Images for the DBC (display) and MDB (scooter controller). See the <a href="https://librescoot.org/docs/install.html">installation guide</a> for flashing instructions.</p>
+
+                <p class="hint">To install an update, enable update mode via the app or the scooter's display menu, then copy the update file over USB. For fresh installations, see the <a href="https://librescoot.org/docs/install.html">installation guide</a>.</p>
+
+                <div id="firmware">
+                    <div class="loading">Loading firmware releases&hellip;</div>
+                </div>
+            </div>
+
+            <!-- ── Maps ────────────────────────────────────── -->
+            <div class="section">
+                <h2 class="section-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 6-3 6 3 6-3v13l-6 3-6-3-6 3Z"/><path d="m9 4v13"/><path d="m15 7v13"/></svg>
+                    Map &amp; Routing Data
+                </h2>
+                <p>Offline map tiles and turn-by-turn routing data, available per German state. Download the map and routing files for your state and copy them to the scooter via USB. Only one state can be installed at a time. See <a href="https://librescoot.org/docs/features/offline-navigation.html">offline navigation</a> for setup instructions.</p>
+
+                <div id="maps">
+                    <div class="loading">Loading map data&hellip;</div>
+                </div>
+            </div>
+
+            <noscript>
+                <div class="section">
+                    <p>JavaScript is required to load download links. View releases directly:</p>
+                    <ul>
+                        <li><a href="https://github.com/librescoot/librescoot/releases">Firmware releases</a></li>
+                        <li><a href="https://github.com/librescoot/osm-tiles/releases">Map tiles</a></li>
+                        <li><a href="https://github.com/librescoot/valhalla-tiles/releases">Routing data</a></li>
+                    </ul>
+                </div>
+            </noscript>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <span><strong>LibreScoot</strong> &mdash; Open-source firmware for unu Scooter Pro. Not affiliated with unu GmbH.</span>
+            <div class="footer-links">
+                <a href="https://github.com/librescoot">GitHub</a>
+                <a href="https://discord.gg/VrumFruSzJ">Discord</a>
+                <a href="https://librescoot.org">Home</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    (function () {
+        'use strict';
+
+        var API = 'https://api.github.com/repos';
+
+        // ── Inline SVG icons ──────────────────────────────────────
+        var ICON_DL = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
+        var ICON_EXT = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>';
+        var ICON_MAP = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 6-3 6 3 6-3v13l-6 3-6-3-6 3Z"/><path d="m9 4v13"/><path d="m15 7v13"/></svg>';
+        var ICON_NAV = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>';
+
+        // ── Helpers ───────────────────────────────────────────────
+        function fmt(bytes) {
+            if (bytes >= 1e9) return (bytes / 1e9).toFixed(1) + ' GB';
+            if (bytes >= 1e6) return Math.round(bytes / 1e6) + ' MB';
+            if (bytes >= 1e3) return Math.round(bytes / 1e3) + ' KB';
+            return bytes + ' B';
+        }
+
+        function channel(r) {
+            if (r.tag_name.startsWith('nightly-')) return 'nightly';
+            if (r.tag_name.startsWith('testing-')) return 'testing';
+            return 'stable';
+        }
+
+        function assetType(name) {
+            if (name.endsWith('.mender')) return { l: 'Update File', o: 0 };
+            return null;
+        }
+
+        function board(name) {
+            if (name.indexOf('-dbc-') !== -1) return 'dbc';
+            if (name.indexOf('-mdb-') !== -1) return 'mdb';
+            return null;
+        }
+
+        function fmtDate(iso) {
+            return new Date(iso).toLocaleDateString('en-US', {
+                year: 'numeric', month: 'short', day: 'numeric'
+            });
+        }
+
+        function esc(s) {
+            var d = document.createElement('div');
+            d.textContent = s;
+            return d.innerHTML;
+        }
+
+        // ── Firmware ──────────────────────────────────────────────
+        var fwData = null;
+
+        function renderBoard(title, assets) {
+            if (!assets.length) return '';
+            var rows = assets.map(function (a) {
+                return '<div class="asset">' +
+                    '<div><span class="asset-label">' + esc(a.l) + '</span><br>' +
+                    '<span class="asset-size">' + fmt(a.size) + '</span></div>' +
+                    '<a href="' + esc(a.url) + '" class="dl-btn">' + ICON_DL + ' Download</a>' +
+                    '</div>';
+            }).join('');
+            return '<div class="board"><h4>' + esc(title) + '</h4>' + rows + '</div>';
+        }
+
+        function renderReleaseCards(releases) {
+            if (!releases.length) return '<p class="empty">No releases yet.</p>';
+
+            return releases.map(function (r, i) {
+                var ch = r._ch;
+                var label = ch.charAt(0).toUpperCase() + ch.slice(1);
+                var boards = { dbc: [], mdb: [] };
+
+                r.assets.forEach(function (a) {
+                    var b = board(a.name);
+                    var t = assetType(a.name);
+                    if (b && t && boards[b]) {
+                        boards[b].push({ l: t.l, o: t.o, size: a.size, url: a.browser_download_url });
+                    }
+                });
+
+                boards.dbc.sort(function (a, b) { return a.o - b.o; });
+                boards.mdb.sort(function (a, b) { return a.o - b.o; });
+
+                return '<details class="fw-card"' + (i === 0 ? ' open' : '') + '>' +
+                    '<summary>' +
+                        '<div class="fw-title">' +
+                            '<span>' + esc(r.tag_name) + '</span>' +
+                            '<span class="badge badge-' + ch + '">' + label + '</span>' +
+                        '</div>' +
+                        '<span class="fw-date">' + fmtDate(r.published_at) + '</span>' +
+                    '</summary>' +
+                    '<div class="fw-body">' +
+                        '<div class="boards">' +
+                            renderBoard('DBC (Display)', boards.dbc) +
+                            renderBoard('MDB (Scooter Controller)', boards.mdb) +
+                        '</div>' +
+                        '<div class="fw-footer">' +
+                            '<a href="' + esc(r.html_url) + '" target="_blank" rel="noopener">' +
+                            ICON_EXT + ' Release notes on GitHub</a>' +
+                        '</div>' +
+                    '</div>' +
+                    '</details>';
+            }).join('');
+        }
+
+        function renderFirmware(releases) {
+            var el = document.getElementById('firmware');
+
+            var stable = releases.filter(function (r) { return r._ch === 'stable'; }).slice(0, 5);
+            var testing = releases.filter(function (r) { return r._ch === 'testing'; }).slice(0, 5);
+            var nightly = releases.filter(function (r) { return r._ch === 'nightly'; }).slice(0, 5);
+
+            var html = '';
+
+            if (stable.length) {
+                html += '<h3 class="channel-heading">Stable</h3>' + renderReleaseCards(stable);
+            }
+            if (testing.length) {
+                html += '<h3 class="channel-heading">Testing</h3>' + renderReleaseCards(testing);
+            }
+            if (nightly.length) {
+                html += '<h3 class="channel-heading">Nightly</h3>' + renderReleaseCards(nightly);
+            }
+
+            el.innerHTML = html || '<p>No releases found.</p>';
+        }
+
+        function loadFirmware() {
+            var el = document.getElementById('firmware');
+
+            fetch(API + '/librescoot/librescoot/releases?per_page=100')
+                .then(function (res) {
+                    if (!res.ok) throw new Error(res.status);
+                    return res.json();
+                })
+                .then(function (releases) {
+                    if (!releases.length) {
+                        el.innerHTML = '<p>No releases found.</p>';
+                        return;
+                    }
+                    releases.forEach(function (r) { r._ch = channel(r); });
+                    renderFirmware(releases);
+                })
+                .catch(function () {
+                    el.innerHTML = '<p>Could not load releases. ' +
+                        '<a href="https://github.com/librescoot/librescoot/releases">View on GitHub</a>.</p>';
+                });
+        }
+
+        // ── Map Downloads ─────────────────────────────────────────
+        var STATES = [
+            { id: 'baden-wuerttemberg',       name: 'Baden-W\u00FCrttemberg' },
+            { id: 'bayern',                    name: 'Bayern' },
+            { id: 'berlin_brandenburg',        name: 'Berlin & Brandenburg' },
+            { id: 'bremen',                    name: 'Bremen' },
+            { id: 'hamburg',                   name: 'Hamburg' },
+            { id: 'hessen',                    name: 'Hessen' },
+            { id: 'mecklenburg-vorpommern',    name: 'Mecklenburg-Vorpommern' },
+            { id: 'niedersachsen',             name: 'Niedersachsen' },
+            { id: 'nordrhein-westfalen',       name: 'Nordrhein-Westfalen' },
+            { id: 'rheinland-pfalz',           name: 'Rheinland-Pfalz' },
+            { id: 'saarland',                  name: 'Saarland' },
+            { id: 'sachsen-anhalt',            name: 'Sachsen-Anhalt' },
+            { id: 'sachsen',                   name: 'Sachsen' },
+            { id: 'schleswig-holstein',        name: 'Schleswig-Holstein' },
+            { id: 'thueringen',                name: 'Th\u00FCringen' }
+        ];
+
+        function renderMaps(osmSizes, valhallaSizes) {
+            var el = document.getElementById('maps');
+
+            var rows = STATES.map(function (s) {
+                var oSize = osmSizes[s.id];
+                var vSize = valhallaSizes[s.id];
+                var oUrl = 'https://github.com/librescoot/osm-tiles/releases/download/latest/tiles_' + s.id + '.mbtiles';
+                var vUrl = 'https://github.com/librescoot/valhalla-tiles/releases/download/latest/valhalla_tiles_' + s.id + '.tar';
+
+                return '<div class="map-row">' +
+                    '<span class="map-name">' + esc(s.name) + '</span>' +
+                    '<a href="' + oUrl + '" class="map-btn" title="Map tiles for ' + esc(s.name) + '">' +
+                        ICON_MAP + ' Map' + (oSize ? ' (' + fmt(oSize) + ')' : '') +
+                    '</a>' +
+                    '<a href="' + vUrl + '" class="map-btn" title="Routing data for ' + esc(s.name) + '">' +
+                        ICON_NAV + ' Routing' + (vSize ? ' (' + fmt(vSize) + ')' : '') +
+                    '</a>' +
+                    '</div>';
+            }).join('');
+
+            el.innerHTML = '<div class="map-table">' +
+                '<div class="map-row map-head">' +
+                    '<span>State</span><span>Map Tiles (.mbtiles)</span><span>Routing Data (.tar)</span>' +
+                '</div>' +
+                rows +
+                '</div>' +
+                '<p class="map-source">Source: ' +
+                '<a href="https://github.com/librescoot/osm-tiles" target="_blank" rel="noopener">osm-tiles</a>, ' +
+                '<a href="https://github.com/librescoot/valhalla-tiles" target="_blank" rel="noopener">valhalla-tiles</a></p>';
+        }
+
+        function loadMaps() {
+            Promise.all([
+                fetch(API + '/librescoot/osm-tiles/releases/tags/latest'),
+                fetch(API + '/librescoot/valhalla-tiles/releases/tags/latest')
+            ])
+            .then(function (responses) {
+                var osmSizes = {}, valhallaSizes = {};
+                var tasks = [];
+
+                if (responses[0].ok) {
+                    tasks.push(responses[0].json().then(function (osm) {
+                        osm.assets.forEach(function (a) {
+                            var m = a.name.match(/^tiles_(.+)\.mbtiles$/);
+                            if (m) osmSizes[m[1]] = a.size;
+                        });
+                    }));
+                }
+                if (responses[1].ok) {
+                    tasks.push(responses[1].json().then(function (v) {
+                        v.assets.forEach(function (a) {
+                            var m = a.name.match(/^valhalla_tiles_(.+)\.tar$/);
+                            if (m) valhallaSizes[m[1]] = a.size;
+                        });
+                    }));
+                }
+
+                return Promise.all(tasks).then(function () {
+                    renderMaps(osmSizes, valhallaSizes);
+                });
+            })
+            .catch(function () {
+                renderMaps({}, {});
+            });
+        }
+
+        // ── Init ──────────────────────────────────────────────────
+        loadFirmware();
+        loadMaps();
+    })();
+    </script>
+</body>
+</html>
