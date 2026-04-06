@@ -26,7 +26,7 @@
         }
 
         /* Layout */
-        .container { max-width: 920px; margin: 0 auto; padding: 0 20px; }
+        .container { max-width: 960px; margin: 0 auto; padding: 0 20px; }
 
         /* Header */
         .header {
@@ -39,8 +39,10 @@
             align-items: center;
         }
         .header a { color: white; text-decoration: none; }
-        .header-brand { font-weight: 700; font-size: 1.1rem; }
-        .header-links { display: flex; gap: 1.25rem; font-size: 0.9rem; }
+        .header-brand { font-weight: 700; font-size: 1.25rem; display: flex; align-items: center; gap: 0.4rem; }
+        .header-brand-text { padding-top: 3px; }
+        .header-logo { height: 40px; width: auto; }
+        .header-links { display: flex; gap: 1.5rem; font-size: 0.95rem; }
         .header-links a { opacity: 0.85; transition: opacity 0.2s; }
         .header-links a:hover { opacity: 1; color: white; }
 
@@ -72,7 +74,7 @@
         /* Channel grid */
         .channels {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 0.75rem;
         }
 
@@ -305,11 +307,11 @@
 <body>
     <header class="header">
         <div class="container header-inner">
-            <a href="https://librescoot.org" class="header-brand">LibreScoot Downloads</a>
+            <a href="https://librescoot.org" class="header-brand"><img src="https://librescoot.org/images/logo-small.png" srcset="https://librescoot.org/images/logo-small@2x.png 2x" alt="LibreScoot" class="header-logo"> <span class="header-brand-text">Downloads</span></a>
             <nav class="header-links">
+                <a href="https://librescoot.org/docs/">Docs</a>
                 <a href="https://librescoot.org/docs/install.html">Installation</a>
                 <a href="https://librescoot.org/changelog.html">Changelog</a>
-                <a href="https://librescoot.org/docs/">Docs</a>
                 <a href="https://discord.gg/VrumFruSzJ">Discord</a>
                 <a href="https://github.com/librescoot">GitHub</a>
             </nav>
