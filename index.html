@@ -291,7 +291,7 @@
         @media (max-width: 768px) {
             .channels { grid-template-columns: 1fr; }
             .map-row { grid-template-columns: 1fr; gap: 0.35rem; padding: 0.7rem 1rem; }
-            .map-head { display: none; }
+
             .map-name { font-weight: 600; }
             .map-btn { justify-content: center; }
             .header-links { gap: 0.75rem; font-size: 0.82rem; }
@@ -299,7 +299,6 @@
             .installer-btn { justify-content: center; }
         }
         @media (max-width: 480px) {
-            .asset { flex-direction: column; align-items: flex-start; gap: 0.35rem; }
             .header-inner { flex-direction: column; gap: 0.5rem; }
         }
     </style>
@@ -311,6 +310,7 @@
             <nav class="header-links">
                 <a href="https://librescoot.org/docs/">Docs</a>
                 <a href="https://librescoot.org/docs/install.html">Installation</a>
+                <a href="https://librescoot.org/docs/architecture.html">Architecture</a>
                 <a href="https://librescoot.org/changelog.html">Changelog</a>
                 <a href="https://discord.gg/VrumFruSzJ">Discord</a>
                 <a href="https://github.com/librescoot">GitHub</a>
@@ -320,8 +320,10 @@
 
     <main>
         <div class="container">
+            <h1>Downloads</h1>
+
             <!-- ── Installer ──────────────────────────────── -->
-            <div class="section">
+            <div class="section" id="installer">
                 <h2 class="section-title">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                     Installer
@@ -354,7 +356,7 @@
                     Firmware Updates
                 </h2>
 
-                <p class="hint">To install an update, enable update mode via the display menu, then copy the .mender file over USB. For fresh installations, use the <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false">installer app</a> above.</p>
+                <p class="hint">To install an update, enable update mode via the display menu, then copy the .mender file over USB. For fresh installations, use the <a href="#installer">installer app</a> above.</p>
 
                 <div id="firmware">
                     <div class="loading">Loading firmware releases&hellip;</div>
