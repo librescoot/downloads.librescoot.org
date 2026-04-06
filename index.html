@@ -14,51 +14,51 @@
     <link rel="icon" type="image/png" href="https://librescoot.org/images/favicon.png">
     <link rel="stylesheet" href="https://librescoot.org/fonts/fonts.css">
     <link rel="stylesheet" href="https://librescoot.org/style.css">
+    <script>
+    (function() {
+        var t = localStorage.getItem('theme');
+        if (t) document.documentElement.setAttribute('data-theme', t);
+    })();
+    </script>
     <style>
-        code {
-            background: #e9ecef;
-            padding: 0.1rem 0.35rem;
-            border-radius: 3px;
-            font-size: 0.88em;
-        }
-
-        /* Header (downloads page uses its own nav structure) */
+        /* Header */
         .header { padding: 1rem 0; }
         .header-inner {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .header a { color: white; text-decoration: none; }
+        .header a { color: var(--text-on-dark); text-decoration: none; }
         .header-brand { font-weight: 700; font-size: 1.25rem; display: flex; align-items: center; gap: 0.4rem; }
-        .header-brand-text { padding-top: 3px; }
-        .header-logo { height: 40px; width: auto; }
-        .header-links { display: flex; gap: 1.5rem; font-size: 0.95rem; }
-        .header-links a { opacity: 0.85; transition: opacity 0.2s; }
-        .header-links a:hover { opacity: 1; color: white; }
+        .header-brand-text { padding-top: 3px; font-family: var(--font-display); }
+        .header-logo { height: 36px; width: auto; }
+        .header-links { display: flex; gap: 1.5rem; font-size: 0.9rem; align-items: center; }
+        .header-links a { color: var(--text-on-dark-muted); transition: color 0.15s; }
+        .header-links a:hover { color: var(--text-on-dark); }
 
         /* Page layout */
         main { padding: 2.5rem 0 4rem; min-height: calc(100vh - 150px); }
-        h1 { font-size: 2rem; color: #2c3e50; margin-bottom: 0.35rem; }
-        .lead { font-size: 1.05rem; color: #666; margin-bottom: 2.5rem; }
+        h1 { font-size: 2.5rem; margin-bottom: 0.35rem; }
+        .lead { font-size: 1.05rem; color: var(--text-secondary); margin-bottom: 2.5rem; }
 
-        /* Section headings (override main site's section padding) */
+        /* Section headings */
         .section { margin-bottom: 3rem; padding: 0; }
         .section-title {
             display: flex;
             align-items: center;
             gap: 0.5rem;
             font-size: 1.4rem;
-            font-weight: 600;
-            color: #2c3e50;
+            font-weight: 400;
+            font-family: var(--font-display);
+            color: var(--text-primary);
             margin-bottom: 0.4rem;
             padding-bottom: 0.4rem;
-            border-bottom: 2px solid #f0f0f0;
+            border-bottom: 2px solid var(--border-subtle);
         }
-        .section-title svg { width: 22px; height: 22px; color: #667eea; }
+        .section-title svg { width: 22px; height: 22px; color: var(--accent); }
         .section > p { font-size: 0.95rem; margin-bottom: 1rem; }
 
-        .hint { font-size: 0.88rem; color: #666; margin-bottom: 1rem; }
+        .hint { font-size: 0.88rem; color: var(--text-tertiary); margin-bottom: 1rem; }
 
         /* Channel grid */
         .channels {
@@ -72,31 +72,31 @@
             display: inline-block;
             font-size: 0.72rem;
             padding: 0.15rem 0.45rem;
-            border-radius: 4px;
+            border-radius: var(--radius);
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.02em;
         }
-        .badge-stable  { background: #d4edda; color: #155724; }
-        .badge-testing { background: #fff3cd; color: #856404; }
-        .badge-nightly { background: #f8d7da; color: #721c24; }
+        .badge-stable  { background: var(--green-bg); color: var(--green); }
+        .badge-testing { background: var(--yellow-bg); color: var(--yellow); }
+        .badge-nightly { background: var(--red-bg); color: var(--red); }
 
         /* Channel cards */
         .ch-card {
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            background: #fafafa;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            background: var(--bg-card);
             padding: 0.9rem 1rem;
         }
         .ch-card.ch-recommended {
-            border-color: #667eea;
+            border-color: var(--accent);
             border-width: 2px;
-            background: #f8f9ff;
+            background: var(--accent-subtle);
         }
         .ch-card h4 {
             font-size: 1rem;
             font-weight: 600;
-            color: #2c3e50;
+            color: var(--text-primary);
             margin: 0 0 0.1rem;
             display: flex;
             align-items: center;
@@ -107,19 +107,19 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.03em;
-            background: #667eea;
+            background: var(--accent);
             color: white;
             padding: 0.1rem 0.4rem;
             border-radius: 3px;
         }
         .ch-card .ch-desc {
             font-size: 0.82rem;
-            color: #666;
+            color: var(--text-tertiary);
             margin-bottom: 0.4rem;
         }
         .ch-card .ch-meta {
             font-size: 0.75rem;
-            color: #999;
+            color: var(--text-tertiary);
             margin-bottom: 0.5rem;
         }
 
@@ -135,16 +135,16 @@
             align-items: center;
             gap: 0.25rem;
             padding: 0.35rem 0.7rem;
-            background: #667eea;
+            background: var(--accent);
             color: white;
             text-decoration: none;
-            border-radius: 4px;
+            border-radius: var(--radius);
             font-size: 0.82rem;
             font-weight: 500;
             transition: background 0.15s;
             white-space: nowrap;
         }
-        .dl-btn:hover { background: #5a67d8; color: white; }
+        .dl-btn:hover { background: var(--accent-hover); color: white; }
         .dl-btn svg { width: 13px; height: 13px; }
         .dl-btn .dl-size { opacity: 0.75; font-weight: 400; }
         .ch-links {
@@ -156,14 +156,16 @@
             display: inline-flex;
             align-items: center;
             gap: 0.2rem;
+            color: var(--accent);
             text-decoration: none;
         }
+        .ch-links a:hover { color: var(--accent-hover); }
         .ch-links svg { width: 12px; height: 12px; }
 
         /* Map table */
         .map-table {
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
             overflow: hidden;
         }
         .map-row {
@@ -172,57 +174,57 @@
             align-items: center;
             gap: 0.5rem;
             padding: 0.35rem 0.9rem;
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid var(--border-subtle);
         }
         .map-row:last-child { border-bottom: none; }
-        .map-row:nth-child(even) { background: #fafafa; }
+        .map-row:nth-child(even) { background: var(--bg-secondary); }
         .map-head {
-            background: #f0f2f5 !important;
+            background: var(--bg-secondary) !important;
             font-weight: 600;
             font-size: 0.78rem;
-            color: #2c3e50;
-            border-bottom-color: #e0e0e0 !important;
+            color: var(--text-primary);
+            border-bottom-color: var(--border) !important;
             padding: 0.4rem 0.9rem;
         }
-        .map-name { font-weight: 500; font-size: 0.85rem; color: #2c3e50; }
+        .map-name { font-weight: 500; font-size: 0.85rem; color: var(--text-primary); }
         .map-btn {
             display: inline-flex;
             align-items: center;
             gap: 0.2rem;
             padding: 0.2rem 0.5rem;
-            background: white;
-            color: #667eea;
+            background: var(--bg-card);
+            color: var(--accent);
             text-decoration: none;
-            border-radius: 4px;
+            border-radius: var(--radius);
             font-size: 0.75rem;
             font-weight: 500;
-            border: 1px solid #e0e0e0;
+            border: 1px solid var(--border-subtle);
             transition: all 0.15s;
             white-space: nowrap;
         }
-        .map-btn:hover { background: #667eea; color: white; border-color: #667eea; }
+        .map-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
         .map-btn svg { width: 12px; height: 12px; }
-        .map-source { font-size: 0.78rem; color: #999; margin-top: 0.6rem; }
+        .map-source { font-size: 0.78rem; color: var(--text-tertiary); margin-top: 0.6rem; }
 
         /* Installer section */
         .installer-hero {
-            background: #f8f9fb;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
             padding: 1.25rem;
         }
-        .installer-hero p { color: #555; font-size: 0.95rem; margin: 0.5rem 0; }
+        .installer-hero p { color: var(--text-secondary); font-size: 0.95rem; margin: 0.5rem 0; }
         .installer-hero p:first-child { margin-top: 0; }
         .beta-note {
             font-size: 0.88rem;
-            color: #856404;
-            background: #fff8e6;
-            border: 1px solid #f0c36d;
-            border-radius: 4px;
+            color: var(--yellow);
+            background: var(--yellow-bg);
+            border: 1px solid var(--yellow);
+            border-radius: var(--radius);
             padding: 0.5rem 0.75rem;
             margin: 0.75rem 0;
         }
-        .beta-note a { color: #6d4c00; font-weight: 500; }
+        .beta-note a { color: var(--yellow); font-weight: 600; }
         .installer-buttons {
             display: flex;
             gap: 0.6rem;
@@ -234,31 +236,31 @@
             align-items: center;
             gap: 0.4rem;
             padding: 0.55rem 1.1rem;
-            background: #667eea;
+            background: var(--accent);
             color: white;
             text-decoration: none;
-            border-radius: 6px;
+            border-radius: var(--radius);
             font-weight: 500;
             font-size: 0.9rem;
             transition: background 0.15s;
         }
-        .installer-btn:hover { background: #5a67d8; color: white; }
+        .installer-btn:hover { background: var(--accent-hover); color: white; }
         .installer-btn svg { flex-shrink: 0; }
         .installer-meta {
             font-size: 0.82rem;
-            color: #888;
+            color: var(--text-tertiary);
             margin: 0.25rem 0 0;
         }
 
         /* Loading / empty */
-        .loading { text-align: center; color: #888; padding: 2rem; font-size: 0.95rem; }
-        .empty { color: #888; font-style: italic; padding: 1rem 0; }
+        .loading { text-align: center; color: var(--text-tertiary); padding: 2rem; font-size: 0.95rem; }
+        .empty { color: var(--text-tertiary); font-style: italic; padding: 1rem 0; }
 
-        /* Footer (downloads page uses its own footer structure) */
+        /* Footer */
         .footer {
             padding: 1.5rem 0;
             font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--text-on-dark-muted);
         }
         .footer-inner {
             display: flex;
@@ -267,9 +269,9 @@
             flex-wrap: wrap;
             gap: 0.75rem;
         }
-        .footer strong { color: white; }
-        .footer a { color: rgba(255, 255, 255, 0.7); text-decoration: none; }
-        .footer a:hover { color: white; }
+        .footer strong { color: var(--text-on-dark); font-family: var(--font-display); }
+        .footer a { color: var(--text-on-dark-muted); text-decoration: none; }
+        .footer a:hover { color: var(--text-on-dark); }
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -297,6 +299,10 @@
                 <a href="https://librescoot.org/changelog.html">Changelog</a>
                 <a href="https://discord.gg/VrumFruSzJ">Discord</a>
                 <a href="https://github.com/librescoot">GitHub</a>
+                <button class="theme-toggle" aria-label="Toggle theme">
+                    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
             </nav>
         </div>
     </header>
@@ -316,7 +322,7 @@
                     <p class="beta-note">Beta software. While we have tested on all platforms against real hardware, things can still go wrong. In the worst case, your scooter might become inoperable without deeper intervention. Use at your own risk. For support, try <a href="https://discord.gg/VrumFruSzJ">Discord</a>, but keep in mind we're all volunteers.</p>
                     <div class="installer-buttons">
                         <a href="https://github.com/librescoot/installer/releases/download/v0.5.2/librescoot-installer-linux-x64-v0.5.2.tar.gz" class="installer-btn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 0 0-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.106 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.368 1.884 1.564.585.151 1.22.107 1.722-.428.151-.162.264-.357.373-.524.224-.352.403-.658.593-.87.17-.197.37-.269.61-.41.232-.134.499-.267.727-.598.13-.189.22-.42.22-.67 0-.16-.04-.312-.084-.451-.087-.27-.216-.427-.332-.671-.039-.082-.1-.12-.16-.163a7.726 7.726 0 0 1-.105-.132c-.098-.133-.184-.18-.164-.401.006-.108.03-.205.076-.348.164-.485.426-.785.64-1.056.214-.271.414-.412.59-.701.286-.465.437-1.064.507-1.793.064-.585.057-1.263-.07-1.942-.314-1.691-1.07-3.208-2.11-4.354-.673-.726-1.447-1.404-2.27-1.665-.42-.131-.875-.148-1.292.005a1.23 1.23 0 0 0-.15-.029c-.193-.028-.392-.028-.592.005A3.72 3.72 0 0 0 12.504 0z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
                             Linux (x64)
                         </a>
                         <a href="https://github.com/librescoot/installer/releases/download/v0.5.2/librescoot-installer-macos-universal-v0.5.2.dmg" class="installer-btn">
@@ -384,6 +390,23 @@
     </footer>
 
     <script>
+    // Theme toggle
+    (function() {
+        var btn = document.querySelector('.theme-toggle');
+        if (!btn) return;
+        function getTheme() {
+            var stored = localStorage.getItem('theme');
+            if (stored) return stored;
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        btn.addEventListener('click', function() {
+            var current = getTheme();
+            var next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+        });
+    })();
+
     (function () {
         'use strict';
 
