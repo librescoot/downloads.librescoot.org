@@ -252,6 +252,20 @@
             margin: 0.25rem 0 0;
         }
 
+        /* Unsigned notice */
+        .unsigned-note {
+            font-size: 0.82rem;
+            color: var(--yellow);
+            background: var(--yellow-bg);
+            border: 1px solid var(--yellow);
+            border-radius: var(--radius);
+            padding: 0.5rem 0.75rem;
+            margin: 0.75rem 0 0;
+        }
+        .unsigned-note code {
+            font-size: 0.78rem;
+        }
+
         /* Loading / empty */
         .loading { text-align: center; color: var(--text-tertiary); padding: 2rem; font-size: 0.95rem; }
         .empty { color: var(--text-tertiary); font-style: italic; padding: 1rem 0; }
@@ -335,6 +349,7 @@
                         </a>
                     </div>
                     <p class="installer-meta">Version 0.5.2 (beta) · <a href="https://github.com/librescoot/installer/releases">All releases</a> · <a href="https://github.com/librescoot/installer">Source code</a> · <a href="https://librescoot.org/docs/install.html">Installation guide</a></p>
+                    <p class="unsigned-note">The installer is not code-signed. <strong>macOS:</strong> right-click &rarr; Open, or run <code>xattr -cr librescoot-installer.app</code>. <strong>Windows:</strong> click <em>More info</em> &rarr; <em>Run anyway</em>.</p>
                 </div>
             </div>
 
