@@ -335,20 +335,20 @@
                     <p>Desktop app that walks you through installing LibreScoot on your scooter. Downloads firmware, flashes both boards, and sets up offline maps. All you need is a USB cable and a screwdriver.</p>
                     <p class="beta-note">Beta software. While we have tested on all platforms against real hardware, things can still go wrong. In the worst case, your scooter might become inoperable without deeper intervention. Use at your own risk. For support, try <a href="https://discord.gg/VrumFruSzJ">Discord</a>, but keep in mind we're all volunteers.</p>
                     <div class="installer-buttons">
-                        <a href="https://github.com/librescoot/installer/releases/download/v0.5.2/librescoot-installer-linux-x64-v0.5.2.tar.gz" class="installer-btn">
+                        <a id="installer-linux" href="https://github.com/librescoot/installer/releases/download/v0.5.2/librescoot-installer-linux-x64-v0.5.2.tar.gz" class="installer-btn">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
                             Linux (x64)
                         </a>
-                        <a href="https://github.com/librescoot/installer/releases/download/v0.5.2/librescoot-installer-macos-universal-v0.5.2.dmg" class="installer-btn">
+                        <a id="installer-macos" href="https://github.com/librescoot/installer/releases/download/v0.5.2/librescoot-installer-macos-universal-v0.5.2.dmg" class="installer-btn">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
                             macOS (Universal)
                         </a>
-                        <a href="https://github.com/librescoot/installer/releases/download/v0.5.2/librescoot-installer-windows-x64-v0.5.2.zip" class="installer-btn">
+                        <a id="installer-windows" href="https://github.com/librescoot/installer/releases/download/v0.5.2/librescoot-installer-windows-x64-v0.5.2.zip" class="installer-btn">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
                             Windows (x64)
                         </a>
                     </div>
-                    <p class="installer-meta">Version 0.5.2 (beta) · <a href="https://github.com/librescoot/installer/releases">All releases</a> · <a href="https://github.com/librescoot/installer">Source code</a> · <a href="https://librescoot.org/docs/install.html">Installation guide</a></p>
+                    <p class="installer-meta">Version <span id="installer-version">0.5.2</span> (beta) · <a href="https://github.com/librescoot/installer/releases">All releases</a> · <a href="https://github.com/librescoot/installer">Source code</a> · <a href="https://librescoot.org/docs/install.html">Installation guide</a></p>
                     <p class="unsigned-note">The installer is not code-signed. <strong>macOS:</strong> right-click &rarr; Open, or run <code>xattr -cr '/Applications/LibreScoot Installer.app'</code>. <strong>Windows:</strong> click <em>More info</em> &rarr; <em>Run anyway</em>.</p>
                 </div>
             </div>
@@ -640,7 +640,45 @@
             });
         }
 
+        // ── Installer ─────────────────────────────────────────────
+        function installerAssetFor(platform, assets) {
+            for (var i = 0; i < assets.length; i++) {
+                var n = assets[i].name.toLowerCase();
+                if (platform === 'linux' && n.indexOf('linux') !== -1 && /\.tar\.gz$|\.tgz$/.test(n)) return assets[i];
+                if (platform === 'macos' && n.indexOf('macos') !== -1 && n.indexOf('.dmg') !== -1) return assets[i];
+                if (platform === 'windows' && n.indexOf('windows') !== -1 && n.indexOf('.zip') !== -1) return assets[i];
+            }
+            return null;
+        }
+
+        function loadInstaller() {
+            fetch(API + '/librescoot/installer/releases/latest')
+                .then(function (res) {
+                    if (!res.ok) throw new Error(res.status);
+                    return res.json();
+                })
+                .then(function (release) {
+                    var version = (release.tag_name || '').replace(/^v/, '');
+                    if (version) {
+                        var vEl = document.getElementById('installer-version');
+                        if (vEl) vEl.textContent = version;
+                    }
+
+                    var platforms = ['linux', 'macos', 'windows'];
+                    platforms.forEach(function (p) {
+                        var asset = installerAssetFor(p, release.assets || []);
+                        if (!asset) return;
+                        var el = document.getElementById('installer-' + p);
+                        if (el) el.href = asset.browser_download_url;
+                    });
+                })
+                .catch(function () {
+                    // Leave hardcoded fallback links/version in place.
+                });
+        }
+
         // ── Init ──────────────────────────────────────────────────
+        loadInstaller();
         loadFirmware();
         loadMaps();
     })();
