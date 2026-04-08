@@ -22,13 +22,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build site
-        run: |
-          mkdir -p _site
-          cp CNAME index.html _site/
-          DEST=_site .github/generate-release-index.sh
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Fetch release data
+        run: .github/generate-release-index.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build site
+        run: npm run build
 
       - uses: actions/configure-pages@v5
 

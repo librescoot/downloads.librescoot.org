@@ -8,7 +8,7 @@ set -euo pipefail
 REPO="librescoot/librescoot"
 RELEASES_PER_CHANNEL=30
 API_URL="https://api.github.com/repos/${REPO}/releases"
-OUTDIR="${DEST:-.}/releases"
+OUTDIR="${DEST:-src/releases}"
 
 mkdir -p "$OUTDIR"
 
@@ -33,7 +33,42 @@ done
 total=$(echo "$all_releases" | jq 'length')
 echo "Fetched ${total} releases total"
 
-# Generate index for each channel
+# Fetch installer release
+installer_data=$(curl -sf -H "Accept: application/vnd.github+json" \
+  -H "User-Agent: librescoot-downloads-gen" \
+  ${GITHUB_TOKEN:+-H "Authorization: Bearer ${GITHUB_TOKEN}"} \
+  "https://api.github.com/repos/librescoot/installer/releases/latest")
+
+if [ -n "$installer_data" ]; then
+  echo "$installer_data" | jq '{
+    tag_name,
+    assets: [.assets[] | {name, size, url: .browser_download_url}]
+  }' > "${OUTDIR}/installer.json"
+  echo "installer: $(echo "$installer_data" | jq '.tag_name')"
+else
+  echo '{"tag_name":"","assets":[]}' > "${OUTDIR}/installer.json"
+  echo "installer: failed to fetch"
+fi
+
+# Generate map/routing data indexes
+for repo in osm-tiles valhalla-tiles; do
+  data=$(curl -sf -H "Accept: application/vnd.github+json" \
+    -H "User-Agent: librescoot-downloads-gen" \
+    ${GITHUB_TOKEN:+-H "Authorization: Bearer ${GITHUB_TOKEN}"} \
+    "https://api.github.com/repos/librescoot/${repo}/releases/tags/latest")
+
+  if [ -n "$data" ]; then
+    echo "$data" | jq '[.assets[] | {name, size, url: .browser_download_url}]' \
+      > "${OUTDIR}/${repo}.json"
+    count=$(jq 'length' "${OUTDIR}/${repo}.json")
+    echo "${repo}: ${count} assets"
+  else
+    echo "[]" > "${OUTDIR}/${repo}.json"
+    echo "${repo}: failed to fetch, wrote empty array"
+  fi
+done
+
+# Generate firmware index for each channel
 for channel in nightly testing stable; do
   case "$channel" in
     stable)  prefix="v" ;;
@@ -48,7 +83,7 @@ for channel in nightly testing stable; do
         tag_name,
         published_at,
         prerelease,
-        assets: [.assets[] | {name, size, browser_download_url}]
+        assets: [.assets[] | {name, size, url: .browser_download_url}]
       }]
   ' > "${OUTDIR}/${channel}.json"
 
