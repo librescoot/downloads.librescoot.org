@@ -58,8 +58,13 @@ for repo in osm-tiles valhalla-tiles; do
     "https://api.github.com/repos/librescoot/${repo}/releases/tags/latest")
 
   if [ -n "$data" ]; then
-    echo "$data" | jq '[.assets[] | {name, size, url: .browser_download_url}]' \
-      > "${OUTDIR}/${repo}.json"
+    echo "$data" | jq '[.assets[] | {
+      name,
+      size,
+      sha256: (.digest | if . then ltrimstr("sha256:") else null end),
+      updated_at: .updated_at,
+      url: .browser_download_url
+    }]' > "${OUTDIR}/${repo}.json"
     count=$(jq 'length' "${OUTDIR}/${repo}.json")
     echo "${repo}: ${count} assets"
   else
@@ -67,6 +72,28 @@ for repo in osm-tiles valhalla-tiles; do
     echo "${repo}: failed to fetch, wrote empty array"
   fi
 done
+
+# Generate combined tiles.json keyed by region slug for update checks
+jq -n \
+  --slurpfile osm "${OUTDIR}/osm-tiles.json" \
+  --slurpfile valhalla "${OUTDIR}/valhalla-tiles.json" '
+  def by_region(prefix; suffix):
+    [.[] | {
+      key: (.name | ltrimstr(prefix) | rtrimstr(suffix)),
+      value: {sha256, size, updated_at, url}
+    }] | from_entries;
+
+  ($osm[0] | by_region("tiles_"; ".mbtiles")) as $osm_map |
+  ($valhalla[0] | by_region("valhalla_tiles_"; ".tar")) as $val_map |
+  ($osm_map | keys) + ($val_map | keys) | unique | map({
+    key: .,
+    value: {
+      map: ($osm_map[.] // null),
+      valhalla: ($val_map[.] // null)
+    }
+  }) | from_entries
+' > "${OUTDIR}/tiles.json"
+echo "tiles.json: combined index written"
 
 # Generate firmware index for each channel
 for channel in nightly testing stable; do

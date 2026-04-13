@@ -217,10 +217,11 @@ title: LibreScoot Downloads
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 6-3 6 3 6-3v13l-6 3-6-3-6 3Z"/><path d="m9 4v13"/><path d="m15 7v13"/></svg>
                     Map &amp; Routing Data
                 </h2>
+                {% if maps.updated %}<p class="hint" style="margin-top:-0.2rem">Updated {{ maps.updated | fmtDate }}</p>{% endif %}
                 <p>Offline map tiles and turn-by-turn routing data, available per German state. Each one also covers about 20 km of the surrounding area. Download the map and routing files for your state and copy them to the scooter via USB. Only one state can be installed at a time. See <a href="https://librescoot.org/docs/features/offline-navigation.html">offline navigation</a> for setup instructions.</p>
 
                 <div class="map-table">
-                    {% for state in maps %}
+                    {% for state in maps.states %}
                         <div class="map-row">
                             <span class="map-name">{{ state.name }}</span>
                             {% if state.osm %}
