@@ -9,7 +9,15 @@ module.exports = function (eleventyConfig) {
     return bytes + " B";
   });
 
-  eleventyConfig.addFilter("fmtDate", function (iso) {
+  eleventyConfig.addFilter("fmtDate", function (iso, lang) {
+    lang = lang || "en";
+    if (lang === "de") {
+      return new Date(iso).toLocaleDateString("sv-SE", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      });
+    }
     return new Date(iso).toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",

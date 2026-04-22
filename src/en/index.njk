@@ -1,17 +1,17 @@
 ---
 title: LibreScoot Downloads
-lang: de
-permalink: /
+lang: en
+permalink: /en/
 ---
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
-    <meta name="description" content="Lade den LibreScoot-Installer, Firmware-Images und Offline-Kartendaten für deinen unu Scooter Pro.">
+    <meta name="description" content="Download the LibreScoot installer, firmware images, and offline map data for your unu Scooter Pro.">
     <meta property="og:title" content="{{ title }}">
-    <meta property="og:description" content="Lade den LibreScoot-Installer, Firmware-Updates und Offline-Kartendaten für deinen unu Scooter Pro.">
+    <meta property="og:description" content="Download the LibreScoot installer, firmware updates, and offline map data for your unu Scooter Pro.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://downloads.librescoot.org">
     <meta property="og:image" content="https://librescoot.org/images/og-image.png">
@@ -41,13 +41,6 @@ permalink: /
         .nav-lang a { color: var(--text-on-dark-muted); }
         .nav-lang a.active { color: var(--text-on-dark); font-weight: 500; }
         .nav-lang-sep { color: var(--text-on-dark-muted); opacity: 0.4; }
-        .i18n-switch-banner { background: var(--bg-secondary, #f5f5f4); color: var(--text-tertiary, #78716c); border-bottom: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.05)); font-size: 0.85rem; text-align: center; padding: 0.4rem 0; }
-        .i18n-switch-banner a { color: inherit; text-decoration: none; }
-        .i18n-switch-banner a:hover { text-decoration: underline; color: var(--text-primary, inherit); }
-        [data-theme="dark"] .i18n-switch-banner { background: rgba(255, 255, 255, 0.04); color: rgba(255, 255, 255, 0.6); border-bottom-color: rgba(255, 255, 255, 0.08); }
-        @media (prefers-color-scheme: dark) {
-            :root:not([data-theme="light"]) .i18n-switch-banner { background: rgba(255, 255, 255, 0.04); color: rgba(255, 255, 255, 0.6); border-bottom-color: rgba(255, 255, 255, 0.08); }
-        }
         main { padding: 2.5rem 0 4rem; min-height: calc(100vh - 150px); }
         h1 { font-size: 2.5rem; margin-bottom: 0.35rem; }
         .lead { font-size: 1.05rem; color: var(--text-secondary); margin-bottom: 2.5rem; }
@@ -141,25 +134,24 @@ permalink: /
         <div class="container header-inner">
             <a href="https://librescoot.org" class="header-brand"><img src="https://librescoot.org/images/logo-small.png" srcset="https://librescoot.org/images/logo-small@2x.png 2x" alt="LibreScoot" class="header-logo"> <span class="header-brand-text">Downloads</span></a>
             <nav class="header-links">
-                <a href="https://librescoot.org/docs/">Dokumentation</a>
-                <a href="https://librescoot.org/docs/install.html">Installation</a>
-                <a href="https://librescoot.org/docs/architecture.html">Architektur</a>
-                <a href="https://librescoot.org/changelog.html">Changelog</a>
+                <a href="https://librescoot.org/en/docs/">Docs</a>
+                <a href="https://librescoot.org/en/docs/install.html">Installation</a>
+                <a href="https://librescoot.org/en/docs/architecture.html">Architecture</a>
+                <a href="https://librescoot.org/en/changelog.html">Changelog</a>
                 <a href="https://discord.gg/VrumFruSzJ">Discord</a>
                 <a href="https://github.com/librescoot">GitHub</a>
-                <span class="nav-lang" aria-label="Sprache">
-                    <a href="/" class="active" aria-current="page">DE</a>
+                <span class="nav-lang" aria-label="Language">
+                    <a href="/">DE</a>
                     <span class="nav-lang-sep">·</span>
-                    <a href="/en/">EN</a>
+                    <a href="/en/" class="active" aria-current="page">EN</a>
                 </span>
-                <button class="theme-toggle" aria-label="Theme umschalten">
+                <button class="theme-toggle" aria-label="Toggle theme">
                     <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
                     <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
                 </button>
             </nav>
         </div>
     </header>
-    <div class="i18n-switch-banner" role="status"><a href="/en/">Read in English →</a></div>
 
     <main>
         <div class="container">
@@ -172,8 +164,8 @@ permalink: /
                     Installer
                 </h2>
                 <div class="installer-hero">
-                    <p>Desktop-App, die dich durch die Installation von LibreScoot auf deinem Roller führt. Lädt die Firmware, flasht beide Boards und richtet die Offline-Karten ein. Du brauchst nur ein USB-Kabel und einen Schraubendreher.</p>
-                    <p class="beta-note">Beta-Software. Wir haben den Installer auf allen Plattformen mit echter Hardware getestet, trotzdem kann etwas schiefgehen. Im schlimmsten Fall ist dein Roller ohne tiefergehenden Eingriff nicht mehr nutzbar. Verwendung auf eigene Gefahr. Für Support versuch's auf <a href="https://discord.gg/VrumFruSzJ">Discord</a>, bedenk aber, dass wir alle ehrenamtlich dabei sind.</p>
+                    <p>Desktop app that walks you through installing LibreScoot on your scooter. Downloads firmware, flashes both boards, and sets up offline maps. All you need is a USB cable and a screwdriver.</p>
+                    <p class="beta-note">Beta software. While we have tested on all platforms against real hardware, things can still go wrong. In the worst case, your scooter might become inoperable without deeper intervention. Use at your own risk. For support, try <a href="https://discord.gg/VrumFruSzJ">Discord</a>, but keep in mind we're all volunteers.</p>
                     <div class="installer-buttons">
                         {% for asset in installer.assets %}
                             {% set name = asset.name | lower %}
@@ -195,33 +187,33 @@ permalink: /
                             {% endif %}
                         {% endfor %}
                     </div>
-                    <p class="installer-meta">Version {{ installer.version }} (Beta) &middot; <a href="https://github.com/librescoot/installer/releases">Alle Releases</a> &middot; <a href="https://github.com/librescoot/installer">Quellcode</a> &middot; <a href="https://librescoot.org/docs/install.html">Installationsanleitung</a></p>
-                    <p class="unsigned-note">Der Installer ist nicht signiert. <strong>macOS:</strong> Rechtsklick &rarr; Öffnen, oder <code>xattr -cr '/Applications/LibreScoot Installer.app'</code> ausführen. <strong>Windows:</strong> auf <em>Weitere Informationen</em> klicken &rarr; <em>Trotzdem ausführen</em>.</p>
+                    <p class="installer-meta">Version {{ installer.version }} (beta) &middot; <a href="https://github.com/librescoot/installer/releases">All releases</a> &middot; <a href="https://github.com/librescoot/installer">Source code</a> &middot; <a href="https://librescoot.org/docs/install.html">Installation guide</a></p>
+                    <p class="unsigned-note">The installer is not code-signed. <strong>macOS:</strong> right-click &rarr; Open, or run <code>xattr -cr '/Applications/LibreScoot Installer.app'</code>. <strong>Windows:</strong> click <em>More info</em> &rarr; <em>Run anyway</em>.</p>
                 </div>
             </div>
 
-            {# ── Firmware-Updates ── #}
+            {# ── Firmware Updates ── #}
             <div class="section">
                 <h2 class="section-title">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
-                    Firmware-Updates
+                    Firmware Updates
                 </h2>
-                <p class="hint">Zum Installieren eines Updates den Update-Modus im Display-Menü aktivieren und die .mender-Datei per USB kopieren. Für eine Neuinstallation nimm die <a href="#installer">Installer-App</a> oben.</p>
+                <p class="hint">To install an update, enable update mode via the display menu, then copy the .mender file over USB. For fresh installations, use the <a href="#installer">installer app</a> above.</p>
 
                 <div class="channels">
                     {% set channels = [
-                        { key: "stable", label: "Stable", desc: "Gründlich getestete Releases. Noch nicht verfügbar.", rec: false },
-                        { key: "testing", label: "Testing", desc: "Empfohlener Kanal. Neue Features, auf echter Hardware getestet.", rec: true },
-                        { key: "nightly", label: "Nightly", desc: "Aktuelle Entwicklungs-Builds. Nur für Entwickler:innen empfohlen.", rec: false }
+                        { key: "stable", label: "Stable", desc: "Fully tested releases. Not yet available.", rec: false },
+                        { key: "testing", label: "Testing", desc: "Recommended channel. New features, tested on real hardware.", rec: true },
+                        { key: "nightly", label: "Nightly", desc: "Latest development builds. Recommended for developers only.", rec: false }
                     ] %}
                     {% for ch in channels %}
                         {% set releases = firmware[ch.key] %}
                         {% set r = releases[0] if releases.length else null %}
                         <div class="ch-card{% if ch.rec %} ch-recommended{% endif %}">
-                            <h4>{{ ch.label }}{% if ch.rec %} <span class="ch-rec-badge">Empfohlen</span>{% endif %}</h4>
+                            <h4>{{ ch.label }}{% if ch.rec %} <span class="ch-rec-badge">Recommended</span>{% endif %}</h4>
                             <div class="ch-desc">{{ ch.desc }}</div>
                             {% if r %}
-                                <div class="ch-meta">{{ r.tag_name }} &middot; {{ r.published_at | fmtDate("de") }}</div>
+                                <div class="ch-meta">{{ r.tag_name }} &middot; {{ r.published_at | fmtDate }}</div>
                                 <div class="ch-assets">
                                     {% for a in r.assets %}
                                         {% if a.name.endsWith(".mender") %}
@@ -242,60 +234,60 @@ permalink: /
                                 <div class="ch-links">
                                     <a href="https://github.com/librescoot/librescoot/releases/tag/{{ r.tag_name }}" target="_blank" rel="noopener">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
-                                        Release Notes
+                                        Release notes
                                     </a>
                                     {% if releases.length > 1 %}
-                                        <a href="https://github.com/librescoot/librescoot/releases" target="_blank" rel="noopener">Ältere Releases</a>
+                                        <a href="https://github.com/librescoot/librescoot/releases" target="_blank" rel="noopener">Older releases</a>
                                     {% endif %}
                                 </div>
                             {% else %}
-                                <div class="ch-meta">Noch keine Releases.</div>
+                                <div class="ch-meta">No releases yet.</div>
                             {% endif %}
                         </div>
                     {% endfor %}
                 </div>
             </div>
 
-            {# ── Karten ── #}
+            {# ── Maps ── #}
             <div class="section">
                 <h2 class="section-title">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 6-3 6 3 6-3v13l-6 3-6-3-6 3Z"/><path d="m9 4v13"/><path d="m15 7v13"/></svg>
-                    Karten- &amp; Routing-Daten
+                    Map &amp; Routing Data
                 </h2>
-                {% if maps.updated %}<p class="hint" style="margin-top:-0.2rem">Aktualisiert am {{ maps.updated | fmtDate("de") }}</p>{% endif %}
-                <p>Offline-Kartenkacheln und Turn-by-Turn-Routing-Daten, nach Bundesland. Jedes Paket deckt zusätzlich etwa 20 km Umland mit ab. Lade die Karten- und Routing-Dateien für dein Bundesland und kopiere sie per USB auf den Roller. Es kann jeweils nur ein Bundesland installiert sein. Anleitung siehe <a href="https://librescoot.org/docs/features/offline-navigation.html">Offline-Navigation</a>.</p>
+                {% if maps.updated %}<p class="hint" style="margin-top:-0.2rem">Updated {{ maps.updated | fmtDate }}</p>{% endif %}
+                <p>Offline map tiles and turn-by-turn routing data, available per German state. Each one also covers about 20 km of the surrounding area. Download the map and routing files for your state and copy them to the scooter via USB. Only one state can be installed at a time. See <a href="https://librescoot.org/docs/features/offline-navigation.html">offline navigation</a> for setup instructions.</p>
 
                 <div class="map-table">
                     {% for state in maps.states %}
                         <div class="map-row">
                             <span class="map-name">{{ state.name }}</span>
                             {% if state.osm %}
-                                <a href="{{ state.osm.url }}" class="map-btn" title="Kartenkacheln für {{ state.name }}">
+                                <a href="{{ state.osm.url }}" class="map-btn" title="Map tiles for {{ state.name }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 6-3 6 3 6-3v13l-6 3-6-3-6 3Z"/><path d="m9 4v13"/><path d="m15 7v13"/></svg>
-                                    Kartenkacheln ({{ state.osm.size | fmt }})
+                                    Map Tiles ({{ state.osm.size | fmt }})
                                 </a>
                             {% endif %}
                             {% if state.valhalla %}
-                                <a href="{{ state.valhalla.url }}" class="map-btn" title="Routing-Daten für {{ state.name }}">
+                                <a href="{{ state.valhalla.url }}" class="map-btn" title="Routing data for {{ state.name }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
-                                    Routing-Daten ({{ state.valhalla.size | fmt }})
+                                    Routing Data ({{ state.valhalla.size | fmt }})
                                 </a>
                             {% endif %}
                         </div>
                     {% endfor %}
                 </div>
-                <p class="map-source">Quellen: <a href="https://github.com/librescoot/osm-tiles" target="_blank" rel="noopener">osm-tiles</a>, <a href="https://github.com/librescoot/valhalla-tiles" target="_blank" rel="noopener">valhalla-tiles</a></p>
+                <p class="map-source">Source: <a href="https://github.com/librescoot/osm-tiles" target="_blank" rel="noopener">osm-tiles</a>, <a href="https://github.com/librescoot/valhalla-tiles" target="_blank" rel="noopener">valhalla-tiles</a></p>
             </div>
         </div>
     </main>
 
     <footer class="footer">
         <div class="container footer-inner">
-            <span><strong>LibreScoot</strong> &mdash; Open-Source-Firmware für den unu Scooter Pro. Nicht verbunden mit unu GmbH.</span>
+            <span><strong>LibreScoot</strong> &mdash; Open-source firmware for unu Scooter Pro. Not affiliated with unu GmbH.</span>
             <div class="footer-links">
                 <a href="https://github.com/librescoot">GitHub</a>
                 <a href="https://discord.gg/VrumFruSzJ">Discord</a>
-                <a href="https://librescoot.org">Startseite</a>
+                <a href="https://librescoot.org">Home</a>
             </div>
         </div>
     </footer>
@@ -305,8 +297,8 @@ permalink: /
         var nav = document.querySelector('.header-links');
         var toggle = document.createElement('button');
         toggle.className = 'nav-toggle';
-        toggle.innerHTML = '☰';
-        toggle.setAttribute('aria-label', 'Navigation umschalten');
+        toggle.innerHTML = '\u2630';
+        toggle.setAttribute('aria-label', 'Toggle navigation');
         document.querySelector('.header-inner').appendChild(toggle);
         toggle.addEventListener('click', function() {
             nav.classList.toggle('nav-open');
