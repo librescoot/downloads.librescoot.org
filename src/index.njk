@@ -37,17 +37,9 @@ permalink: /
         .header-links { display: flex; gap: 1.5rem; font-size: 0.9rem; align-items: center; }
         .header-links a { color: var(--text-on-dark-muted); transition: color 0.15s; }
         .header-links a:hover { color: var(--text-on-dark); }
-        .nav-lang { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; }
-        .nav-lang a { color: var(--text-on-dark-muted); }
-        .nav-lang a.active { color: var(--text-on-dark); font-weight: 500; }
-        .nav-lang-sep { color: var(--text-on-dark-muted); opacity: 0.4; }
-        .i18n-switch-banner { background: var(--bg-secondary, #f5f5f4); color: var(--text-tertiary, #78716c); border-bottom: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.05)); font-size: 0.85rem; text-align: center; padding: 0.4rem 0; }
-        .i18n-switch-banner a { color: inherit; text-decoration: none; }
-        .i18n-switch-banner a:hover { text-decoration: underline; color: var(--text-primary, inherit); }
-        [data-theme="dark"] .i18n-switch-banner { background: rgba(255, 255, 255, 0.04); color: rgba(255, 255, 255, 0.6); border-bottom-color: rgba(255, 255, 255, 0.08); }
-        @media (prefers-color-scheme: dark) {
-            :root:not([data-theme="light"]) .i18n-switch-banner { background: rgba(255, 255, 255, 0.04); color: rgba(255, 255, 255, 0.6); border-bottom-color: rgba(255, 255, 255, 0.08); }
-        }
+        .nav-lang-switch a { display: inline-flex; align-items: center; gap: 0.35rem; color: var(--text-on-dark-muted); text-decoration: none; font-size: 0.9rem; transition: color 0.15s; }
+        .nav-lang-switch a:hover { color: var(--text-on-dark); }
+        .nav-lang-switch svg { flex-shrink: 0; opacity: 0.85; }
         main { padding: 2.5rem 0 4rem; min-height: calc(100vh - 150px); }
         h1 { font-size: 2.5rem; margin-bottom: 0.35rem; }
         .lead { font-size: 1.05rem; color: var(--text-secondary); margin-bottom: 2.5rem; }
@@ -147,10 +139,11 @@ permalink: /
                 <a href="https://librescoot.org/changelog.html">Changelog</a>
                 <a href="https://discord.gg/VrumFruSzJ">Discord</a>
                 <a href="https://github.com/librescoot">GitHub</a>
-                <span class="nav-lang" aria-label="Sprache">
-                    <a href="/" class="active" aria-current="page">DE</a>
-                    <span class="nav-lang-sep">·</span>
-                    <a href="/en/">EN</a>
+                <span class="nav-lang-switch">
+                    <a href="/en/" rel="alternate" hreflang="en">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                        In English
+                    </a>
                 </span>
                 <button class="theme-toggle" aria-label="Theme umschalten">
                     <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
@@ -159,7 +152,6 @@ permalink: /
             </nav>
         </div>
     </header>
-    <div class="i18n-switch-banner" role="status"><a href="/en/">Read in English →</a></div>
 
     <main>
         <div class="container">
@@ -221,7 +213,7 @@ permalink: /
                             <h4>{{ ch.label }}{% if ch.rec %} <span class="ch-rec-badge">Empfohlen</span>{% endif %}</h4>
                             <div class="ch-desc">{{ ch.desc }}</div>
                             {% if r %}
-                                <div class="ch-meta">{{ r.tag_name }} &middot; {{ r.published_at | fmtDate("de") }}</div>
+                                <div class="ch-meta">{{ r.tag_name }} &middot; {{ r.published_at | fmtDate }}</div>
                                 <div class="ch-assets">
                                     {% for a in r.assets %}
                                         {% if a.name.endsWith(".mender") %}
@@ -262,7 +254,7 @@ permalink: /
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 6-3 6 3 6-3v13l-6 3-6-3-6 3Z"/><path d="m9 4v13"/><path d="m15 7v13"/></svg>
                     Karten- &amp; Routing-Daten
                 </h2>
-                {% if maps.updated %}<p class="hint" style="margin-top:-0.2rem">Aktualisiert am {{ maps.updated | fmtDate("de") }}</p>{% endif %}
+                {% if maps.updated %}<p class="hint" style="margin-top:-0.2rem">Aktualisiert am {{ maps.updated | fmtDate }}</p>{% endif %}
                 <p>Offline-Kartenkacheln und Turn-by-Turn-Routing-Daten, nach Bundesland. Jedes Paket deckt zusätzlich etwa 20 km Umland mit ab. Lade die Karten- und Routing-Dateien für dein Bundesland und kopiere sie per USB auf den Roller. Es kann jeweils nur ein Bundesland installiert sein. Anleitung siehe <a href="https://librescoot.org/docs/features/offline-navigation.html">Offline-Navigation</a>.</p>
 
                 <div class="map-table">
