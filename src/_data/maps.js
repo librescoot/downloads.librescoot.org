@@ -10,7 +10,7 @@ const STATE_NAMES = {
   "hamburg": "Hamburg",
   "hessen": "Hessen",
   "mecklenburg-vorpommern": "Mecklenburg-Vorpommern",
-  "niedersachsen": "Niedersachsen",
+  "niedersachsen": "Niedersachsen (incl. Bremen)",
   "nordrhein-westfalen": "Nordrhein-Westfalen",
   "rheinland-pfalz": "Rheinland-Pfalz",
   "saarland": "Saarland",
