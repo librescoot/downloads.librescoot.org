@@ -204,8 +204,8 @@ permalink: /
 
                 <div class="channels">
                     {% set channels = [
-                        { key: "stable", label: "Stable", desc: "Gründlich getestete Releases. Noch nicht verfügbar.", rec: false },
-                        { key: "testing", label: "Testing", desc: "Empfohlener Kanal. Neue Features, auf echter Hardware getestet.", rec: true },
+                        { key: "stable", label: "Stable", desc: "Empfohlener Kanal. Gründlich getestete Releases.", rec: true },
+                        { key: "testing", label: "Testing", desc: "Vorschau auf kommende Releases. Neue Features, auf echter Hardware getestet.", rec: false },
                         { key: "nightly", label: "Nightly", desc: "Aktuelle Entwicklungs-Builds. Nur für Entwickler:innen empfohlen.", rec: false }
                     ] %}
                     {% for ch in channels %}
