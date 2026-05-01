@@ -117,3 +117,17 @@ for channel in nightly testing stable; do
   count=$(jq 'length' "${OUTDIR}/${channel}.json")
   echo "${channel}: ${count} releases"
 done
+
+# Combined latest-per-channel manifest. One fetch gets the current pointer
+# for every firmware channel; consumers (installer) avoid three round trips.
+jq -n \
+  --slurpfile stable "${OUTDIR}/stable.json" \
+  --slurpfile testing "${OUTDIR}/testing.json" \
+  --slurpfile nightly "${OUTDIR}/nightly.json" '
+  {
+    stable:  ($stable[0][0]  // null),
+    testing: ($testing[0][0] // null),
+    nightly: ($nightly[0][0] // null)
+  }
+' > "${OUTDIR}/latest.json"
+echo "latest.json: combined latest-per-channel manifest written"
