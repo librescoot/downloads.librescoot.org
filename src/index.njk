@@ -72,6 +72,10 @@ permalink: /
         .installer-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.55rem 1.1rem; background: var(--accent); color: var(--on-accent); text-decoration: none; border-radius: var(--radius); font-weight: 500; font-size: 0.9rem; transition: background 0.15s; }
         .installer-btn:hover { background: var(--accent-hover); color: var(--on-accent); }
         .installer-btn svg { flex-shrink: 0; }
+        .installer-btn-group { display: inline-flex; }
+        .installer-btn-group > .installer-btn { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+        .installer-btn-suffix { display: inline-flex; align-items: center; padding: 0.55rem 0.8rem; background: var(--bg-card); color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 0.82rem; border: 1px solid var(--border-subtle); border-left: none; border-top-right-radius: var(--radius); border-bottom-right-radius: var(--radius); transition: background 0.15s, color 0.15s; }
+        .installer-btn-suffix:hover { background: var(--bg-secondary); color: var(--text-primary); }
         .installer-meta { font-size: 0.82rem; color: var(--text-tertiary); margin: 0.25rem 0 0; }
         .unsigned-note { font-size: 0.82rem; color: var(--yellow); background: var(--yellow-bg); border: 1px solid var(--yellow); border-radius: var(--radius); padding: 0.5rem 0.75rem; margin: 0.75rem 0 0; }
         .unsigned-note code { font-size: 0.78rem; }
@@ -135,26 +139,36 @@ permalink: /
                 <div class="installer-hero">
                     <p>Desktop-App, die dich durch die Installation von Librescoot auf deinem Roller führt. Lädt die Firmware, flasht beide Boards und richtet die Offline-Karten ein. Du brauchst nur ein USB-Kabel und einen Schraubendreher.</p>
                     <p class="beta-note">Wir haben den Installer auf allen Plattformen mit echter Hardware getestet, trotzdem kann etwas schiefgehen. Im schlimmsten Fall ist dein Roller ohne tiefergehenden Eingriff nicht mehr nutzbar. Verwendung auf eigene Gefahr. Für Support versuch's auf <a href="https://discord.gg/VrumFruSzJ">Discord</a>, bedenk aber, dass wir alle ehrenamtlich dabei sind.</p>
+                    {% set platforms = installer.assets | byPlatform %}
                     <div class="installer-buttons">
-                        {% for asset in installer.assets %}
-                            {% set name = asset.name | lower %}
-                            {% if "linux" in name and (name.endsWith(".tar.gz") or name.endsWith(".tgz")) %}
-                                <a href="{{ asset.url }}" class="installer-btn">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-                                    Linux (x64)
-                                </a>
-                            {% elif "macos" in name and ".dmg" in name %}
-                                <a href="{{ asset.url }}" class="installer-btn">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-                                    macOS (Universal)
-                                </a>
-                            {% elif "windows" in name and ".zip" in name %}
-                                <a href="{{ asset.url }}" class="installer-btn">
+                        {% if platforms.linux %}
+                            <a href="{{ platforms.linux.url }}" class="installer-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                                Linux (x64)
+                            </a>
+                        {% endif %}
+                        {% if platforms.macos %}
+                            <a href="{{ platforms.macos.url }}" class="installer-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                                macOS (Universal)
+                            </a>
+                        {% endif %}
+                        {% if platforms.windowsExe %}
+                            <span class="installer-btn-group">
+                                <a href="{{ platforms.windowsExe.url }}" class="installer-btn">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
                                     Windows (x64)
                                 </a>
-                            {% endif %}
-                        {% endfor %}
+                                {% if platforms.windowsZip %}
+                                    <a href="{{ platforms.windowsZip.url }}" class="installer-btn-suffix" title="Portables ZIP-Archiv">.zip</a>
+                                {% endif %}
+                            </span>
+                        {% elif platforms.windowsZip %}
+                            <a href="{{ platforms.windowsZip.url }}" class="installer-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
+                                Windows (x64)
+                            </a>
+                        {% endif %}
                     </div>
                     <p class="installer-meta">Version {{ installer.version }} &middot; <a href="https://github.com/librescoot/installer/releases">Alle Releases</a> &middot; <a href="https://github.com/librescoot/installer">Quellcode</a> &middot; <a href="https://librescoot.org/docs/install.html">Installationsanleitung</a></p>
                     <p class="unsigned-note">Der Windows-Build ist nicht signiert; bei der SmartScreen-Warnung auf <em>Weitere Informationen</em> klicken &rarr; <em>Trotzdem ausführen</em>.</p>
