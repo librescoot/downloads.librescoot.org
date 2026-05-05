@@ -170,7 +170,7 @@ permalink: /en/
                             </a>
                         {% endif %}
                     </div>
-                    <p class="installer-meta">Version {{ installer.version }} &middot; <a href="https://github.com/librescoot/installer/releases">All releases</a> &middot; <a href="https://github.com/librescoot/installer">Source code</a> &middot; <a href="https://librescoot.org/docs/install.html">Installation guide</a></p>
+                    <p class="installer-meta">Version {{ installer.version }} &middot; <a href="https://github.com/librescoot/installer/releases">All releases</a> &middot; <a href="https://github.com/librescoot/installer">Source code</a> &middot; <a href="https://librescoot.org/en/docs/install.html">Installation guide</a></p>
                     <p class="unsigned-note">The Windows build is not code-signed; when SmartScreen warns, click <em>More info</em> &rarr; <em>Run anyway</em>.</p>
                 </div>
             </div>
@@ -238,7 +238,7 @@ permalink: /en/
                     Map &amp; Routing Data
                 </h2>
                 {% if maps.updated %}<p class="hint" style="margin-top:-0.2rem">Updated {{ maps.updated | fmtDate }}</p>{% endif %}
-                <p>Offline map tiles and turn-by-turn routing data, available per German state. Each one also covers about 20 km of the surrounding area. Download the map and routing files for your state and copy them to the scooter via USB. Only one state can be installed at a time. See <a href="https://librescoot.org/docs/features/offline-navigation.html">offline navigation</a> for setup instructions.</p>
+                <p>Offline map tiles and turn-by-turn routing data, available per German state. Each one also covers about 20 km of the surrounding area. Download the map and routing files for your state and copy them to the scooter via USB. Only one state can be installed at a time. See <a href="https://librescoot.org/en/docs/features/offline-navigation.html">offline navigation</a> for setup instructions.</p>
 
                 <div class="map-table">
                     {% for state in maps.states %}
