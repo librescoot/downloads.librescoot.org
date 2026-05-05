@@ -42,7 +42,12 @@ installer_data=$(curl -sf -H "Accept: application/vnd.github+json" \
 if [ -n "$installer_data" ]; then
   echo "$installer_data" | jq '{
     tag_name,
-    assets: [.assets[] | {name, size, url: .browser_download_url}]
+    assets: [.assets[] | {
+      name,
+      size,
+      sha256: (.digest | if . then ltrimstr("sha256:") else null end),
+      url: .browser_download_url
+    }]
   }' > "${OUTDIR}/installer.json"
   echo "installer: $(echo "$installer_data" | jq '.tag_name')"
 else
@@ -110,7 +115,12 @@ for channel in nightly testing stable; do
         tag_name,
         published_at,
         prerelease,
-        assets: [.assets[] | {name, size, url: .browser_download_url}]
+        assets: [.assets[] | {
+          name,
+          size,
+          sha256: (.digest | if . then ltrimstr("sha256:") else null end),
+          url: .browser_download_url
+        }]
       }]
   ' > "${OUTDIR}/${channel}.json"
 
