@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-// German state IDs to display names
+// Region IDs to display names
 const STATE_NAMES = {
   "baden-wuerttemberg": "Baden-W\u00FCrttemberg",
   "bayern": "Bayern",
@@ -18,6 +18,10 @@ const STATE_NAMES = {
   "sachsen": "Sachsen",
   "schleswig-holstein": "Schleswig-Holstein",
   "thueringen": "Th\u00FCringen",
+  "netherlands": "Nederland",
+  "belgium": "Belgi\u00EB",
+  "luxembourg": "Luxembourg",
+  "ile-de-france": "\u00CEle-de-France",
 };
 
 module.exports = function () {
