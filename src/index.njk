@@ -54,6 +54,8 @@ permalink: /
         .ch-links a { display: inline-flex; align-items: center; gap: 0.2rem; color: var(--accent); text-decoration: none; }
         .ch-links a:hover { color: var(--accent-hover); }
         .ch-links svg { width: 12px; height: 12px; }
+        .map-country { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-tertiary); margin: 0.8rem 0 0.3rem; }
+        .map-country:first-child { margin-top: 0; }
         .map-table { border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); overflow: hidden; }
         .map-row { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 0.5rem; padding: 0.35rem 0.9rem; border-bottom: 1px solid var(--border-subtle); }
         .map-row:last-child { border-bottom: none; }
@@ -238,27 +240,30 @@ permalink: /
                     Karten- &amp; Routing-Daten
                 </h2>
                 {% if maps.updated %}<p class="hint" style="margin-top:-0.2rem">Aktualisiert am {{ maps.updated | fmtDate }}</p>{% endif %}
-                <p>Offline-Kartenkacheln und Turn-by-Turn-Routing-Daten, nach Bundesland. Jedes Paket deckt zusätzlich etwa 20 km Umland mit ab. Lade die Karten- und Routing-Dateien für dein Bundesland und kopiere sie per USB auf den Roller. Es kann jeweils nur ein Bundesland installiert sein. Anleitung siehe <a href="https://librescoot.org/docs/features/offline-navigation.html">Offline-Navigation</a>.</p>
+                <p>Offline-Kartenkacheln und Turn-by-Turn-Routing-Daten, nach Region. Jedes Paket deckt zusätzlich etwa 20 km Umland mit ab. Lade die Karten- und Routing-Dateien für deine Region und kopiere sie per USB auf den Roller. Es kann jeweils nur eine Region installiert sein. Anleitung siehe <a href="https://librescoot.org/docs/features/offline-navigation.html">Offline-Navigation</a>.</p>
 
-                <div class="map-table">
-                    {% for state in maps.states %}
-                        <div class="map-row">
-                            <span class="map-name">{{ state.name }}</span>
-                            {% if state.osm %}
-                                <a href="{{ state.osm.url }}" class="map-btn" title="Kartenkacheln für {{ state.name }}">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 6-3 6 3 6-3v13l-6 3-6-3-6 3Z"/><path d="m9 4v13"/><path d="m15 7v13"/></svg>
-                                    Kartenkacheln ({{ state.osm.size | fmt }})
-                                </a>
-                            {% endif %}
-                            {% if state.valhalla %}
-                                <a href="{{ state.valhalla.url }}" class="map-btn" title="Routing-Daten für {{ state.name }}">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
-                                    Routing-Daten ({{ state.valhalla.size | fmt }})
-                                </a>
-                            {% endif %}
-                        </div>
-                    {% endfor %}
-                </div>
+                {% for country in maps.countries %}
+                    <p class="map-country">{{ country.name }}</p>
+                    <div class="map-table">
+                        {% for state in country.states %}
+                            <div class="map-row">
+                                <span class="map-name">{{ state.name }}</span>
+                                {% if state.osm %}
+                                    <a href="{{ state.osm.url }}" class="map-btn" title="Kartenkacheln für {{ state.name }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 6-3 6 3 6-3v13l-6 3-6-3-6 3Z"/><path d="m9 4v13"/><path d="m15 7v13"/></svg>
+                                        Kartenkacheln ({{ state.osm.size | fmt }})
+                                    </a>
+                                {% endif %}
+                                {% if state.valhalla %}
+                                    <a href="{{ state.valhalla.url }}" class="map-btn" title="Routing-Daten für {{ state.name }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+                                        Routing-Daten ({{ state.valhalla.size | fmt }})
+                                    </a>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
                 <p class="map-source">Quellen: <a href="https://github.com/librescoot/osm-tiles" target="_blank" rel="noopener">osm-tiles</a>, <a href="https://github.com/librescoot/valhalla-tiles" target="_blank" rel="noopener">valhalla-tiles</a></p>
             </div>
         </div>
