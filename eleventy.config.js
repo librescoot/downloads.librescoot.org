@@ -24,14 +24,22 @@ module.exports = function (eleventyConfig) {
   });
 
   // Categorize installer release assets by platform so templates can render
-  // each platform's button without re-walking the asset list. Windows is split
-  // into `windowsExe` (preferred portable single-file installer) and
-  // `windowsZip` (legacy folder zip).
+  // each platform's button without re-walking the asset list. Linux and
+  // Windows each split into a preferred portable artifact (`linuxAppImage`,
+  // `windowsExe`) and a legacy archive (`linux` tar.gz, `windowsZip`).
   eleventyConfig.addFilter("byPlatform", function (assets) {
-    const out = { linux: null, macos: null, windowsExe: null, windowsZip: null };
+    const out = {
+      linuxAppImage: null,
+      linux: null,
+      macos: null,
+      windowsExe: null,
+      windowsZip: null,
+    };
     for (const a of assets || []) {
       const n = (a.name || "").toLowerCase();
-      if (n.includes("linux") && (n.endsWith(".tar.gz") || n.endsWith(".tgz"))) {
+      if (n.includes("linux") && n.endsWith(".appimage")) {
+        out.linuxAppImage = a;
+      } else if (n.includes("linux") && (n.endsWith(".tar.gz") || n.endsWith(".tgz"))) {
         out.linux = a;
       } else if (n.includes("macos") && n.endsWith(".dmg")) {
         out.macos = a;
