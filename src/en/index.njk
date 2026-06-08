@@ -81,6 +81,8 @@ permalink: /en/
         .installer-meta { font-size: 0.82rem; color: var(--text-tertiary); margin: 0.25rem 0 0; }
         .unsigned-note { font-size: 0.82rem; color: var(--yellow); background: var(--yellow-bg); border: 1px solid var(--yellow); border-radius: var(--radius); padding: 0.5rem 0.75rem; margin: 0.75rem 0 0; }
         .unsigned-note code { font-size: 0.78rem; }
+        .video-embed { position: relative; width: 100%; margin: 1.25rem 0 0; aspect-ratio: 16 / 9; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border-subtle); background: #000; }
+        .video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
         .footer { padding: 1.5rem 0; font-size: 0.85rem; color: var(--text-on-dark-muted); }
         .footer-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; }
         .footer strong { color: var(--text-on-dark); font-family: var(--font-display); }
@@ -185,6 +187,9 @@ permalink: /en/
                     <p class="installer-meta">Next: <a href="https://librescoot.org/en/handbook/quick-start.html">Quickstart</a> &middot; <a href="https://librescoot.org/en/handbook/">Handbook</a></p>
                     <p class="installer-meta" title="Version {{ installer.version }}"><a href="https://github.com/librescoot/installer/releases">All releases</a> &middot; <a href="https://github.com/librescoot/installer">Source code</a> &middot; <a href="https://librescoot.org/en/docs/install.html">Installation guide</a></p>
                     <p class="unsigned-note">The Windows build is not code-signed; when SmartScreen warns, click <em>More info</em> &rarr; <em>Run anyway</em>.</p>
+                    <div class="video-embed">
+                        <iframe src="https://www.youtube-nocookie.com/embed/gQXannrg-FQ?si=N1gDt2tAoQQ7Q5-K" title="Installing Librescoot" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
                 </div>
             </div>
 
