@@ -78,26 +78,14 @@ for repo in osm-tiles valhalla-tiles; do
   fi
 done
 
-# Generate combined tiles.json keyed by region slug for update checks
+# Generate combined tiles.json keyed by region slug for update checks.
+# The jq program lives in tiles-index.jq so .github/test-tiles-index.sh can
+# exercise it against fixtures without hitting the GitHub API.
 jq -n \
   --slurpfile osm "${OUTDIR}/osm-tiles.json" \
-  --slurpfile valhalla "${OUTDIR}/valhalla-tiles.json" '
-  def by_region(prefix; suffix):
-    [.[] | {
-      key: (.name | ltrimstr(prefix) | rtrimstr(suffix)),
-      value: {sha256, size, updated_at, url}
-    }] | from_entries;
-
-  ($osm[0] | by_region("tiles_"; ".mbtiles")) as $osm_map |
-  ($valhalla[0] | by_region("valhalla_tiles_"; ".tar")) as $val_map |
-  ($osm_map | keys) + ($val_map | keys) | unique | map({
-    key: .,
-    value: {
-      map: ($osm_map[.] // null),
-      valhalla: ($val_map[.] // null)
-    }
-  }) | from_entries
-' > "${OUTDIR}/tiles.json"
+  --slurpfile valhalla "${OUTDIR}/valhalla-tiles.json" \
+  -f "$(dirname "${BASH_SOURCE[0]}")/tiles-index.jq" \
+  > "${OUTDIR}/tiles.json"
 echo "tiles.json: combined index written"
 
 # Generate firmware index for each channel
