@@ -29,6 +29,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Runs before the API call so a broken tiles-index.jq fails fast and
+      # loudly. Without it the only symptom is a maps page that quietly drops
+      # the compressed routing downloads, which nothing else here would catch.
+      - name: Test tiles index generation
+        run: .github/test-tiles-index.sh
+
       - name: Fetch release data
         run: .github/generate-release-index.sh
         env:
