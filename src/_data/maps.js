@@ -57,6 +57,11 @@ module.exports = function () {
     const m = a.name.match(/^valhalla_tiles_(.+)\.tar$/);
     if (m) valhalla[m[1]] = a;
   }
+  const valhallaZst = {};
+  for (const a of valhallaAssets) {
+    const m = a.name.match(/^valhalla_tiles_(.+)\.tar\.zst$/);
+    if (m) valhallaZst[m[1]] = a;
+  }
 
   const allDates = [...osmAssets, ...valhallaAssets]
     .map((a) => a.updated_at)
@@ -70,6 +75,7 @@ module.exports = function () {
     name: r.name,
     osm: osm[r.id] || null,
     valhalla: valhalla[r.id] || null,
+    valhallaZst: valhallaZst[r.id] || null,
   });
 
   // Group known regions under their country bucket. Any unrecognised slugs
@@ -88,7 +94,13 @@ module.exports = function () {
   const orphans = [...seen]
     .filter((id) => !known.has(id))
     .sort()
-    .map((id) => ({ id, name: id, osm: osm[id] || null, valhalla: valhalla[id] || null }));
+    .map((id) => ({
+      id,
+      name: id,
+      osm: osm[id] || null,
+      valhalla: valhalla[id] || null,
+      valhallaZst: valhallaZst[id] || null,
+    }));
   if (orphans.length) {
     countries.push({ id: "other", name: "Other", states: orphans });
   }
