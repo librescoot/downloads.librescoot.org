@@ -67,8 +67,30 @@ fi
 
 # Generate map/routing data indexes
 for repo in osm-tiles valhalla-tiles; do
-  data=$(gh_api \
-    "https://api.github.com/repos/librescoot/${repo}/releases/tags/latest")
+  case "$repo" in
+    osm-tiles)
+      # osm-tiles publishes every build under its own tiles-<timestamp> tag so
+      # asset URLs are immutable: the old scheme rewrote one tag in place, so a
+      # URL could serve different bytes than the digest recorded here and a
+      # vehicle would fail the checksum on a file it downloaded correctly.
+      # Falls back to the fixed tag until the first immutable release exists.
+      data=$(gh_api \
+        "https://api.github.com/repos/librescoot/${repo}/releases?per_page=20" \
+        | jq '[.[] | select(.draft == false and .prerelease == false
+                            and (.tag_name | startswith("tiles-")))] | .[0] // empty')
+      if [ -z "$data" ]; then
+        echo "${repo}: no tiles-* release yet, falling back to tags/latest"
+        data=$(gh_api \
+          "https://api.github.com/repos/librescoot/${repo}/releases/tags/latest")
+      fi
+      ;;
+    *)
+      # valhalla-tiles still publishes to a fixed tag, and its dated releases
+      # are older than it, so resolve it by tag rather than by date.
+      data=$(gh_api \
+        "https://api.github.com/repos/librescoot/${repo}/releases/tags/latest")
+      ;;
+  esac
 
   if [ -n "$data" ]; then
     echo "$data" | jq '[.assets[] | {
