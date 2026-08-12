@@ -12,13 +12,25 @@ OUTDIR="${DEST:-src/releases}"
 
 mkdir -p "$OUTDIR"
 
+# A transient network or TLS blip used to abort the whole script through
+# pipefail, leaving releases/*.json describing the previous build. Nothing
+# downstream notices: vehicles keep reading a stale manifest and simply never
+# see the new release. Retry before giving up.
+gh_api() {
+  curl -sfL --retry 5 --retry-delay 3 --retry-all-errors \
+    --connect-timeout 15 --max-time 120 \
+    -H "Accept: application/vnd.github+json" \
+    -H "User-Agent: librescoot-downloads-gen" \
+    ${GITHUB_TOKEN:+-H "Authorization: Bearer ${GITHUB_TOKEN}"} \
+    "$@"
+}
+
+
 # Fetch all releases (paginated, up to 300 — enough for months of nightlies)
 all_releases="[]"
 page=1
 while [ "$page" -le 3 ]; do
-  page_data=$(curl -sf -H "Accept: application/vnd.github+json" \
-    -H "User-Agent: librescoot-downloads-gen" \
-    ${GITHUB_TOKEN:+-H "Authorization: Bearer ${GITHUB_TOKEN}"} \
+  page_data=$(gh_api \
     "${API_URL}?per_page=100&page=${page}")
 
   count=$(echo "$page_data" | jq 'length')
@@ -34,9 +46,7 @@ total=$(echo "$all_releases" | jq 'length')
 echo "Fetched ${total} releases total"
 
 # Fetch installer release
-installer_data=$(curl -sf -H "Accept: application/vnd.github+json" \
-  -H "User-Agent: librescoot-downloads-gen" \
-  ${GITHUB_TOKEN:+-H "Authorization: Bearer ${GITHUB_TOKEN}"} \
+installer_data=$(gh_api \
   "https://api.github.com/repos/librescoot/installer/releases/latest")
 
 if [ -n "$installer_data" ]; then
@@ -57,9 +67,7 @@ fi
 
 # Generate map/routing data indexes
 for repo in osm-tiles valhalla-tiles; do
-  data=$(curl -sf -H "Accept: application/vnd.github+json" \
-    -H "User-Agent: librescoot-downloads-gen" \
-    ${GITHUB_TOKEN:+-H "Authorization: Bearer ${GITHUB_TOKEN}"} \
+  data=$(gh_api \
     "https://api.github.com/repos/librescoot/${repo}/releases/tags/latest")
 
   if [ -n "$data" ]; then
