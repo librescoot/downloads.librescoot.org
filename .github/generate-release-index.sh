@@ -73,15 +73,16 @@ for repo in osm-tiles valhalla-tiles; do
       # asset URLs are immutable: the old scheme rewrote one tag in place, so a
       # URL could serve different bytes than the digest recorded here and a
       # vehicle would fail the checksum on a file it downloaded correctly.
-      # Falls back to the fixed tag until the first immutable release exists.
+      # There is deliberately no fallback to the old fixed tag. That release
+      # still exists but is frozen at the last build of the old scheme, so
+      # falling back to it would quietly publish stale tiles rather than fail.
       data=$(gh_api \
         "https://api.github.com/repos/librescoot/${repo}/releases?per_page=20" \
         | jq '[.[] | select(.draft == false and .prerelease == false
                             and (.tag_name | startswith("tiles-")))] | .[0] // empty')
       if [ -z "$data" ]; then
-        echo "${repo}: no tiles-* release yet, falling back to tags/latest"
-        data=$(gh_api \
-          "https://api.github.com/repos/librescoot/${repo}/releases/tags/latest")
+        echo "${repo}: no tiles-* release found" >&2
+        exit 1
       fi
       ;;
     *)
