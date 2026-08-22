@@ -68,8 +68,8 @@ permalink: /en/
         .installer-hero { background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 1.25rem; }
         .installer-hero p { color: var(--text-secondary); font-size: 0.95rem; margin: 0.5rem 0; }
         .installer-hero p:first-child { margin-top: 0; }
-        .beta-note { font-size: 0.88rem; color: var(--yellow); background: var(--yellow-bg); border: 1px solid var(--yellow); border-radius: var(--radius); padding: 0.5rem 0.75rem; margin: 0.75rem 0; }
-        .beta-note a { color: var(--yellow); font-weight: 600; }
+        .risk-note { margin-top: 0.5rem; }
+        .warn-icon { width: 14px; height: 14px; vertical-align: -2px; color: var(--yellow); margin-right: 0.15rem; }
         .installer-buttons { display: flex; gap: 0.6rem; flex-wrap: wrap; margin: 1rem 0 0.5rem; }
         .installer-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.55rem 1.1rem; background: var(--accent); color: var(--on-accent); text-decoration: none; border-radius: var(--radius); font-weight: 500; font-size: 0.9rem; transition: background 0.15s; }
         .installer-btn:hover { background: var(--accent-hover); color: var(--on-accent); }
@@ -79,7 +79,12 @@ permalink: /en/
         .installer-btn-suffix { display: inline-flex; align-items: center; padding: 0.55rem 0.8rem; background: var(--bg-card); color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 0.82rem; border: 1px solid var(--border-subtle); border-left: none; border-top-right-radius: var(--radius); border-bottom-right-radius: var(--radius); transition: background 0.15s, color 0.15s; }
         .installer-btn-suffix:hover { background: var(--bg-secondary); color: var(--text-primary); }
         .installer-meta { font-size: 0.82rem; color: var(--text-tertiary); margin: 0.25rem 0 0; }
-        .unsigned-note { font-size: 0.82rem; color: var(--yellow); background: var(--yellow-bg); border: 1px solid var(--yellow); border-radius: var(--radius); padding: 0.5rem 0.75rem; margin: 0.75rem 0 0; }
+        .beta-box { font-size: 0.82rem; background: var(--accent-subtle); border: 1px solid var(--accent); border-radius: var(--radius); padding: 0.6rem 0.75rem; margin: 0.75rem 0 0; }
+        .beta-box p { margin: 0; }
+        .beta-box p + p { margin-top: 0.4rem; }
+        .beta-box ul { margin: 0.4rem 0 0; padding-left: 1.1rem; }
+        .beta-box li { margin: 0.15rem 0; }
+        .unsigned-note { font-size: 0.75rem; line-height: 1.35; color: var(--yellow); background: var(--yellow-bg); border: 1px solid var(--yellow); border-radius: var(--radius); padding: 0.3rem 0.55rem; margin: 0.6rem 0 0; }
         .unsigned-note code { font-size: 0.78rem; }
         .video-embed { position: relative; width: 100%; margin: 1.25rem 0 0; aspect-ratio: 16 / 9; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border-subtle); background: #000; }
         .video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
@@ -141,8 +146,8 @@ permalink: /en/
                     Installer
                 </h2>
                 <div class="installer-hero">
-                    <p>Desktop app that walks you through installing Librescoot on your scooter. Downloads firmware, flashes both boards, and sets up offline maps. All you need is a USB cable and a screwdriver.</p>
-                    <p class="beta-note">While we have tested on all platforms against real hardware, things can still go wrong. In the worst case, your scooter might become inoperable without deeper intervention. Use at your own risk. For support, try <a href="https://discord.gg/VrumFruSzJ">Discord</a>, but keep in mind we're all volunteers.</p>
+                    <p>The installer handles the whole thing: downloading the firmware, flashing both boards, setting up the offline maps. All you need is a USB cable, a screwdriver and twenty minutes.</p>
+                    <p class="risk-note"><svg class="warn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> We test every release on real hardware, on all three platforms. Even so, this is your scooter’s firmware, and if something goes wrong halfway through it stays put until you sort it out. Use at your own risk. If you get stuck, ask on <a href="https://discord.gg/VrumFruSzJ">Discord</a>, and bear with us, we all do this on the side.</p>
                     {% set platforms = installer.assets | byPlatform %}
                     <div class="installer-buttons">
                         {% if platforms.linuxAppImage %}
@@ -186,9 +191,18 @@ permalink: /en/
                     </div>
                     <p class="installer-meta">Next: <a href="https://librescoot.org/en/handbook/quick-start.html">Quickstart</a> &middot; <a href="https://librescoot.org/en/handbook/">Handbook</a></p>
                     <p class="installer-meta" title="Version {{ installer.version }}"><a href="https://github.com/librescoot/installer/releases">All releases</a> &middot; <a href="https://github.com/librescoot/installer">Source code</a> &middot; <a href="https://librescoot.org/en/docs/install.html">Installation guide</a></p>
-                    {# Beta prerelease; bump the tag here for new betas (push a hyphenated tag, e.g. v2.0.0-beta.2, CI builds and publishes the prerelease) #}
-                    <p class="installer-meta">Beta: <a href="https://github.com/librescoot/installer/releases/tag/v2.0.0-beta.1" target="_blank" rel="noopener">2.0.0 beta 1 with the new install flow</a>, please only use this if we asked you to.</p>
                     <p class="unsigned-note">The Windows build is not code-signed; when SmartScreen warns, click <em>More info</em> &rarr; <em>Run anyway</em>.</p>
+                    {# Beta prerelease; bump the tag here for new betas (push a hyphenated tag, e.g. v2.0.0-beta.2, CI builds and publishes the prerelease) #}
+                    <div class="beta-box">
+                        <p><strong><a href="https://github.com/librescoot/installer/releases/tag/v2.0.0-beta.1" target="_blank" rel="noopener">2.0.0 beta 1</a>: what is different</strong></p>
+                        <ul>
+                            <li>Upgrade instead of reinstall: settings, keycards, maps and trips are kept.</li>
+                            <li>Pick per board: upgrade, install fresh, or leave it alone.</li>
+                            <li>Once you swap the USB cable over, the scooter finishes on its own. No laptop needed for the rest.</li>
+                            <li>Progress and errors show on the dashboard. When it is done the scooter unlocks itself, that is the signal.</li>
+                        </ul>
+                        <p>If you are somewhat technical and want to help test, give it a go and say hello on <a href="https://discord.gg/VrumFruSzJ">Discord</a>.</p>
+                    </div>
                     <div class="video-embed">
                         <iframe src="https://www.youtube-nocookie.com/embed/gQXannrg-FQ?si=N1gDt2tAoQQ7Q5-K" title="Installing Librescoot" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                     </div>
