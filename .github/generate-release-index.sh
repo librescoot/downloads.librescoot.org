@@ -7,6 +7,12 @@ set -euo pipefail
 
 REPO="librescoot/librescoot"
 RELEASES_PER_CHANNEL=30
+# The stage-0 image the installer writes before it installs an artifact. Pinned
+# on purpose and bumped by hand: it carries whatever the installer needs in
+# order to run (redis, bluetooth-service, mender-update), and the firmware line
+# a user picks may predate any of that. Artifacts depend on device_type alone,
+# so any stage-0 for this board can carry any target version.
+BOOTSTRAP_TAG="${BOOTSTRAP_TAG:-nightly-20260823T021701}"
 API_URL="https://api.github.com/repos/${REPO}/releases"
 OUTDIR="${DEST:-src/releases}"
 
@@ -147,16 +153,45 @@ for channel in nightly testing stable; do
   echo "${channel}: ${count} releases"
 done
 
+# The pinned stage-0 release, as its own entry.
+echo "$all_releases" | jq --arg tag "$BOOTSTRAP_TAG" '
+  [.[] | select(.tag_name == $tag)]
+  | .[:1]
+  | [.[] | {
+      tag_name,
+      published_at,
+      prerelease,
+      assets: [.assets[] | {
+        name,
+        size,
+        sha256: (.digest | if . then ltrimstr("sha256:") else null end),
+        url: .browser_download_url
+      }]
+    }]
+' > "${OUTDIR}/bootstrap.json"
+
+if [ "$(jq 'length' "${OUTDIR}/bootstrap.json")" -eq 0 ]; then
+  # A pin that no longer resolves is worse than no pin: the installer would
+  # fall back to the target release's stage-0, which is the behaviour this
+  # exists to avoid. Fail loudly so the tag gets bumped.
+  echo "ERROR: bootstrap tag ${BOOTSTRAP_TAG} matched no release" >&2
+  exit 1
+fi
+echo "bootstrap: pinned to ${BOOTSTRAP_TAG}"
+
 # Combined latest-per-channel manifest. One fetch gets the current pointer
 # for every firmware channel; consumers (installer) avoid three round trips.
+# bootstrap is the stage-0 to write first, whichever channel is chosen.
 jq -n \
   --slurpfile stable "${OUTDIR}/stable.json" \
   --slurpfile testing "${OUTDIR}/testing.json" \
-  --slurpfile nightly "${OUTDIR}/nightly.json" '
+  --slurpfile nightly "${OUTDIR}/nightly.json" \
+  --slurpfile bootstrap "${OUTDIR}/bootstrap.json" '
   {
     stable:  ($stable[0][0]  // null),
     testing: ($testing[0][0] // null),
-    nightly: ($nightly[0][0] // null)
+    nightly: ($nightly[0][0] // null),
+    bootstrap: ($bootstrap[0][0] // null)
   }
 ' > "${OUTDIR}/latest.json"
 echo "latest.json: combined latest-per-channel manifest written"
