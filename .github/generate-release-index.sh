@@ -9,10 +9,10 @@ REPO="librescoot/librescoot"
 RELEASES_PER_CHANNEL=30
 # The stage-0 image the installer writes before it installs an artifact. Pinned
 # on purpose and bumped by hand: it carries whatever the installer needs in
-# order to run (redis, bluetooth-service, mender-update), and the firmware line
-# a user picks may predate any of that. Artifacts depend on device_type alone,
+# order to run (redis, bluetooth-service, mender-update, zstd), and the firmware
+# line a user picks may predate any of that. Artifacts depend on device_type alone,
 # so any stage-0 for this board can carry any target version.
-BOOTSTRAP_TAG="${BOOTSTRAP_TAG:-nightly-20260823T021701}"
+BOOTSTRAP_TAG="${BOOTSTRAP_TAG:-nightly-20260823T082958}"
 API_URL="https://api.github.com/repos/${REPO}/releases"
 OUTDIR="${DEST:-src/releases}"
 
