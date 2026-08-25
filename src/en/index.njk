@@ -80,7 +80,9 @@ permalink: /en/
         .installer-btn-suffix:hover { background: var(--bg-secondary); color: var(--text-primary); }
         .installer-meta { font-size: 0.82rem; color: var(--text-tertiary); margin: 0.25rem 0 0; }
         .beta-box { font-size: 0.82rem; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius); padding: 0.6rem 0.75rem; margin: 0.75rem 0 0; }
-        .beta-badge { display: inline-block; margin-right: 0.45rem; padding: 0.05rem 0.4rem; border: 1px solid var(--yellow); border-radius: var(--radius); background: var(--yellow-bg); background: color-mix(in srgb, var(--yellow) 20%, transparent); color: var(--yellow); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; vertical-align: 1px; }
+        .beta-badge { display: inline-block; margin-right: 0.45rem; padding: 0.05rem 0.4rem; border: 1px solid #FBBF24; border-radius: var(--radius); background: #FDE68A; color: #713F12; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; vertical-align: 1px; }
+        [data-theme="dark"] .beta-badge { background: #FBBF24; border-color: #FBBF24; color: #1C1917; }
+        @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .beta-badge { background: #FBBF24; border-color: #FBBF24; color: #1C1917; } }
         .beta-box p { margin: 0; }
         .beta-box p + p { margin-top: 0.4rem; }
         .beta-box ul { margin: 0.4rem 0 0; padding-left: 1.1rem; }
