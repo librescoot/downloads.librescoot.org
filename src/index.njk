@@ -195,15 +195,21 @@ permalink: /
                     <p class="unsigned-note">Der Windows-Build ist nicht signiert; bei der SmartScreen-Warnung auf <em>Weitere Informationen</em> klicken &rarr; <em>Trotzdem ausführen</em>.</p>
                     {# Beta-Prerelease; bei neuen Betas den Tag hier aktualisieren (Tag mit Bindestrich pushen, z.B. v2.0.0-beta.2, CI baut und veröffentlicht das Prerelease) #}
                     <div class="beta-box">
-                        <p><span class="beta-badge">Beta</span>Version 2 wird noch getestet und ist noch nicht für alle geeignet. Wenn du etwas technisch bist und beim Testen helfen willst, hol dir <a href="https://github.com/librescoot/installer/releases/tag/v2.0.0-beta.13" target="_blank" rel="noopener">2.0.0 Beta 13</a> und meld dich auf <a href="https://discord.gg/VrumFruSzJ">Discord</a>.</p>
+                        <p><span class="beta-badge">Beta</span>Version 2 ist der nächste Installer: Er aktualisiert, statt neu aufzusetzen, und die zweite Hälfte der Installation erledigt der Roller ohne Laptop. Bei uns läuft er auf mehreren Rollern von Anfang bis Ende durch, aber er hat noch Ecken, und die finden wir nur mit Leuten, die sie melden. Wenn du dir zutraust, bei einem Hänger ein Log zu schicken, hol dir <a href="https://github.com/librescoot/installer/releases/tag/v2.0.0-beta.14" target="_blank" rel="noopener">2.0.0 Beta 14</a> und meld dich auf <a href="https://discord.gg/VrumFruSzJ">Discord</a>.</p>
+                        <p><strong>Was du wissen solltest</strong></p>
+                        <ul>
+                            <li>Eine komplette Installation dauert gut eine halbe Stunde. Etwa die Hälfte davon arbeitet der Roller allein, mit dem USB-Kabel am Display.</li>
+                            <li>Bleibt er hängen, sagt es dir der Roller selbst: rotes Blinken am Display-LED und Warnblinker. Steck den Laptop wieder an, der Installer liest dann vom Roller, was passiert ist, räumt auf und beginnt die Installation neu. Was schon übertragen ist, wird nicht noch einmal hochgeladen.</li>
+                            <li>Das Log liegt in <em>Dokumente/Librescoot Installer</em>. Das ist das Erste, was wir bei einem Problem brauchen.</li>
+                        </ul>
                         <p><strong>Neu im Vergleich zu Version 1</strong></p>
                         <ul>
                             <li>Aktualisieren statt neu aufsetzen: Einstellungen, Keycards, Karten und Fahrten überleben das Update.</li>
                             <li>Für jedes der beiden Boards entscheidest du selbst, ob es aktualisiert, neu installiert oder in Ruhe gelassen wird.</li>
-                            <li>Es geht schneller. Auf das Board kommt nur noch ein kleines Startsystem, der Rest wird als Update-Paket eingespielt.</li>
-                            <li>Die zweite Hälfte macht der Roller allein. Sobald das USB-Kabel wieder am Display steckt, kannst du den Laptop zuklappen; der Roller flasht das Display fertig und entsperrt sich, wenn er durch ist.</li>
-                            <li>Das Display schreibt dabei selbst mit, woran es gerade ist, während es sich installiert. Und wenn etwas schiefgeht, steht dort auch, was.</li>
-                            <li>Am Laptop zeigt dir der Installer, welcher Schritt läuft, wie lange er üblicherweise dauert, und wenn er länger braucht als sonst, sagt er das auch.</li>
+                            <li>Auf das Board kommt nur noch ein kleines Startsystem, der Rest wird als Update-Paket eingespielt. Das ist schneller und lässt sich später genauso aktualisieren wie ein normales OTA-Update.</li>
+                            <li>Sobald das USB-Kabel wieder am Display steckt, kannst du den Laptop zuklappen. Der Roller flasht das Display fertig, spielt die Karten ein und entsperrt sich, wenn er durch ist.</li>
+                            <li>Die Blinker zeigen den Fortschritt an, das Display schreibt mit, woran es gerade ist, und wenn etwas schiefgeht, steht dort auch, was.</li>
+                            <li>Am Laptop zeigt dir der Installer, welcher Schritt läuft und wie lange er üblicherweise dauert. Braucht er länger, sagt er das auch.</li>
                         </ul>
                     </div>
                     <div class="video-embed">
