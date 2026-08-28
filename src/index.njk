@@ -195,21 +195,22 @@ permalink: /
                     <p class="unsigned-note">Der Windows-Build ist nicht signiert; bei der SmartScreen-Warnung auf <em>Weitere Informationen</em> klicken &rarr; <em>Trotzdem ausführen</em>.</p>
                     {# Beta-Prerelease; bei neuen Betas den Tag hier aktualisieren (Tag mit Bindestrich pushen, z.B. v2.0.0-beta.2, CI baut und veröffentlicht das Prerelease) #}
                     <div class="beta-box">
-                        <p><span class="beta-badge">Beta</span>Version 2 ist der nächste Installer: Er aktualisiert, statt neu aufzusetzen, und die zweite Hälfte der Installation erledigt der Roller ohne Laptop. Bei uns läuft er auf mehreren Rollern von Anfang bis Ende durch, aber er hat noch Ecken, und die finden wir nur mit Leuten, die sie melden. Wenn du dir zutraust, bei einem Hänger ein Log zu schicken, hol dir <a href="https://github.com/librescoot/installer/releases/tag/v2.0.0-beta.14" target="_blank" rel="noopener">2.0.0 Beta 14</a> und meld dich auf <a href="https://discord.gg/VrumFruSzJ">Discord</a>.</p>
-                        <p><strong>Was du wissen solltest</strong></p>
+                        <p><span class="beta-badge">Beta</span>Installer 2.0 aktualisiert einen Roller, statt ihn neu aufzusetzen, und führt die zweite Hälfte der Installation ohne Laptop auf dem Roller aus. Die Beta ist auf unseren eigenen Rollern vollständig durchgelaufen und wird jetzt breiter getestet. Sie richtet sich an Nutzer, die bei einem Fehler das Protokoll bereitstellen können. Aktuelle Version: <a href="https://github.com/librescoot/installer/releases/tag/v2.0.0-beta.14" target="_blank" rel="noopener">2.0.0 Beta 14</a>. Rückmeldungen und Fragen bitte auf <a href="https://discord.gg/VrumFruSzJ">Discord</a>.</p>
+                        <p><strong>Ablauf und Dauer</strong></p>
                         <ul>
-                            <li>Eine komplette Installation dauert gut eine halbe Stunde. Etwa die Hälfte davon arbeitet der Roller allein, mit dem USB-Kabel am Display.</li>
-                            <li>Bleibt er hängen, sagt es dir der Roller selbst: rotes Blinken am Display-LED und Warnblinker. Steck den Laptop wieder an, der Installer liest dann vom Roller, was passiert ist, räumt auf und beginnt die Installation neu. Was schon übertragen ist, wird nicht noch einmal hochgeladen.</li>
-                            <li>Das Log liegt in <em>Dokumente/Librescoot Installer</em>. Das ist das Erste, was wir bei einem Problem brauchen.</li>
+                            <li>Eine vollständige Installation dauert etwa 20 Minuten, Downloads nicht eingerechnet. Rund 13 Minuten davon arbeitet der Roller selbstständig, mit dem USB-Kabel am Display.</li>
+                            <li>Der Fortschritt ist am Roller ablesbar: Die Blinker dienen als Fortschrittsanzeige, die Display-LED zeigt den Gesamtzustand. Ein Fehler wird durch rotes Blinken der Display-LED und die Warnblinker angezeigt.</li>
+                            <li>Nach einem Fehler bleibt der Roller erreichbar. Wird der Laptop wieder angeschlossen, liest der Installer den Zustand vom Roller, zeigt die Ursache an und beginnt die Installation von vorn. Bereits übertragene Dateien werden nicht erneut hochgeladen.</li>
+                            <li>Das Protokoll liegt unter <em>Dokumente/Librescoot Installer</em>. Bitte bei jeder Fehlermeldung mitschicken.</li>
                         </ul>
-                        <p><strong>Neu im Vergleich zu Version 1</strong></p>
+                        <p><strong>Neu gegenüber Version 1</strong></p>
                         <ul>
-                            <li>Aktualisieren statt neu aufsetzen: Einstellungen, Keycards, Karten und Fahrten überleben das Update.</li>
-                            <li>Für jedes der beiden Boards entscheidest du selbst, ob es aktualisiert, neu installiert oder in Ruhe gelassen wird.</li>
-                            <li>Auf das Board kommt nur noch ein kleines Startsystem, der Rest wird als Update-Paket eingespielt. Das ist schneller und lässt sich später genauso aktualisieren wie ein normales OTA-Update.</li>
-                            <li>Sobald das USB-Kabel wieder am Display steckt, kannst du den Laptop zuklappen. Der Roller flasht das Display fertig, spielt die Karten ein und entsperrt sich, wenn er durch ist.</li>
-                            <li>Die Blinker zeigen den Fortschritt an, das Display schreibt mit, woran es gerade ist, und wenn etwas schiefgeht, steht dort auch, was.</li>
-                            <li>Am Laptop zeigt dir der Installer, welcher Schritt läuft und wie lange er üblicherweise dauert. Braucht er länger, sagt er das auch.</li>
+                            <li>Aktualisierung statt Neuinstallation: Einstellungen, Keycards, Karten und Fahrten bleiben erhalten.</li>
+                            <li>Für jedes der beiden Boards lässt sich getrennt festlegen, ob es aktualisiert, neu installiert oder unverändert gelassen wird.</li>
+                            <li>Auf das Board wird nur noch ein kleines Startsystem geschrieben; das eigentliche System wird als Update-Paket installiert, auf demselben Weg wie spätere OTA-Updates.</li>
+                            <li>Sobald das USB-Kabel wieder am Display steckt, wird der Laptop nicht mehr benötigt. Der Roller installiert Display, Karten und Routing selbst und entsperrt sich nach Abschluss.</li>
+                            <li>Das Display zeigt während seiner Installation an, welcher Schritt läuft, und im Fehlerfall die Ursache.</li>
+                            <li>Am Laptop zeigt der Installer den laufenden Schritt und dessen übliche Dauer an und meldet, wenn ein Schritt länger braucht als erwartet.</li>
                         </ul>
                     </div>
                     <div class="video-embed">

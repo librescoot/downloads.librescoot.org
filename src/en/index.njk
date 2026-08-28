@@ -195,21 +195,22 @@ permalink: /en/
                     <p class="unsigned-note">The Windows build is not code-signed; when SmartScreen warns, click <em>More info</em> &rarr; <em>Run anyway</em>.</p>
                     {# Beta prerelease; bump the tag here for new betas (push a hyphenated tag, e.g. v2.0.0-beta.2, CI builds and publishes the prerelease) #}
                     <div class="beta-box">
-                        <p><span class="beta-badge">Beta</span>Version 2 is the next installer: it updates instead of starting over, and the scooter does the second half of the install without the laptop. It runs end to end on our own scooters, but it still has corners, and we only find those with people who report them. If you are up for sending a log when it gets stuck, grab <a href="https://github.com/librescoot/installer/releases/tag/v2.0.0-beta.14" target="_blank" rel="noopener">2.0.0 beta 14</a> and say hello on <a href="https://discord.gg/VrumFruSzJ">Discord</a>.</p>
-                        <p><strong>What to know</strong></p>
+                        <p><span class="beta-badge">Beta</span>Installer 2.0 updates a scooter instead of reinstalling it, and runs the second half of the installation on the scooter itself, without the laptop. The beta has completed full installs on our own scooters and is now being tested more widely. It is intended for users who can provide the log file if something fails. Current release: <a href="https://github.com/librescoot/installer/releases/tag/v2.0.0-beta.14" target="_blank" rel="noopener">2.0.0 beta 14</a>. Feedback and questions on <a href="https://discord.gg/VrumFruSzJ">Discord</a>.</p>
+                        <p><strong>Process and duration</strong></p>
                         <ul>
-                            <li>A full install takes a good half hour. About half of that the scooter works on its own, with the USB cable on the display.</li>
-                            <li>If it gets stuck, the scooter tells you: a red blink on the display LED and the hazard lights. Plug the laptop back in; the installer reads from the scooter what happened, cleans up and starts the install again. Anything already transferred is not uploaded twice.</li>
-                            <li>The log lives in <em>Documents/Librescoot Installer</em>. It is the first thing we need when something goes wrong.</li>
+                            <li>A complete installation takes about 20 minutes, downloads not included. For roughly 13 of those the scooter works on its own, with the USB cable connected to the display.</li>
+                            <li>Progress is visible on the scooter: the turn signals act as a progress bar and the display LED shows the overall state. A failure is signalled by a red blinking display LED and the hazard lights.</li>
+                            <li>After a failure the scooter remains reachable. When the laptop is reconnected, the installer reads the state from the scooter, shows the cause and starts the installation over. Files already transferred are not uploaded again.</li>
+                            <li>The log file is in <em>Documents/Librescoot Installer</em>. Please attach it to every report.</li>
                         </ul>
                         <p><strong>New compared to version 1</strong></p>
                         <ul>
-                            <li>An update is an update, not a fresh start: settings, keycards, maps and trips all survive it.</li>
-                            <li>You decide for each of the two boards whether it gets updated, reinstalled, or left alone.</li>
-                            <li>Only a small boot system is written to the board; the rest arrives as an update package. That is quicker, and it updates later exactly like a normal OTA update.</li>
-                            <li>Once the USB cable is back on the display you can shut the laptop. The scooter finishes flashing the display, installs the maps and unlocks itself when it is through.</li>
-                            <li>The blinkers show the progress, the display reports what it is doing, and if something goes wrong it says there what.</li>
-                            <li>On the laptop, the installer shows which step is running and how long it usually takes. If it takes longer, it says so.</li>
+                            <li>Update instead of reinstall: settings, keycards, maps and trips are preserved.</li>
+                            <li>Each of the two boards can be set separately to be updated, reinstalled or left unchanged.</li>
+                            <li>Only a small boot system is written to the board; the system itself is installed as an update package, the same way later OTA updates are.</li>
+                            <li>Once the USB cable is back on the display, the laptop is no longer needed. The scooter installs the display, maps and routing itself and unlocks when it is done.</li>
+                            <li>The display shows which step is running during its own installation and, in case of a failure, the cause.</li>
+                            <li>On the laptop, the installer shows the current step and its usual duration, and reports when a step takes longer than expected.</li>
                         </ul>
                     </div>
                     <div class="video-embed">
