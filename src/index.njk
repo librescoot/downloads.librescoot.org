@@ -64,6 +64,10 @@ permalink: /
         .map-btn { display: inline-flex; align-items: center; gap: 0.2rem; padding: 0.2rem 0.5rem; background: var(--bg-card); color: var(--accent); text-decoration: none; border-radius: var(--radius); font-size: 0.75rem; font-weight: 500; border: 1px solid var(--border-subtle); transition: all 0.15s; white-space: nowrap; }
         .map-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
         .map-btn svg { width: 12px; height: 12px; }
+        .map-btn-group { display: inline-flex; }
+        .map-btn-group > .map-btn { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+        .map-btn-suffix { display: inline-flex; align-items: center; padding: 0.2rem 0.5rem; background: var(--bg-card); color: var(--text-secondary); text-decoration: none; border: 1px solid var(--border-subtle); border-left: none; border-top-right-radius: var(--radius); border-bottom-right-radius: var(--radius); font-size: 0.75rem; font-weight: 500; transition: background 0.15s, color 0.15s; white-space: nowrap; }
+        .map-btn-suffix:hover { background: var(--bg-secondary); color: var(--text-primary); }
         .map-source { font-size: 0.78rem; color: var(--text-tertiary); margin-top: 0.6rem; }
         .installer-hero { background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 1.25rem; }
         .installer-hero p { color: var(--text-secondary); font-size: 0.95rem; margin: 0.5rem 0; }
@@ -99,6 +103,8 @@ permalink: /
             .map-row { grid-template-columns: 1fr; gap: 0.35rem; padding: 0.7rem 1rem; }
             .map-name { font-weight: 600; }
             .map-btn { justify-content: center; }
+            .map-btn-group { justify-self: stretch; }
+            .map-btn-group > .map-btn { flex: 1; }
             .installer-buttons { flex-direction: column; }
             .installer-btn { justify-content: center; }
         }
@@ -293,19 +299,27 @@ permalink: /
                                 {% if state.osm %}
                                     <a href="{{ state.osm.url }}" class="map-btn" title="Kartenkacheln für {{ state.name }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 6-3 6 3 6-3v13l-6 3-6-3-6 3Z"/><path d="m9 4v13"/><path d="m15 7v13"/></svg>
-                                        Kartenkacheln ({{ state.osm.size | fmt }})
+                                        Karten ({{ state.osm.size | fmt }})
                                     </a>
                                 {% endif %}
-                                {% if state.valhalla %}
+                                {% if state.valhalla and state.valhallaZst %}
+                                    <span class="map-btn-group">
+                                        <a href="{{ state.valhalla.url }}" class="map-btn" title="Routing-Daten für {{ state.name }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+                                            Routing-Daten ({{ state.valhalla.size | fmt }})
+                                        </a>
+                                        <a href="{{ state.valhallaZst.url }}" class="map-btn-suffix" title="Komprimierte Routing-Daten für {{ state.name }}">
+                                            komprimiert ({{ state.valhallaZst.size | fmt }})
+                                        </a>
+                                    </span>
+                                {% elif state.valhalla %}
                                     <a href="{{ state.valhalla.url }}" class="map-btn" title="Routing-Daten für {{ state.name }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
                                         Routing-Daten ({{ state.valhalla.size | fmt }})
                                     </a>
-                                {% endif %}
-                                {% if state.valhallaZst %}
+                                {% elif state.valhallaZst %}
                                     <a href="{{ state.valhallaZst.url }}" class="map-btn" title="Komprimierte Routing-Daten für {{ state.name }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg>
-                                        Routing-Daten komprimiert ({{ state.valhallaZst.size | fmt }})
+                                        Komprimiert ({{ state.valhallaZst.size | fmt }})
                                     </a>
                                 {% endif %}
                             </div>
