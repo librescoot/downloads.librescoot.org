@@ -211,9 +211,9 @@ permalink: /en/
 
                 <div class="channels">
                     {% set channels = [
-                        { key: "stable", label: "Stable", desc: "The right choice for most people. Tested for everyday use.", rec: true },
-                        { key: "testing", label: "Testing", desc: "A preview of the next release for adventurous users. Usually stable, but may still be incomplete or contain bugs.", rec: false },
-                        { key: "nightly", label: "Nightly", desc: "The latest development build. No stability guarantees – only for targeted testing and troubleshooting.", rec: false }
+                        { key: "stable", label: "Stable", desc: "The right choice for most people. Stable, complete and tested for everyday use.", rec: true },
+                        { key: "testing", label: "Testing", desc: "A preview of the next release. Usually stable, but may still contain bugs or be incomplete.", rec: false },
+                        { key: "nightly", label: "Nightly", desc: "For developers only. There are no guarantees; bugs may leave your scooter unusable.", rec: false }
                     ] %}
                     {% for ch in channels %}
                         {% set releases = firmware[ch.key] %}

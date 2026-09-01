@@ -211,9 +211,9 @@ permalink: /
 
                 <div class="channels">
                     {% set channels = [
-                        { key: "stable", label: "Stable", desc: "Für die meisten die richtige Wahl. Für den täglichen Einsatz getestet.", rec: true },
-                        { key: "testing", label: "Testing", desc: "Vorschau auf das nächste Release für Neugierige. Meist stabil, aber möglicherweise noch unvollständig oder fehlerhaft.", rec: false },
-                        { key: "nightly", label: "Nightly", desc: "Neuester Entwicklungsstand. Keine Stabilitätsgarantie – nur für gezielte Tests und Fehlersuche.", rec: false }
+                        { key: "stable", label: "Stable", desc: "Für die meisten die richtige Wahl. Stabil, vollständig und für den täglichen Einsatz getestet.", rec: true },
+                        { key: "testing", label: "Testing", desc: "Vorschau auf das nächste Release. Meist stabil, kann aber noch Fehler enthalten oder unvollständig sein.", rec: false },
+                        { key: "nightly", label: "Nightly", desc: "Nur für Entwickler*innen. Keine Garantien – Fehler können deinen Roller unbrauchbar machen.", rec: false }
                     ] %}
                     {% for ch in channels %}
                         {% set releases = firmware[ch.key] %}
