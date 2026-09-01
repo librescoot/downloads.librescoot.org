@@ -69,19 +69,21 @@ permalink: /en/
         .map-btn-suffix { display: inline-flex; align-items: center; padding: 0.2rem 0.5rem; background: var(--bg-card); color: var(--accent); text-decoration: none; border: 1px solid var(--border-subtle); border-left: none; border-top-right-radius: var(--radius); border-bottom-right-radius: var(--radius); font-size: 0.75rem; font-weight: 500; transition: all 0.15s; white-space: nowrap; }
         .map-btn-suffix:hover { background: var(--accent); color: white; border-color: var(--accent); }
         .map-source { font-size: 0.78rem; color: var(--text-tertiary); margin-top: 0.6rem; }
+        #installer { margin-bottom: 5.5rem; }
+        .installer-content { padding: 0.25rem 0 0.75rem; }
         .installer-content > p { color: var(--text-secondary); font-size: 0.95rem; margin: 0.5rem 0; }
-        .installer-content > p:first-child { margin-top: 0; }
-        .installer-content .risk-note { margin: 1rem 0; padding: 0.75rem 0.85rem; color: var(--text-primary); background: var(--yellow-bg); border: 1px solid var(--yellow-fill-border); border-radius: var(--radius); font-size: 0.86rem; line-height: 1.5; }
+        .installer-content .installer-intro { max-width: 52rem; margin: 0 auto; color: var(--text-primary); font-size: 1.12rem; line-height: 1.65; text-align: center; }
+        .installer-content .risk-note { margin: 1.25rem 0; padding: 0.75rem 0.85rem; color: var(--text-primary); background: var(--yellow-bg); border: 1px solid var(--yellow-fill-border); border-radius: var(--radius); font-size: 0.86rem; line-height: 1.5; }
         .warn-icon { width: 16px; height: 16px; vertical-align: -3px; color: var(--yellow); margin-right: 0.3rem; }
-        .installer-buttons { display: flex; gap: 0.6rem; flex-wrap: wrap; margin: 1rem 0 0.5rem; }
-        .installer-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.55rem 1.1rem; background: var(--accent); color: var(--on-accent); text-decoration: none; border-radius: var(--radius); font-weight: 500; font-size: 0.9rem; transition: background 0.15s; }
-        .installer-btn:hover { background: var(--accent-hover); color: var(--on-accent); }
-        .installer-btn svg { flex-shrink: 0; }
+        .installer-buttons { display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap; margin: 1.5rem 0 0.85rem; }
+        .installer-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.35rem; background: var(--accent); color: var(--on-accent); text-decoration: none; border-radius: var(--radius-lg); font-weight: 600; font-size: 0.98rem; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12); transition: background 0.15s, transform 0.15s, box-shadow 0.15s; }
+        .installer-btn:hover { background: var(--accent-hover); color: var(--on-accent); transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16); }
+        .installer-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
         .installer-btn-group { display: inline-flex; }
         .installer-btn-group > .installer-btn { border-top-right-radius: 0; border-bottom-right-radius: 0; }
-        .installer-btn-suffix { display: inline-flex; align-items: center; padding: 0.55rem 0.8rem; background: var(--bg-card); color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 0.82rem; border: 1px solid var(--border-subtle); border-left: none; border-top-right-radius: var(--radius); border-bottom-right-radius: var(--radius); transition: background 0.15s, color 0.15s; }
+        .installer-btn-suffix { display: inline-flex; align-items: center; padding: 0.7rem 0.9rem; background: var(--bg-card); color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 0.85rem; border: 1px solid var(--border-subtle); border-left: none; border-top-right-radius: var(--radius-lg); border-bottom-right-radius: var(--radius-lg); transition: background 0.15s, color 0.15s; }
         .installer-btn-suffix:hover { background: var(--bg-secondary); color: var(--text-primary); }
-        .installer-content .installer-meta { font-size: 0.82rem; color: var(--text-tertiary); margin: 0.25rem 0 0; }
+        .installer-content .installer-meta { font-size: 0.82rem; color: var(--text-tertiary); margin: 0.25rem 0 0; text-align: center; }
         .installer-content .windows-note { margin: 1rem 0; padding: 0.75rem 0.85rem; color: var(--text-primary); background: var(--blue-bg); border: 1px solid var(--blue-fill-border); border-radius: var(--radius); font-size: 0.86rem; line-height: 1.5; }
         .installer-content .windows-note[hidden] { display: none; }
         .info-icon { width: 16px; height: 16px; vertical-align: -3px; color: var(--blue); margin-right: 0.3rem; }
@@ -101,6 +103,9 @@ permalink: /en/
             .map-btn-group > .map-btn { flex: 1; }
             .installer-buttons { flex-direction: column; }
             .installer-btn { justify-content: center; }
+            .installer-btn-group { width: 100%; }
+            .installer-btn-group > .installer-btn { flex: 1; }
+            .installer-btn-suffix { justify-content: center; }
         }
     </style>
 </head>
@@ -147,7 +152,7 @@ permalink: /en/
                     Installer
                 </h2>
                 <div class="installer-content">
-                    <p>Use the installer for either a fresh Librescoot installation or an upgrade. It downloads the firmware and map data, flashes the MDB and DBC, and guides you through each step. You need a USB cable, a screwdriver and about twenty minutes.</p>
+                    <p class="installer-intro">Installer 2.0 prepares the firmware and map data up front. The scooter then finishes the installation itself without the laptop. You can install Librescoot from scratch or upgrade an existing system. You need a USB cable, a screwdriver and about twenty minutes.</p>
                     {% set platforms = installer.assets | byPlatform %}
                     <div class="installer-buttons">
                         {% if platforms.linuxAppImage %}
