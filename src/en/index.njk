@@ -81,9 +81,12 @@ permalink: /en/
         .installer-btn-group > .installer-btn { border-top-right-radius: 0; border-bottom-right-radius: 0; }
         .installer-btn-suffix { display: inline-flex; align-items: center; padding: 0.55rem 0.8rem; background: var(--bg-card); color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 0.82rem; border: 1px solid var(--border-subtle); border-left: none; border-top-right-radius: var(--radius); border-bottom-right-radius: var(--radius); transition: background 0.15s, color 0.15s; }
         .installer-btn-suffix:hover { background: var(--bg-secondary); color: var(--text-primary); }
-        .installer-meta { font-size: 0.82rem; color: var(--text-tertiary); margin: 0.25rem 0 0; }
-        .unsigned-note { font-size: 0.75rem; line-height: 1.35; color: var(--yellow); background: var(--yellow-bg); border: 1px solid var(--yellow); border-radius: var(--radius); padding: 0.3rem 0.55rem; margin: 0.6rem 0 0; }
-        .unsigned-note code { font-size: 0.78rem; }
+        .installer-content .installer-meta { font-size: 0.82rem; color: var(--text-tertiary); margin: 0.25rem 0 0; }
+        .installer-content .windows-note { margin: 1rem 0; padding: 0.75rem 0.85rem; color: var(--text-primary); background: var(--blue-bg); border: 1px solid var(--blue-fill-border); border-radius: var(--radius); font-size: 0.86rem; line-height: 1.5; }
+        .installer-content .windows-note[hidden] { display: none; }
+        .info-icon { width: 16px; height: 16px; vertical-align: -3px; color: var(--blue); margin-right: 0.3rem; }
+        .installer-content .installer-legacy { margin: 0.8rem 0 0; color: var(--text-tertiary); font-size: 0.75rem; }
+        .installer-content .installer-legacy a { color: inherit; text-decoration-color: var(--border-subtle); }
         .footer { padding: 1.5rem 0; font-size: 0.85rem; color: var(--text-on-dark-muted); }
         .footer-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; }
         .footer strong { color: var(--text-on-dark); font-family: var(--font-display); }
@@ -171,16 +174,16 @@ permalink: /en/
                         {% endif %}
                         {% if platforms.windowsExe %}
                             <span class="installer-btn-group">
-                                <a href="{{ platforms.windowsExe.url }}" class="installer-btn">
+                                <a href="{{ platforms.windowsExe.url }}" class="installer-btn windows-download">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
                                     Windows (x64)
                                 </a>
                                 {% if platforms.windowsZip %}
-                                    <a href="{{ platforms.windowsZip.url }}" class="installer-btn-suffix" title="Portable .zip archive">.zip</a>
+                                    <a href="{{ platforms.windowsZip.url }}" class="installer-btn-suffix windows-download" title="Portable .zip archive">.zip</a>
                                 {% endif %}
                             </span>
                         {% elif platforms.windowsZip %}
-                            <a href="{{ platforms.windowsZip.url }}" class="installer-btn">
+                            <a href="{{ platforms.windowsZip.url }}" class="installer-btn windows-download">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
                                 Windows (x64)
                             </a>
@@ -188,9 +191,9 @@ permalink: /en/
                     </div>
                     <p class="installer-meta">Installer {{ installer.version }} &middot; <a href="https://github.com/librescoot/installer/releases/tag/v{{ installer.version }}">Release notes</a> &middot; <a href="https://librescoot.org/en/docs/install.html">Installation guide</a> &middot; <a href="https://github.com/librescoot/installer">Source code</a></p>
                     <p class="installer-meta">After installation: <a href="https://librescoot.org/en/handbook/quick-start.html">Quickstart</a> &middot; <a href="https://librescoot.org/en/handbook/">Handbook</a></p>
-                    <p class="unsigned-note">The Windows build is not yet code-signed. If SmartScreen warns, click <em>More info</em>, then <em>Run anyway</em>.</p>
+                    <p class="windows-note" id="windows-note" role="note" aria-live="polite" hidden><svg class="info-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> The Windows build is not yet code-signed. If SmartScreen appears, click <em>More info</em>, then <em>Run anyway</em>.</p>
                     <p class="risk-note"><svg class="warn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> We test the installer on real hardware under Linux, macOS and Windows. On a scooter that has been running reliably, flashing normally completes without trouble. Set aside enough time and do not start when you are in a hurry: this helps avoid mistakes and leaves time to ask for support and recover the scooter if something does go wrong. Changes to the scooter are made at your own risk; help is available on <a href="https://discord.gg/VrumFruSzJ">Discord</a>.</p>
-                    <p class="installer-meta"><a href="https://github.com/librescoot/installer/releases/tag/v1.0.35">Installer 1.0.35</a> and its <a href="https://www.youtube.com/watch?v=gQXannrg-FQ" target="_blank" rel="noopener">installation video</a> remain available for older installation procedures.</p>
+                    <p class="installer-legacy"><a href="https://github.com/librescoot/installer/releases/tag/v1.0.35">Installer 1.0.35</a> and its <a href="https://www.youtube.com/watch?v=gQXannrg-FQ" target="_blank" rel="noopener">installation video</a> remain available for older installation procedures.</p>
                 </div>
             </div>
 
@@ -322,6 +325,16 @@ permalink: /en/
         document.querySelector('.nav-container').appendChild(toggle);
         toggle.addEventListener('click', function() {
             nav.classList.toggle('nav-open');
+        });
+    })();
+
+    (function() {
+        var note = document.getElementById('windows-note');
+        if (!note) return;
+        document.querySelectorAll('.windows-download').forEach(function(link) {
+            link.addEventListener('click', function() {
+                note.hidden = false;
+            });
         });
     })();
 
