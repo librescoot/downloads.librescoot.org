@@ -211,9 +211,9 @@ permalink: /
 
                 <div class="channels">
                     {% set channels = [
-                        { key: "stable", label: "Stable", desc: "Empfohlen für den Alltag. Auf echter Hardware getestet.", rec: true },
-                        { key: "testing", label: "Testing", desc: "Vorschau auf das nächste Release, ebenfalls auf echter Hardware getestet.", rec: false },
-                        { key: "nightly", label: "Nightly", desc: "Aktueller Entwicklungsstand für Entwickler:innen und gezielte Tests.", rec: false }
+                        { key: "stable", label: "Stable", desc: "Für die meisten die richtige Wahl. Für den täglichen Einsatz getestet.", rec: true },
+                        { key: "testing", label: "Testing", desc: "Vorschau auf das nächste Release für Neugierige. Meist stabil, aber möglicherweise noch unvollständig oder fehlerhaft.", rec: false },
+                        { key: "nightly", label: "Nightly", desc: "Neuester Entwicklungsstand. Keine Stabilitätsgarantie – nur für gezielte Tests und Fehlersuche.", rec: false }
                     ] %}
                     {% for ch in channels %}
                         {% set releases = firmware[ch.key] %}
