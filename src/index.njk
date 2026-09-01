@@ -31,7 +31,7 @@ permalink: /
         .nav-brand a { display: flex; align-items: center; gap: 0.4rem; color: var(--text-on-dark); text-decoration: none; font-weight: 500; font-size: 1.2rem; }
         .nav-brand-suffix { padding-top: 1px; font-family: var(--font-display); }
         main { padding: 2.5rem 0 5rem; min-height: calc(100vh - 150px); }
-        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        h1 { font-size: 2.5rem; margin-bottom: 2.5rem; }
         .lead { font-size: 1.05rem; color: var(--text-secondary); margin-bottom: 3rem; }
         .section { margin-bottom: 4rem; padding: 0; }
         .section-title { display: flex; align-items: center; gap: 0.5rem; font-size: 1.4rem; font-weight: 400; font-family: var(--font-display); color: var(--text-primary); margin-bottom: 1rem; padding-bottom: 0.6rem; border-bottom: 2px solid var(--border-subtle); }
@@ -72,8 +72,8 @@ permalink: /
         .installer-hero { background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 1.25rem; }
         .installer-hero p { color: var(--text-secondary); font-size: 0.95rem; margin: 0.5rem 0; }
         .installer-hero p:first-child { margin-top: 0; }
-        .risk-note { margin-top: 0.5rem; }
-        .warn-icon { width: 14px; height: 14px; vertical-align: -2px; color: var(--yellow); margin-right: 0.15rem; }
+        .installer-hero .risk-note { margin: 1rem 0 0; padding: 0.75rem 0.85rem; color: var(--text-primary); background: var(--yellow-bg); border: 1px solid var(--yellow-fill-border); border-radius: var(--radius); font-size: 0.86rem; line-height: 1.5; }
+        .warn-icon { width: 16px; height: 16px; vertical-align: -3px; color: var(--yellow); margin-right: 0.3rem; }
         .installer-buttons { display: flex; gap: 0.6rem; flex-wrap: wrap; margin: 1rem 0 0.5rem; }
         .installer-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.55rem 1.1rem; background: var(--accent); color: var(--on-accent); text-decoration: none; border-radius: var(--radius); font-weight: 500; font-size: 0.9rem; transition: background 0.15s; }
         .installer-btn:hover { background: var(--accent-hover); color: var(--on-accent); }
@@ -145,8 +145,8 @@ permalink: /
                     Installer
                 </h2>
                 <div class="installer-hero">
-                    <p>Der Installer führt dich durch die Installation: Firmware herunterladen, beide Boards flashen, Offline-Karten einrichten. Du brauchst ein USB-Kabel, einen Schraubendreher und etwa zwanzig Minuten.</p>
-                    <p class="risk-note"><svg class="warn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Jede Version wird auf echter Hardware und auf allen drei Plattformen getestet. Trotzdem überschreibst du hier die Firmware deines Rollers, und wenn dabei etwas schiefgeht, ist er erst einmal nicht fahrbereit. Veränderungen am Roller geschehen auf eigene Gefahr. Bei Problemen hilft der <a href="https://discord.gg/VrumFruSzJ">Discord</a> weiter, allerdings arbeiten hier alle ehrenamtlich.</p>
+                    <p>Mit dem Installer kannst du Librescoot neu installieren oder ein bestehendes System aktualisieren. Er lädt Firmware und Kartendaten, flasht MDB und DBC und führt dich Schritt für Schritt durch den Ablauf. Du brauchst ein USB-Kabel, einen Schraubendreher und etwa zwanzig Minuten Zeit.</p>
+                    <p class="risk-note"><svg class="warn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Wir testen den Installer auf echter Hardware unter Linux, macOS und Windows. Das Flashen bleibt trotzdem mit Risiken verbunden: Wenn etwas schiefgeht, ist der Roller bis zur Wiederherstellung nicht fahrbereit. Änderungen am Roller geschehen auf eigene Gefahr. Bei Problemen hilft der <a href="https://discord.gg/VrumFruSzJ">Discord</a> weiter; das Projekt wird ehrenamtlich betreut.</p>
                     {% set platforms = installer.assets | byPlatform %}
                     <div class="installer-buttons">
                         {% if platforms.linuxAppImage %}
@@ -188,11 +188,10 @@ permalink: /
                             </a>
                         {% endif %}
                     </div>
-                    <p class="installer-meta">Weiter geht&rsquo;s: <a href="https://librescoot.org/handbook/schnellstart.html">Schnellstart</a> &middot; <a href="https://librescoot.org/handbook/">Handbuch</a></p>
-                    <p class="installer-meta" title="Version {{ installer.version }}"><a href="https://github.com/librescoot/installer/releases">Alle Releases</a> &middot; <a href="https://github.com/librescoot/installer">Quellcode</a> &middot; <a href="https://librescoot.org/docs/install.html">Installationsanleitung</a></p>
-                    <p class="unsigned-note">Der Windows-Build ist nicht signiert; bei der SmartScreen-Warnung auf <em>Weitere Informationen</em> klicken &rarr; <em>Trotzdem ausführen</em>.</p>
-                    <p class="installer-meta">Falls du aus einem bestimmten Grund den vorherigen Installer brauchst: <a href="https://github.com/librescoot/installer/releases/tag/v1.0.35">Installer 1.0.35 verwenden</a>.</p>
-                    <p class="installer-meta">Video zum alten Installer 1.0: <a href="https://www.youtube.com/watch?v=gQXannrg-FQ" target="_blank" rel="noopener">auf YouTube ansehen</a>.</p>
+                    <p class="installer-meta">Installer {{ installer.version }} &middot; <a href="https://github.com/librescoot/installer/releases/tag/v{{ installer.version }}">Release Notes</a> &middot; <a href="https://librescoot.org/docs/install.html">Installationsanleitung</a> &middot; <a href="https://github.com/librescoot/installer">Quellcode</a></p>
+                    <p class="installer-meta">Nach der Installation: <a href="https://librescoot.org/handbook/schnellstart.html">Schnellstart</a> &middot; <a href="https://librescoot.org/handbook/">Handbuch</a></p>
+                    <p class="unsigned-note">Der Windows-Build ist noch nicht signiert. Bei einer SmartScreen-Warnung auf <em>Weitere Informationen</em> und dann auf <em>Trotzdem ausführen</em> klicken.</p>
+                    <p class="installer-meta">Für ältere Installationsabläufe gibt es weiterhin <a href="https://github.com/librescoot/installer/releases/tag/v1.0.35">Installer 1.0.35</a> und das dazugehörige <a href="https://www.youtube.com/watch?v=gQXannrg-FQ" target="_blank" rel="noopener">Installationsvideo</a>.</p>
                 </div>
             </div>
 
@@ -202,13 +201,13 @@ permalink: /
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
                     Firmware-Updates
                 </h2>
-                <p class="hint">Zum Installieren eines Updates den Update-Modus im Display-Menü aktivieren und die .mender-Datei per USB kopieren. Für eine Neuinstallation nimm die <a href="#installer">Installer-App</a> oben.</p>
+                <p class="hint">Auf einem bereits installierten Librescoot kannst du Updates im Update-Modus per USB einspielen. Für eine Neuinstallation oder ein geführtes Upgrade nimm den <a href="#installer">Installer</a> oben.</p>
 
                 <div class="channels">
                     {% set channels = [
-                        { key: "stable", label: "Stable", desc: "Empfohlener Kanal. Gründlich getestete Releases.", rec: true },
-                        { key: "testing", label: "Testing", desc: "Vorschau auf kommende Releases. Neue Features, auf echter Hardware getestet.", rec: false },
-                        { key: "nightly", label: "Nightly", desc: "Aktuelle Entwicklungs-Builds. Nur für Entwickler:innen empfohlen.", rec: false }
+                        { key: "stable", label: "Stable", desc: "Empfohlen für den Alltag. Auf echter Hardware getestet.", rec: true },
+                        { key: "testing", label: "Testing", desc: "Vorschau auf das nächste Release, ebenfalls auf echter Hardware getestet.", rec: false },
+                        { key: "nightly", label: "Nightly", desc: "Aktueller Entwicklungsstand für Entwickler:innen und gezielte Tests.", rec: false }
                     ] %}
                     {% for ch in channels %}
                         {% set releases = firmware[ch.key] %}
@@ -259,7 +258,7 @@ permalink: /
                     Karten- &amp; Routing-Daten
                 </h2>
                 {% if maps.updated %}<p class="hint" style="margin-top:-0.2rem">Aktualisiert am {{ maps.updated | fmtDate }}</p>{% endif %}
-                <p>Offline-Kartenkacheln und Turn-by-Turn-Routing-Daten, nach Region. Jedes Paket deckt zusätzlich etwa 20 km Umland mit ab. Lade die Karten- und Routing-Dateien für deine Region und kopiere sie per USB auf den Roller. Es kann jeweils nur eine Region installiert sein. Anleitung siehe <a href="https://librescoot.org/docs/features/offline-navigation.html">Offline-Navigation</a>.</p>
+                <p>Hier findest du Offline-Karten und Routingdaten nach Region. Jede Region umfasst zusätzlich etwa 20 Kilometer Umland. Für eine manuelle Installation lädst du beide Dateien herunter und kopierst sie im Update-Modus per USB auf den Roller. Es kann immer nur eine Region installiert sein. Mehr dazu steht in der Anleitung zur <a href="https://librescoot.org/docs/features/offline-navigation.html">Offline-Navigation</a>.</p>
 
                 {% for country in maps.countries %}
                     <p class="map-country">{{ country.name }}</p>
