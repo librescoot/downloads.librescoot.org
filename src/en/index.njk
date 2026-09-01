@@ -83,11 +83,6 @@ permalink: /en/
         .installer-btn-suffix { display: inline-flex; align-items: center; padding: 0.55rem 0.8rem; background: var(--bg-card); color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 0.82rem; border: 1px solid var(--border-subtle); border-left: none; border-top-right-radius: var(--radius); border-bottom-right-radius: var(--radius); transition: background 0.15s, color 0.15s; }
         .installer-btn-suffix:hover { background: var(--bg-secondary); color: var(--text-primary); }
         .installer-meta { font-size: 0.82rem; color: var(--text-tertiary); margin: 0.25rem 0 0; }
-        .installer-details { font-size: 0.82rem; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius); padding: 0.6rem 0.75rem; margin: 0.75rem 0 0; }
-        .installer-details p { margin: 0; }
-        .installer-details p + p { margin-top: 0.4rem; }
-        .installer-details ul { margin: 0.4rem 0 0; padding-left: 1.1rem; }
-        .installer-details li { margin: 0.15rem 0; }
         .unsigned-note { font-size: 0.75rem; line-height: 1.35; color: var(--yellow); background: var(--yellow-bg); border: 1px solid var(--yellow); border-radius: var(--radius); padding: 0.3rem 0.55rem; margin: 0.6rem 0 0; }
         .unsigned-note code { font-size: 0.78rem; }
         .video-embed { position: relative; width: 100%; margin: 1.25rem 0 0; aspect-ratio: 16 / 9; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border-subtle); background: #000; }
@@ -198,25 +193,7 @@ permalink: /en/
                     <p class="installer-meta">Next: <a href="https://librescoot.org/en/handbook/quick-start.html">Quickstart</a> &middot; <a href="https://librescoot.org/en/handbook/">Handbook</a></p>
                     <p class="installer-meta" title="Version {{ installer.version }}"><a href="https://github.com/librescoot/installer/releases">All releases</a> &middot; <a href="https://github.com/librescoot/installer">Source code</a> &middot; <a href="https://librescoot.org/en/docs/install.html">Installation guide</a></p>
                     <p class="unsigned-note">The Windows build is not code-signed; when SmartScreen warns, click <em>More info</em> &rarr; <em>Run anyway</em>.</p>
-                    <div class="installer-details">
-                        <p>Installer 2.0 updates a scooter instead of reinstalling it, and runs the second half of the installation on the scooter itself, without the laptop. Current stable release: <a href="https://github.com/librescoot/installer/releases/tag/v2.0.0" target="_blank" rel="noopener">2.0.0</a>. Feedback and questions on <a href="https://discord.gg/VrumFruSzJ">Discord</a>.</p>
-                        <p><strong>Process and duration</strong></p>
-                        <ul>
-                            <li>A complete installation takes about 15 to 20 minutes, downloads not included. For roughly 13 of those the scooter works on its own, with the USB cable connected to the display; the laptop side is a few minutes and two hands-on steps, restarting the scooter and moving the cable.</li>
-                            <li>Progress is visible on the scooter: the turn signals act as a progress bar and the display LED shows the overall state. A failure is signalled by a red blinking display LED and the hazard lights.</li>
-                            <li>After a failure the scooter remains reachable. When the laptop is reconnected, the installer reads the state from the scooter, shows the cause and starts the installation over. Files already transferred are not uploaded again.</li>
-                            <li>The log file is in <em>Documents/Librescoot Installer</em>. Please attach it to every report.</li>
-                        </ul>
-                        <p><strong>New compared to version 1</strong></p>
-                        <ul>
-                            <li>Update instead of reinstall: settings, keycards, maps and trips are preserved.</li>
-                            <li>Each of the two boards can be set separately to be updated, reinstalled or left unchanged.</li>
-                            <li>Only a small boot system is written to the board; the system itself is installed as an update package, the same way later OTA updates are.</li>
-                            <li>Once the USB cable is back on the display, the laptop is no longer needed. The scooter installs the display, maps and routing itself and unlocks when it is done.</li>
-                            <li>The display shows which step is running during its own installation and, in case of a failure, the cause.</li>
-                            <li>On the laptop, the installer shows the current step and its usual duration, and reports when a step takes longer than expected.</li>
-                        </ul>
-                    </div>
+                    <p class="installer-meta">Need the previous installer for a specific reason? <a href="https://github.com/librescoot/installer/releases/tag/v1.0.35">Use Installer 1.0.35</a>.</p>
                     <div class="video-embed">
                         <iframe src="https://www.youtube-nocookie.com/embed/gQXannrg-FQ?si=N1gDt2tAoQQ7Q5-K" title="Installing Librescoot" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                     </div>

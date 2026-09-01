@@ -83,11 +83,6 @@ permalink: /
         .installer-btn-suffix { display: inline-flex; align-items: center; padding: 0.55rem 0.8rem; background: var(--bg-card); color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 0.82rem; border: 1px solid var(--border-subtle); border-left: none; border-top-right-radius: var(--radius); border-bottom-right-radius: var(--radius); transition: background 0.15s, color 0.15s; }
         .installer-btn-suffix:hover { background: var(--bg-secondary); color: var(--text-primary); }
         .installer-meta { font-size: 0.82rem; color: var(--text-tertiary); margin: 0.25rem 0 0; }
-        .installer-details { font-size: 0.82rem; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius); padding: 0.6rem 0.75rem; margin: 0.75rem 0 0; }
-        .installer-details p { margin: 0; }
-        .installer-details p + p { margin-top: 0.4rem; }
-        .installer-details ul { margin: 0.4rem 0 0; padding-left: 1.1rem; }
-        .installer-details li { margin: 0.15rem 0; }
         .unsigned-note { font-size: 0.75rem; line-height: 1.35; color: var(--yellow); background: var(--yellow-bg); border: 1px solid var(--yellow); border-radius: var(--radius); padding: 0.3rem 0.55rem; margin: 0.6rem 0 0; }
         .unsigned-note code { font-size: 0.78rem; }
         .video-embed { position: relative; width: 100%; margin: 1.25rem 0 0; aspect-ratio: 16 / 9; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border-subtle); background: #000; }
@@ -198,25 +193,7 @@ permalink: /
                     <p class="installer-meta">Weiter geht&rsquo;s: <a href="https://librescoot.org/handbook/schnellstart.html">Schnellstart</a> &middot; <a href="https://librescoot.org/handbook/">Handbuch</a></p>
                     <p class="installer-meta" title="Version {{ installer.version }}"><a href="https://github.com/librescoot/installer/releases">Alle Releases</a> &middot; <a href="https://github.com/librescoot/installer">Quellcode</a> &middot; <a href="https://librescoot.org/docs/install.html">Installationsanleitung</a></p>
                     <p class="unsigned-note">Der Windows-Build ist nicht signiert; bei der SmartScreen-Warnung auf <em>Weitere Informationen</em> klicken &rarr; <em>Trotzdem ausführen</em>.</p>
-                    <div class="installer-details">
-                        <p>Installer 2.0 aktualisiert einen Roller, statt ihn neu aufzusetzen, und führt die zweite Hälfte der Installation ohne Laptop auf dem Roller aus. Aktuelle stabile Version: <a href="https://github.com/librescoot/installer/releases/tag/v2.0.0" target="_blank" rel="noopener">2.0.0</a>. Rückmeldungen und Fragen bitte auf <a href="https://discord.gg/VrumFruSzJ">Discord</a>.</p>
-                        <p><strong>Ablauf und Dauer</strong></p>
-                        <ul>
-                            <li>Eine vollständige Installation dauert etwa 15 bis 20 Minuten, Downloads nicht eingerechnet. Rund 13 Minuten davon arbeitet der Roller selbstständig, mit dem USB-Kabel am Display; am Laptop sind es wenige Minuten und zwei Handgriffe, der Neustart des Rollers und das Umstecken des Kabels.</li>
-                            <li>Der Fortschritt ist am Roller ablesbar: Die Blinker dienen als Fortschrittsanzeige, die Display-LED zeigt den Gesamtzustand. Ein Fehler wird durch rotes Blinken der Display-LED und die Warnblinker angezeigt.</li>
-                            <li>Nach einem Fehler bleibt der Roller erreichbar. Wird der Laptop wieder angeschlossen, liest der Installer den Zustand vom Roller, zeigt die Ursache an und beginnt die Installation von vorn. Bereits übertragene Dateien werden nicht erneut hochgeladen.</li>
-                            <li>Das Protokoll liegt unter <em>Dokumente/Librescoot Installer</em>. Bitte bei jeder Fehlermeldung mitschicken.</li>
-                        </ul>
-                        <p><strong>Neu gegenüber Version 1</strong></p>
-                        <ul>
-                            <li>Aktualisierung statt Neuinstallation: Einstellungen, Keycards, Karten und Fahrten bleiben erhalten.</li>
-                            <li>Für jedes der beiden Boards lässt sich getrennt festlegen, ob es aktualisiert, neu installiert oder unverändert gelassen wird.</li>
-                            <li>Auf das Board wird nur noch ein kleines Startsystem geschrieben; das eigentliche System wird als Update-Paket installiert, auf demselben Weg wie spätere OTA-Updates.</li>
-                            <li>Sobald das USB-Kabel wieder am Display steckt, wird der Laptop nicht mehr benötigt. Der Roller installiert Display, Karten und Routing selbst und entsperrt sich nach Abschluss.</li>
-                            <li>Das Display zeigt während seiner Installation an, welcher Schritt läuft, und im Fehlerfall die Ursache.</li>
-                            <li>Am Laptop zeigt der Installer den laufenden Schritt und dessen übliche Dauer an und meldet, wenn ein Schritt länger braucht als erwartet.</li>
-                        </ul>
-                    </div>
+                    <p class="installer-meta">Falls du aus einem bestimmten Grund den vorherigen Installer brauchst: <a href="https://github.com/librescoot/installer/releases/tag/v1.0.35">Installer 1.0.35 verwenden</a>.</p>
                     <div class="video-embed">
                         <iframe src="https://www.youtube-nocookie.com/embed/gQXannrg-FQ?si=N1gDt2tAoQQ7Q5-K" title="Librescoot installieren" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                     </div>
