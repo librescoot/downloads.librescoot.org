@@ -69,10 +69,9 @@ permalink: /en/
         .map-btn-suffix { display: inline-flex; align-items: center; padding: 0.2rem 0.5rem; background: var(--bg-card); color: var(--accent); text-decoration: none; border: 1px solid var(--border-subtle); border-left: none; border-top-right-radius: var(--radius); border-bottom-right-radius: var(--radius); font-size: 0.75rem; font-weight: 500; transition: all 0.15s; white-space: nowrap; }
         .map-btn-suffix:hover { background: var(--accent); color: white; border-color: var(--accent); }
         .map-source { font-size: 0.78rem; color: var(--text-tertiary); margin-top: 0.6rem; }
-        .installer-hero { background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 1.25rem; }
-        .installer-hero p { color: var(--text-secondary); font-size: 0.95rem; margin: 0.5rem 0; }
-        .installer-hero p:first-child { margin-top: 0; }
-        .installer-hero .risk-note { margin: 1rem 0 0; padding: 0.75rem 0.85rem; color: var(--text-primary); background: var(--yellow-bg); border: 1px solid var(--yellow-fill-border); border-radius: var(--radius); font-size: 0.86rem; line-height: 1.5; }
+        .installer-content > p { color: var(--text-secondary); font-size: 0.95rem; margin: 0.5rem 0; }
+        .installer-content > p:first-child { margin-top: 0; }
+        .installer-content .risk-note { margin: 1rem 0; padding: 0.75rem 0.85rem; color: var(--text-primary); background: var(--yellow-bg); border: 1px solid var(--yellow-fill-border); border-radius: var(--radius); font-size: 0.86rem; line-height: 1.5; }
         .warn-icon { width: 16px; height: 16px; vertical-align: -3px; color: var(--yellow); margin-right: 0.3rem; }
         .installer-buttons { display: flex; gap: 0.6rem; flex-wrap: wrap; margin: 1rem 0 0.5rem; }
         .installer-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.55rem 1.1rem; background: var(--accent); color: var(--on-accent); text-decoration: none; border-radius: var(--radius); font-weight: 500; font-size: 0.9rem; transition: background 0.15s; }
@@ -144,9 +143,8 @@ permalink: /en/
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                     Installer
                 </h2>
-                <div class="installer-hero">
+                <div class="installer-content">
                     <p>Use the installer for either a fresh Librescoot installation or an upgrade. It downloads the firmware and map data, flashes the MDB and DBC, and guides you through each step. You need a USB cable, a screwdriver and about twenty minutes.</p>
-                    <p class="risk-note"><svg class="warn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> We test the installer on real hardware under Linux, macOS and Windows. Flashing still carries a risk: if something goes wrong, the scooter will not be rideable until it is recovered. Changes to the scooter are made at your own risk. Ask for help on <a href="https://discord.gg/VrumFruSzJ">Discord</a>; the project is maintained by volunteers.</p>
                     {% set platforms = installer.assets | byPlatform %}
                     <div class="installer-buttons">
                         {% if platforms.linuxAppImage %}
@@ -191,6 +189,7 @@ permalink: /en/
                     <p class="installer-meta">Installer {{ installer.version }} &middot; <a href="https://github.com/librescoot/installer/releases/tag/v{{ installer.version }}">Release notes</a> &middot; <a href="https://librescoot.org/en/docs/install.html">Installation guide</a> &middot; <a href="https://github.com/librescoot/installer">Source code</a></p>
                     <p class="installer-meta">After installation: <a href="https://librescoot.org/en/handbook/quick-start.html">Quickstart</a> &middot; <a href="https://librescoot.org/en/handbook/">Handbook</a></p>
                     <p class="unsigned-note">The Windows build is not yet code-signed. If SmartScreen warns, click <em>More info</em>, then <em>Run anyway</em>.</p>
+                    <p class="risk-note"><svg class="warn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> We test the installer on real hardware under Linux, macOS and Windows. On a scooter that has been running reliably, flashing normally completes without trouble. Set aside enough time and do not start when you are in a hurry: this helps avoid mistakes and leaves time to ask for support and recover the scooter if something does go wrong. Changes to the scooter are made at your own risk; help is available on <a href="https://discord.gg/VrumFruSzJ">Discord</a>.</p>
                     <p class="installer-meta"><a href="https://github.com/librescoot/installer/releases/tag/v1.0.35">Installer 1.0.35</a> and its <a href="https://www.youtube.com/watch?v=gQXannrg-FQ" target="_blank" rel="noopener">installation video</a> remain available for older installation procedures.</p>
                 </div>
             </div>
@@ -201,7 +200,8 @@ permalink: /en/
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
                     Firmware Updates
                 </h2>
-                <p class="hint">On a scooter already running Librescoot, you can install updates over USB in Update Mode. For a fresh installation or guided upgrade, use the <a href="#installer">installer</a> above.</p>
+                <p>On Librescoot 1.2.1 or newer, the preferred way to install regular firmware updates is over Bluetooth with the <a href="https://github.com/librescoot/mobile-app" target="_blank" rel="noopener">companion app</a>. You need neither a SIM card nor a USB cable.</p>
+                <p class="hint">The files below are for updates over USB: for recovery, changing release channel without an internet connection, or when no suitable Bluetooth delta is available. For a fresh installation or guided upgrade, use the <a href="#installer">installer</a> above.</p>
 
                 <div class="channels">
                     {% set channels = [
