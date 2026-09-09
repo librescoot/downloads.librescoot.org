@@ -56,18 +56,13 @@ installer_data=$(gh_api \
   "https://api.github.com/repos/librescoot/installer/releases/latest")
 
 if [ -n "$installer_data" ]; then
-  echo "$installer_data" | jq '{
-    tag_name,
-    assets: [.assets[] | {
-      name,
-      size,
-      sha256: (.digest | if . then ltrimstr("sha256:") else null end),
-      url: .browser_download_url
-    }]
-  }' > "${OUTDIR}/installer.json"
+  echo "$installer_data" \
+    | jq -f "$(dirname "${BASH_SOURCE[0]}")/installer-index.jq" \
+    > "${OUTDIR}/installer.json"
   echo "installer: $(echo "$installer_data" | jq '.tag_name')"
 else
-  echo '{"tag_name":"","assets":[]}' > "${OUTDIR}/installer.json"
+  echo '{"tag_name":"","published_at":null,"release_url":null,"release_notes":"","assets":[]}' \
+    > "${OUTDIR}/installer.json"
   echo "installer: failed to fetch"
 fi
 
