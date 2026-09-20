@@ -1,5 +1,6 @@
 module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/CNAME");
+  eleventyConfig.addPassthroughCopy("src/librescoot-logo-v3-full-downloads.png");
   eleventyConfig.addPassthroughCopy("src/releases");
 
   eleventyConfig.addFilter("fmt", function (bytes) {
