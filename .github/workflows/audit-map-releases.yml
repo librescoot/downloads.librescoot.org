@@ -1,0 +1,21 @@
+name: Audit map release retention (dry run)
+
+on:
+  schedule:
+    - cron: '0 3 * * 1'  # Mondays, 03:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test retention rules
+        run: python3 .github/test-map-retention.py
+      - name: Report eligible releases without deleting them
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 .github/audit-map-releases.py | tee "$GITHUB_STEP_SUMMARY"

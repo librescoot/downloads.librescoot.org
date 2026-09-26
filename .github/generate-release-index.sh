@@ -66,49 +66,25 @@ else
   echo "installer: failed to fetch"
 fi
 
-# Generate map/routing data indexes
+# Build the per-region index from all retained tile releases. Partial builds
+# contain only their selected regions; unchanged regions keep their older URLs.
+map_releases=$(mktemp -d)
+trap 'rm -rf "$map_releases"' EXIT
 for repo in osm-tiles valhalla-tiles; do
-  case "$repo" in
-    osm-tiles)
-      # osm-tiles publishes every build under its own tiles-<timestamp> tag so
-      # asset URLs are immutable: the old scheme rewrote one tag in place, so a
-      # URL could serve different bytes than the digest recorded here and a
-      # vehicle would fail the checksum on a file it downloaded correctly.
-      # There is deliberately no fallback to the old fixed tag. That release
-      # still exists but is frozen at the last build of the old scheme, so
-      # falling back to it would quietly publish stale tiles rather than fail.
-      data=$(gh_api \
-        "https://api.github.com/repos/librescoot/${repo}/releases?per_page=20" \
-        | jq '[.[] | select(.draft == false and .prerelease == false
-                            and (.tag_name | startswith("tiles-")))] | .[0] // empty')
-      if [ -z "$data" ]; then
-        echo "${repo}: no tiles-* release found" >&2
-        exit 1
-      fi
-      ;;
-    *)
-      # valhalla-tiles still publishes to a fixed tag, and its dated releases
-      # are older than it, so resolve it by tag rather than by date.
-      data=$(gh_api \
-        "https://api.github.com/repos/librescoot/${repo}/releases/tags/latest")
-      ;;
-  esac
-
-  if [ -n "$data" ]; then
-    echo "$data" | jq '[.assets[] | {
-      name,
-      size,
-      sha256: (.digest | if . then ltrimstr("sha256:") else null end),
-      updated_at: .updated_at,
-      url: .browser_download_url
-    }]' > "${OUTDIR}/${repo}.json"
-    count=$(jq 'length' "${OUTDIR}/${repo}.json")
-    echo "${repo}: ${count} assets"
-  else
-    echo "[]" > "${OUTDIR}/${repo}.json"
-    echo "${repo}: failed to fetch, wrote empty array"
-  fi
+  echo '[]' > "$map_releases/$repo.json"
+  page=1
+  while :; do
+    page_data=$(gh_api "https://api.github.com/repos/librescoot/${repo}/releases?per_page=100&page=$page")
+    printf '%s\n%s\n' "$(<"$map_releases/$repo.json")" "$page_data" \
+      | jq -s '.[0] + .[1]' > "$map_releases/next.json"
+    mv "$map_releases/next.json" "$map_releases/$repo.json"
+    [ "$(echo "$page_data" | jq 'length')" -eq 100 ] || break
+    page=$((page + 1))
+  done
 done
+python3 "$(dirname "${BASH_SOURCE[0]}")/build-map-index.py" \
+  "$(dirname "${BASH_SOURCE[0]}")/../src/_data/map-regions.json" \
+  "$map_releases/osm-tiles.json" "$map_releases/valhalla-tiles.json" "$OUTDIR"
 
 # Generate combined tiles.json keyed by region slug for update checks.
 # The jq program lives in tiles-index.jq so .github/test-tiles-index.sh can

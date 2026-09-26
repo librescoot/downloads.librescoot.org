@@ -33,6 +33,7 @@ jobs:
       - name: Test release index generation
         run: |
           .github/test-tiles-index.sh
+          python3 .github/test-map-index.py
           .github/test-installer-index.sh
 
       - name: Fetch release data
