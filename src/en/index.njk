@@ -80,20 +80,23 @@ permalink: /en/
         .map-source { font-size: 0.78rem; color: var(--text-tertiary); margin-top: 0.6rem; }
         #installer { margin-bottom: 4rem; }
         .installer-content > p:last-child { margin-bottom: 0; }
+        .installer-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2.5rem; align-items: start; }
         .installer-content { padding: 0.25rem 0 0.75rem; }
+        .installer-video { margin: 0.25rem 0 0; aspect-ratio: 16 / 9; border-radius: var(--radius-lg); overflow: hidden; background: #000; border: 1px solid var(--border-subtle); }
+        .installer-video iframe { display: block; width: 100%; height: 100%; border: 0; }
         .installer-content > p { color: var(--text-secondary); font-size: 0.95rem; margin: 0.5rem 0; }
-        .installer-content .installer-intro { max-width: 46rem; margin: 0 auto; color: var(--text-primary); font-size: 1.1rem; line-height: 1.6; text-align: center; }
+        .installer-content .installer-intro { margin: 0; color: var(--text-primary); font-size: 1.1rem; line-height: 1.6; }
         .installer-content .risk-note { margin: 1.25rem 0; padding: 0.75rem 0.85rem; color: var(--text-primary); background: var(--yellow-bg); border: 1px solid var(--yellow-fill-border); border-radius: var(--radius); font-size: 0.86rem; line-height: 1.5; }
         .warn-icon { width: 16px; height: 16px; vertical-align: -3px; color: var(--yellow); margin-right: 0.3rem; }
-        .installer-buttons { display: flex; justify-content: center; align-items: flex-start; gap: 0.75rem; flex-wrap: wrap; margin: 1.5rem 0 0.85rem; }
-        .installer-platform { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; }
+        .installer-buttons { display: flex; justify-content: flex-start; align-items: flex-start; gap: 0.75rem; flex-wrap: wrap; margin: 1.5rem 0 0.85rem; }
+        .installer-platform { display: flex; flex-direction: column; align-items: flex-start; gap: 0.35rem; }
         .installer-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.35rem; background: var(--accent); color: var(--on-accent); text-decoration: none; border-radius: var(--radius-lg); font-weight: 600; font-size: 0.98rem; transition: background 0.15s; }
         .installer-btn:hover { background: var(--accent-hover); color: var(--on-accent); }
         .installer-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
         .installer-alternative { color: var(--text-tertiary); font-size: 0.72rem; line-height: 1.3; }
         .installer-alternative a { color: inherit; text-underline-offset: 2px; }
         .installer-alternative a:hover { color: var(--text-secondary); }
-        .installer-content .installer-meta { font-size: 0.82rem; color: var(--text-tertiary); margin: 0.25rem 0 0; text-align: center; }
+        .installer-content .installer-meta { font-size: 0.82rem; color: var(--text-tertiary); margin: 0.25rem 0 0; }
         .installer-content .windows-note { margin: 1rem 0; padding: 0.75rem 0.85rem; color: var(--text-primary); background: var(--blue-bg); border: 1px solid var(--blue-fill-border); border-radius: var(--radius); font-size: 0.86rem; line-height: 1.5; }
         .installer-content .windows-note[hidden] { display: none; }
         .info-icon { width: 16px; height: 16px; vertical-align: -3px; color: var(--blue); margin-right: 0.3rem; }
@@ -103,6 +106,7 @@ permalink: /en/
         .footer a { color: var(--text-on-dark-muted); text-decoration: none; }
         .footer a:hover { color: var(--text-on-dark); }
         @media (max-width: 768px) {
+            .installer-layout { grid-template-columns: 1fr; gap: 1.25rem; }
             .channels { grid-template-columns: 1fr; }
             .map-row { grid-template-columns: 1fr; gap: 0.35rem; padding: 0.7rem 1rem; }
             .map-name { font-weight: 600; }
@@ -157,53 +161,58 @@ permalink: /en/
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                     Installer
                 </h2>
-                <div class="installer-content">
-                    <p class="installer-intro">The installer sets up Librescoot from scratch or upgrades an existing system. It downloads firmware and map data, prepares the MDB and DBC, and guides you through the installation. The scooter then finishes the process itself. You need a USB cable, a screwdriver and about twenty minutes.</p>
-                    {% set platforms = installer.assets | byPlatform %}
-                    <div class="installer-buttons">
-                        {% if platforms.linuxAppImage %}
-                            <span class="installer-platform">
-                                <a href="{{ platforms.linuxAppImage.url }}" class="installer-btn">
+                <div class="installer-layout">
+                    <div class="installer-content">
+                        <p class="installer-intro">The installer sets up Librescoot from scratch or upgrades an existing system. It downloads firmware and map data, prepares the MDB and DBC, and guides you through the installation. The scooter then finishes the process itself. You need a USB cable, a screwdriver and about twenty minutes.</p>
+                        {% set platforms = installer.assets | byPlatform %}
+                        <div class="installer-buttons">
+                            {% if platforms.linuxAppImage %}
+                                <span class="installer-platform">
+                                    <a href="{{ platforms.linuxAppImage.url }}" class="installer-btn">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                                        Linux (x64)
+                                    </a>
+                                    {% if platforms.linux %}
+                                        <span class="installer-alternative">Also available as <a href="{{ platforms.linux.url }}" title="Portable .tar.gz archive (needs GTK 3 installed)">.tar.gz</a></span>
+                                    {% endif %}
+                                </span>
+                            {% elif platforms.linux %}
+                                <a href="{{ platforms.linux.url }}" class="installer-btn">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
                                     Linux (x64)
                                 </a>
-                                {% if platforms.linux %}
-                                    <span class="installer-alternative">Also available as <a href="{{ platforms.linux.url }}" title="Portable .tar.gz archive (needs GTK 3 installed)">.tar.gz</a></span>
-                                {% endif %}
-                            </span>
-                        {% elif platforms.linux %}
-                            <a href="{{ platforms.linux.url }}" class="installer-btn">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-                                Linux (x64)
-                            </a>
-                        {% endif %}
-                        {% if platforms.macos %}
-                            <a href="{{ platforms.macos.url }}" class="installer-btn">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-                                macOS (Universal)
-                            </a>
-                        {% endif %}
-                        {% if platforms.windowsExe %}
-                            <span class="installer-platform">
-                                <a href="{{ platforms.windowsExe.url }}" class="installer-btn windows-download">
+                            {% endif %}
+                            {% if platforms.macos %}
+                                <a href="{{ platforms.macos.url }}" class="installer-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                                    macOS (Universal)
+                                </a>
+                            {% endif %}
+                            {% if platforms.windowsExe %}
+                                <span class="installer-platform">
+                                    <a href="{{ platforms.windowsExe.url }}" class="installer-btn windows-download">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
+                                        Windows (x64)
+                                    </a>
+                                    {% if platforms.windowsZip %}
+                                        <span class="installer-alternative">Also available as <a href="{{ platforms.windowsZip.url }}" class="windows-download" title="Portable .zip archive">.zip</a></span>
+                                    {% endif %}
+                                </span>
+                            {% elif platforms.windowsZip %}
+                                <a href="{{ platforms.windowsZip.url }}" class="installer-btn windows-download">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
                                     Windows (x64)
                                 </a>
-                                {% if platforms.windowsZip %}
-                                    <span class="installer-alternative">Also available as <a href="{{ platforms.windowsZip.url }}" class="windows-download" title="Portable .zip archive">.zip</a></span>
-                                {% endif %}
-                            </span>
-                        {% elif platforms.windowsZip %}
-                            <a href="{{ platforms.windowsZip.url }}" class="installer-btn windows-download">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
-                                Windows (x64)
-                            </a>
-                        {% endif %}
+                            {% endif %}
+                        </div>
+                        <p class="installer-meta">Installer {{ installer.version }} &middot; <a href="https://github.com/librescoot/installer/releases/tag/v{{ installer.version }}">Release notes</a> &middot; <a href="https://librescoot.org/en/docs/install.html">Installation guide</a> &middot; <a href="https://github.com/librescoot/installer">Source code</a></p>
+                        <p class="installer-meta">After installation: <a href="https://librescoot.org/en/handbook/quick-start.html">Quickstart</a> &middot; <a href="https://librescoot.org/en/handbook/">Handbook</a></p>
+                        <p class="windows-note" id="windows-note" role="note" aria-live="polite" hidden><svg class="info-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> The Windows build is not yet code-signed. If SmartScreen appears, click <em>More info</em>, then <em>Run anyway</em>.</p>
+                        <p class="risk-note"><svg class="warn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> We test the installer on real hardware under Linux, macOS and Windows. Flashing normally completes without trouble on a reliable scooter. Still, leave enough time for the installation and possible recovery. Changes to the scooter are made at your own risk; help is available on <a href="https://discord.gg/VrumFruSzJ">Discord</a>.</p>
                     </div>
-                    <p class="installer-meta">Installer {{ installer.version }} &middot; <a href="https://github.com/librescoot/installer/releases/tag/v{{ installer.version }}">Release notes</a> &middot; <a href="https://librescoot.org/en/docs/install.html">Installation guide</a> &middot; <a href="https://github.com/librescoot/installer">Source code</a></p>
-                    <p class="installer-meta">After installation: <a href="https://librescoot.org/en/handbook/quick-start.html">Quickstart</a> &middot; <a href="https://librescoot.org/en/handbook/">Handbook</a></p>
-                    <p class="windows-note" id="windows-note" role="note" aria-live="polite" hidden><svg class="info-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> The Windows build is not yet code-signed. If SmartScreen appears, click <em>More info</em>, then <em>Run anyway</em>.</p>
-                    <p class="risk-note"><svg class="warn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> We test the installer on real hardware under Linux, macOS and Windows. Flashing normally completes without trouble on a reliable scooter. Still, leave enough time for the installation and possible recovery. Changes to the scooter are made at your own risk; help is available on <a href="https://discord.gg/VrumFruSzJ">Discord</a>.</p>
+                    <div class="installer-video">
+                        <iframe src="https://www.youtube-nocookie.com/embed/aMKpiwmAf68" title="Installation video: setting up Librescoot with the installer" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
                 </div>
             </div>
 
