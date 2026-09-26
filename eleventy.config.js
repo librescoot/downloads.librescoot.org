@@ -3,6 +3,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/librescoot-logo-v3-full-downloads.png");
   eleventyConfig.addPassthroughCopy("src/og-de.png");
   eleventyConfig.addPassthroughCopy("src/og-en.png");
+  eleventyConfig.addPassthroughCopy("src/installation-video-preview.jpg");
   eleventyConfig.addPassthroughCopy("src/releases");
 
   eleventyConfig.addFilter("fmt", function (bytes) {

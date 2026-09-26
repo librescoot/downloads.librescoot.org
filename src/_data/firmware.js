@@ -3,16 +3,19 @@ const path = require("path");
 
 module.exports = function () {
   const dir = path.join(__dirname, "..", "releases");
-  const channels = {};
-
-  for (const ch of ["stable", "testing", "nightly"]) {
-    const file = path.join(dir, `${ch}.json`);
-    try {
-      channels[ch] = JSON.parse(fs.readFileSync(file, "utf8"));
-    } catch {
-      channels[ch] = [];
+  try {
+    const latest = JSON.parse(fs.readFileSync(path.join(dir, "latest.json"), "utf8"));
+    return Object.fromEntries(["stable", "testing", "nightly"].map((ch) =>
+      [ch, latest[ch] ? [latest[ch]] : []]));
+  } catch {
+    const channels = {};
+    for (const ch of ["stable", "testing", "nightly"]) {
+      try {
+        channels[ch] = JSON.parse(fs.readFileSync(path.join(dir, `${ch}.json`), "utf8"));
+      } catch {
+        channels[ch] = [];
+      }
     }
+    return channels;
   }
-
-  return channels;
 };

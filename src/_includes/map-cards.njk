@@ -1,0 +1,77 @@
+<div class="map-browser">
+    <div class="map-picker" data-locating="{{ mapLabels.locating }}" data-location-error="{{ mapLabels.locationError }}" data-no-match="{{ mapLabels.noMatch }}" hidden>
+        <div class="map-picker-tools">
+            <label for="map-search">{{ mapLabels.search }}</label>
+            <div class="map-search-wrap">
+                <input id="map-search" type="search" autocomplete="off" placeholder="{{ mapLabels.searchPlaceholder }}">
+                <button type="button" class="map-search-clear" aria-label="{{ mapLabels.clearSearch }}" hidden>&times;</button>
+            </div>
+            <button type="button" class="map-locate" aria-label="{{ mapLabels.locate }}" title="{{ mapLabels.locate }}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M516-120 402-402 120-516v-56l720-268-268 720h-56Zm26-148 162-436-436 162 196 78 78 196Zm-78-196Z"/></svg>
+            </button>
+            <span class="map-locate-note">{{ mapLabels.locationPrivacy }}</span>
+            <span class="map-picker-status" role="status" aria-live="polite"></span>
+        </div>
+        <div class="map-country-column">
+            <h3 class="map-column-title">{{ mapLabels.countries }}</h3>
+            <div class="map-country-tabs" role="tablist" aria-orientation="vertical" aria-label="{{ mapLabels.countries }}">
+                {% for country in maps.countries %}
+                    <button type="button" class="map-country-tab" role="tab" id="map-tab-{{ country.id }}" aria-controls="map-panel-{{ country.id }}" aria-selected="{{ 'true' if loop.first else 'false' }}" tabindex="{{ '0' if loop.first else '-1' }}" data-country="{{ country.id }}" data-name="{{ country.nameEn if lang == 'en' else country.name }}">{{ country.nameEn if lang == 'en' else country.name }} <span class="map-country-match-count" aria-hidden="true" hidden></span></button>
+                {% endfor %}
+            </div>
+        </div>
+        <select class="map-country-select" aria-label="{{ mapLabels.countries }}">
+            {% for country in maps.countries %}<option value="{{ country.id }}">{{ country.nameEn if lang == 'en' else country.name }}</option>{% endfor %}
+        </select>
+        <div class="map-country-panels">
+            <h3 class="map-column-title">{{ mapLabels.regions }}</h3>
+            {% for country in maps.countries %}
+                <section class="map-country-panel" role="tabpanel" id="map-panel-{{ country.id }}" aria-labelledby="map-tab-{{ country.id }}" data-country="{{ country.id }}"{% if not loop.first %} hidden{% endif %}>
+                    <div class="map-regions">
+                        {% for state in country.states %}
+                            <button type="button" class="map-region-choice" data-region="{{ state.id }}" data-name="{{ state.name }}" aria-pressed="false"{% if not state.available %} disabled{% endif %}>
+                                {{ state.name }}{% if not state.available %} <small>{{ mapLabels.unavailable }}</small>{% endif %}
+                            </button>
+                        {% endfor %}
+                    </div>
+                </section>
+            {% endfor %}
+            <p class="map-search-empty" hidden>{{ mapLabels.notFound }}</p>
+        </div>
+    </div>
+    <div class="map-results">
+        <h3 class="map-column-title">{{ mapLabels.files }}</h3>
+        <p class="map-results-prompt" hidden>{{ mapLabels.choose }}</p>
+        {% for country in maps.countries %}
+            <div class="map-region-group">
+                <h3 class="map-region-group-title">{{ country.nameEn if lang == 'en' else country.name }}</h3>
+                {% for state in country.states %}
+                    <article class="map-region" data-region="{{ state.id }}" data-name="{{ state.name }}">
+                        <h4>{{ state.name }}</h4>
+                        {% if state.available %}
+                            <div class="map-card-actions">
+                                {% if state.map %}
+                                    <a href="{{ state.map.url }}" class="map-download">{{ mapLabels.maps }} <span>{{ state.map.size | fmt }}</span></a>
+                                {% endif %}
+                                {% if state.routing %}
+                                    <div class="map-route-group">
+                                        {% if state.routing.compressed %}
+                                            <a href="{{ state.routing.compressed.url }}" class="map-download">{{ mapLabels.routing }} ({{ mapLabels.compressed }}) <span>{{ state.routing.compressed.size | fmt }}</span></a>
+                                            {% if state.routing.url %}
+                                                <a href="{{ state.routing.url }}" class="map-download map-download-secondary">{{ mapLabels.routing }} ({{ mapLabels.plain }}) <span>{{ state.routing.size | fmt }}</span></a>
+                                            {% endif %}
+                                        {% elif state.routing.url %}
+                                            <a href="{{ state.routing.url }}" class="map-download">{{ mapLabels.routing }} <span>{{ state.routing.size | fmt }}</span></a>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <p class="map-unavailable">{{ mapLabels.unavailable }}</p>
+                        {% endif %}
+                    </article>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
