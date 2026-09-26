@@ -45,11 +45,14 @@ class PartialReleaseTest(unittest.TestCase):
         self.assertEqual(len(result), 3)
         self.assertIn("/old/", result["valhalla_tiles_bayern.tar"]["url"])
         self.assertIn("/new/", result["valhalla_tiles_alsace.tar.zst"]["url"])
-        catalog = [{"id": "alsace", "name": "Alsace", "country": "FR"}]
+        catalog = [{"id": "alsace", "name": "Alsace", "country": "FR",
+                    "location": {"subdivision_codes": ["FR-67", "FR-68"]}}]
         osm = [module.asset_info(asset("tiles_alsace.mbtiles", "new"))]
         manifest = module.build_manifest(catalog, osm, list(result.values()))
         self.assertEqual(manifest["version"], 1)
         self.assertEqual(manifest["regions"]["alsace"]["country"], "FR")
+        self.assertEqual(manifest["regions"]["alsace"]["location"]["subdivision_codes"],
+                         ["FR-67", "FR-68"])
         self.assertEqual(manifest["regions"]["alsace"]["routing"]["compressed"]["codec"], "zstd")
         self.assertIsNone(manifest["regions"]["bayern"]["map"])
 

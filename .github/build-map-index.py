@@ -69,6 +69,7 @@ def build_manifest(catalog, osm_assets, routing_assets):
         regions[slug] = {
             "country": metadata.get("country"),
             "name": metadata.get("name", slug.replace("-", " ").replace("_", " ").title()),
+            "location": metadata.get("location"),
             "map": {k: v for k, v in maps[slug].items() if k != "name"} if slug in maps else None,
             "routing": routing,
         }

@@ -13,6 +13,7 @@ release. A release may contain regions from several countries.
     "graz": {
       "country": "AT",
       "name": "Graz",
+      "location": {"cities": ["Graz"]},
       "map": {
         "url": "https://github.com/librescoot/osm-tiles/releases/download/tiles-.../tiles_graz.mbtiles",
         "size": 123,
@@ -37,9 +38,17 @@ release. A release may contain regions from several countries.
 }
 ```
 
-`country` is an ISO 3166-1 alpha-2 code. `map` or `routing` can be null when
-only one repository has published the region; clients should offer installation
-only when both are present. `routing.compressed` is optional. SHA-256 may be
+`country` is an ISO 3166-1 alpha-2 code. Optional `location` rules let a
+client match a Nominatim reverse-geocoded address to the available region:
+`subdivision_codes` contains ISO 3166-2 values returned under
+`ISO3166-2-lvl*`, `cities` matches the address city/town, and
+`scope: "country"` covers a whole country. The country code must also match.
+A client should choose a region only when exactly one rule of the highest
+specificity matches; city matches outrank subdivisions, which outrank country
+scope. This metadata is for online download selection, not offline routing.
+
+`map` or `routing` can be null when only one repository has published the region;
+clients should offer installation only when both are present. `routing.compressed` is optional. SHA-256 may be
 null for older GitHub release assets that have no server-provided digest.
 
 The compatibility indexes `tiles.json`, `osm-tiles.json`, and
