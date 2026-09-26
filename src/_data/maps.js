@@ -5,12 +5,12 @@ const catalog = require("./map-regions.json");
 const countries = [
   { id: "DE", name: "Deutschland", nameEn: "Germany" },
   { id: "NL", name: "Nederland", nameEn: "Netherlands" },
-  { id: "BE", name: "België", nameEn: "Belgium" },
-  { id: "LU", name: "Luxembourg", nameEn: "Luxembourg" },
   { id: "FR", name: "France", nameEn: "France" },
-  { id: "IT", name: "Italia", nameEn: "Italy" },
-  { id: "ES", name: "España", nameEn: "Spain" },
+  { id: "BE", name: "België", nameEn: "Belgium" },
   { id: "AT", name: "Österreich", nameEn: "Austria" },
+  { id: "ES", name: "España", nameEn: "Spain" },
+  { id: "IT", name: "Italia", nameEn: "Italy" },
+  { id: "LU", name: "Luxembourg", nameEn: "Luxembourg" },
   { id: "CH", name: "Schweiz", nameEn: "Switzerland" },
 ];
 
