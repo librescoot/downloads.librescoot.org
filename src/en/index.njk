@@ -80,7 +80,9 @@ permalink: /en/
         .map-source { font-size: 0.78rem; color: var(--text-tertiary); margin-top: 0.6rem; }
         #installer { margin-bottom: 4rem; }
         .installer-content > p:last-child { margin-bottom: 0; }
-        .installer-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2.5rem; align-items: start; }
+        .installer-layout { display: grid; grid-template-columns: minmax(0, 1fr) 20rem; gap: 2.5rem; align-items: start; }
+        /* Below this width the three download buttons no longer fit beside the video. */
+        @media (max-width: 1000px) { .installer-layout { grid-template-columns: 1fr; gap: 1.25rem; } .installer-video { max-width: 36rem; } }
         .installer-content { padding: 0.25rem 0 0.75rem; }
         .installer-video { margin: 0.25rem 0 0; aspect-ratio: 16 / 9; border-radius: var(--radius-lg); overflow: hidden; background: #000; border: 1px solid var(--border-subtle); }
         .installer-video iframe { display: block; width: 100%; height: 100%; border: 0; }
@@ -106,7 +108,6 @@ permalink: /en/
         .footer a { color: var(--text-on-dark-muted); text-decoration: none; }
         .footer a:hover { color: var(--text-on-dark); }
         @media (max-width: 768px) {
-            .installer-layout { grid-template-columns: 1fr; gap: 1.25rem; }
             .channels { grid-template-columns: 1fr; }
             .map-row { grid-template-columns: 1fr; gap: 0.35rem; padding: 0.7rem 1rem; }
             .map-name { font-weight: 600; }
