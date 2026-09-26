@@ -43,6 +43,16 @@ function matchingRegion(address) {
     return null;
 }
 
+function mapFragment(country, region) {
+    return '#maps/' + country + (region ? '/' + region : '');
+}
+
+function parseMapFragment(hash) {
+    var match = /^#maps\/([a-z]{2}|other)(?:\/([a-z0-9_-]+))?$/i.exec(hash);
+    if (!match) return null;
+    return { country: match[1].toLowerCase() === 'other' ? 'other' : match[1].toUpperCase(), region: match[2] ? match[2].toLowerCase() : null };
+}
+
 (function() {
     if (typeof document === 'undefined') return;
     var picker = document.querySelector('.map-picker');
@@ -59,6 +69,7 @@ function matchingRegion(address) {
     var countrySelect = picker.querySelector('.map-country-select');
     var locate = picker.querySelector('.map-locate');
     var active = 0;
+    var restoringFragment = false;
 
     function clearSelection() {
         cards.forEach(function(card) { card.hidden = true; });
@@ -69,6 +80,11 @@ function matchingRegion(address) {
     }
     function normalize(text) {
         return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/ß/g, 'ss');
+    }
+    function updateFragment(region) {
+        if (restoringFragment) return;
+        var fragment = mapFragment(countries[active].dataset.country, region);
+        if (location.hash !== fragment) history.replaceState(history.state, '', fragment);
     }
     function filter() {
         clear.hidden = !search.value;
@@ -104,6 +120,7 @@ function matchingRegion(address) {
         filter();
         var choices = countries[index].querySelectorAll('.map-region-choice');
         if (choices.length === 1 && !choices[0].hidden) select(choices[0]);
+        else updateFragment();
         if (focus) tabs[index].focus();
     }
     function select(choice, fromLocation) {
@@ -115,6 +132,7 @@ function matchingRegion(address) {
         var card = cards.find(function(item) { return item.dataset.region === choice.dataset.region; });
         if (card) { card.hidden = false; prompt.hidden = true; }
         status.textContent = '';
+        updateFragment(choice.dataset.region);
         if (fromLocation) {
             choice.focus({ preventScroll: true });
             var panel = choice.closest('.map-country-panels');
@@ -156,7 +174,8 @@ function matchingRegion(address) {
         if (!counts[active]) {
             var first = counts.findIndex(function(count) { return count > 0; });
             if (first >= 0) selectCountry(first, false);
-        }
+            else updateFragment();
+        } else updateFragment();
     });
     clear.addEventListener('click', function() {
         search.value = '';
@@ -201,6 +220,27 @@ function matchingRegion(address) {
             finishLocate();
         }, { enableHighAccuracy: false, timeout: 10000, maximumAge: 600000 });
     });
+    function restoreFragment() {
+        var target = parseMapFragment(location.hash);
+        if (!target) return;
+        var index = countries.findIndex(function(country) { return country.dataset.country === target.country; });
+        if (index < 0) return;
+        restoringFragment = true;
+        try {
+            search.value = '';
+            selectCountry(index, false);
+            if (target.region) {
+                var choice = Array.from(countries[index].querySelectorAll('.map-region-choice'))
+                    .find(function(item) { return item.dataset.region === target.region; });
+                if (choice) select(choice);
+            }
+        } finally {
+            restoringFragment = false;
+        }
+        document.getElementById('maps').scrollIntoView({ block: 'start' });
+    }
+    window.addEventListener('hashchange', restoreFragment);
+    restoreFragment();
 })();
 
-if (typeof module !== 'undefined') module.exports = { matchingRegion: matchingRegion };
+if (typeof module !== 'undefined') module.exports = { matchingRegion: matchingRegion, mapFragment: mapFragment, parseMapFragment: parseMapFragment };

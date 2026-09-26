@@ -1,5 +1,5 @@
 const assert = require('node:assert/strict');
-const { matchingRegion } = require('../src/_includes/map-picker.js');
+const { matchingRegion, mapFragment, parseMapFragment } = require('../src/_includes/map-picker.js');
 
 const cases = [
   [{ country_code: 'de', state: 'Berlin' }, 'berlin_brandenburg'],
@@ -23,4 +23,14 @@ const cases = [
 for (const [address, expected] of cases) {
   assert.equal(matchingRegion(address), expected, JSON.stringify(address));
 }
-console.log(`${cases.length} map location cases passed`);
+for (const [country, region] of [
+  ['FR', 'alsace'], ['DE', 'berlin_brandenburg'], ['CH', 'zurich'], ['NL', null],
+]) {
+  const fragment = mapFragment(country, region);
+  assert.deepEqual(parseMapFragment(fragment), { country, region });
+}
+assert.deepEqual(parseMapFragment('#maps/fr/ALSACE'), { country: 'FR', region: 'alsace' });
+assert.equal(parseMapFragment('#maps'), null);
+assert.equal(parseMapFragment('#firmware'), null);
+assert.equal(parseMapFragment('#maps/FR/alsace/extra'), null);
+console.log(`${cases.length} map location cases and fragment round-trips passed`);
