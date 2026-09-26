@@ -11,6 +11,7 @@ const countries = [
   { id: "IT", name: "Italia", nameEn: "Italy" },
   { id: "ES", name: "España", nameEn: "Spain" },
   { id: "AT", name: "Österreich", nameEn: "Austria" },
+  { id: "CH", name: "Schweiz", nameEn: "Switzerland" },
 ];
 
 module.exports = function () {

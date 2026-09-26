@@ -22,5 +22,6 @@
   {"id":"islas-baleares","name":"Islas Baleares (Mallorca)","country":"ES"},
   {"id":"graz","name":"Graz","country":"AT"},
   {"id":"vienna","name":"Vienna","country":"AT"},
+  {"id":"zurich","name":"Kanton Zürich","country":"CH"},
   {"id":"italy-nord-ovest","name":"Nord-Ovest (incl. Lombardy)","country":"IT"}
 ]
