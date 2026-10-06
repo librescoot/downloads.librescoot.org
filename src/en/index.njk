@@ -206,6 +206,8 @@ permalink: /en/
                             </a>
                         {% endif %}
                     </div>
+                    {% set betaLanguage = "en" %}
+                    {% include "installer-beta.njk" %}
                     <p class="windows-note" id="windows-note" role="note" aria-live="polite" hidden><svg class="info-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> The Windows build is not yet code-signed. If SmartScreen appears, click <em>More info</em>, then <em>Run anyway</em>.</p>
                     <p class="installer-meta"><a href="https://github.com/librescoot/installer/releases/tag/v{{ installer.version }}" title="Release notes">Installer v{{ installer.version }}</a> &middot; <a href="https://librescoot.org/en/handbook/quick-start.html">Quickstart</a> &middot; <a href="https://librescoot.org/en/handbook/">Handbook</a> &middot; <a href="https://discord.gg/4Ewnhcs2Yt">Discord #support</a> &middot; <a href="https://librescoot.org/en/docs/1.3/install-manual.html">Manual installation guide</a></p>
                 </div>
