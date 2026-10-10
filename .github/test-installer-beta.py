@@ -10,11 +10,14 @@ for page, warning in [('_site/index.html', 'echter Hardware'), ('_site/en/index.
     html = (root / page).read_text()
     assert f'/releases/tag/{stable["tag_name"]}' in html, 'Stable release link must remain present'
     if beta is None:
-        assert ' — Beta' not in html, 'No eligible newer beta should be listed'
+        assert '<details class="installer-beta">' not in html, 'No eligible newer beta should be listed'
         continue
     version = beta['tag_name'].removeprefix('v')
     assert beta['release_url'] in html
-    assert f'Installer v{version} — Beta' in html
+    assert f'Installer v{version}' in html
+    beta_start = html.index('<details class="installer-beta">')
+    stable_notes = html.index(f'/releases/tag/{stable["tag_name"]}')
+    assert beta_start > html.index('</p>', stable_notes), 'Beta must follow stable release notes and help links'
     assert warning in html
     for asset in beta['assets']:
         assert asset['url'] in html, f'Missing beta download: {asset["name"]}'

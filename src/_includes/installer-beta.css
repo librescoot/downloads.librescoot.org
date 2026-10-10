@@ -1,0 +1,9 @@
+.installer-beta { clear: both; margin-top: 1.25rem; padding: 0.8rem 1rem; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); background: var(--bg-card); color: var(--text-secondary); font-size: 0.85rem; }
+.installer-beta summary { cursor: pointer; color: var(--text-secondary); font-weight: 500; line-height: 1.7; list-style-position: inside; overflow-wrap: anywhere; }
+.installer-beta summary::marker { color: var(--text-tertiary); }
+.installer-beta-badge { display: inline-block; margin-inline: 0.25rem 0.4rem; padding: 0.05rem 0.45rem; border: 1px solid var(--border-subtle); border-radius: var(--radius); color: var(--text-primary); font-size: 0.72rem; font-weight: 600; vertical-align: 0.05rem; }
+.installer-beta p { margin: 0.8rem 0; line-height: 1.6; }
+.installer-beta-downloads { margin: 0.75rem 0; padding-inline-start: 1.25rem; list-style: disc outside; }
+.installer-beta-downloads li { padding-block: 0.2rem; line-height: 1.6; overflow-wrap: anywhere; }
+.installer-beta-downloads a { display: inline-block; }
+.installer-beta .installer-beta-meta { margin-bottom: 0; font-size: 0.8rem; }

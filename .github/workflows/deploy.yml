@@ -46,7 +46,9 @@ jobs:
         run: npm run build
 
       - name: Test generated beta downloads
-        run: python3 .github/test-installer-beta.py
+        run: |
+          python3 .github/test-installer-beta.py
+          node .github/test-installer-beta-layout.js
 
       - uses: actions/configure-pages@v5
 

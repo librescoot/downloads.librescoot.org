@@ -1,27 +1,29 @@
 {% if installerBeta.version %}
-<details class="installer-meta">
-    <summary>Installer v{{ installerBeta.version }} — Beta</summary>
+<details class="installer-beta">
+    <summary><span class="installer-beta-badge">Beta</span> Installer v{{ installerBeta.version }}</summary>
     {% if betaLanguage == "en" %}
-    <p>For testing. The dashboard handoff and LED/front-ring signals still require physical hardware validation. Automated tests and simulated recordings do not establish hardware safety. Use the stable download above for normal installations.</p>
+    <p>For testing: the dashboard handoff and LED/front-ring signals still require physical hardware validation. Use the stable download above for normal installations.</p>
     {% else %}
-    <p>Zum Testen. Die Dashboard-Übergabe sowie LED- und Leuchtring-Signale müssen noch an echter Hardware geprüft werden. Automatisierte Tests und simulierte Aufnahmen belegen keine Hardware-Sicherheit. Für normale Installationen den stabilen Download oben verwenden.</p>
+    <p>Zum Testen: Die Dashboard-Übergabe sowie LED- und Leuchtring-Signale müssen noch an echter Hardware geprüft werden. Für normale Installationen den stabilen Download oben verwenden.</p>
     {% endif %}
     {% set betaPlatforms = installerBeta.assets | byPlatform %}
-    <ul>
+    <ul class="installer-beta-downloads">
         {% if betaPlatforms.windowsExe or betaPlatforms.windowsZip %}
-        <li>Windows:
+        <li><strong>Windows (x64)</strong>:
             {% if betaPlatforms.windowsExe %}<a href="{{ betaPlatforms.windowsExe.url }}" class="windows-download">.exe</a>{% endif %}
+            {% if betaPlatforms.windowsExe and betaPlatforms.windowsZip %} · {% endif %}
             {% if betaPlatforms.windowsZip %}<a href="{{ betaPlatforms.windowsZip.url }}" class="windows-download">.zip</a>{% endif %}
         </li>
         {% endif %}
-        {% if betaPlatforms.macos %}<li>macOS: <a href="{{ betaPlatforms.macos.url }}">.dmg</a></li>{% endif %}
+        {% if betaPlatforms.macos %}<li><strong>macOS (Universal)</strong>: <a href="{{ betaPlatforms.macos.url }}">.dmg</a></li>{% endif %}
         {% if betaPlatforms.linuxAppImage or betaPlatforms.linux %}
-        <li>Linux:
+        <li><strong>Linux (x64)</strong>:
             {% if betaPlatforms.linuxAppImage %}<a href="{{ betaPlatforms.linuxAppImage.url }}">AppImage</a>{% endif %}
+            {% if betaPlatforms.linuxAppImage and betaPlatforms.linux %} · {% endif %}
             {% if betaPlatforms.linux %}<a href="{{ betaPlatforms.linux.url }}">.tar.gz</a>{% endif %}
         </li>
         {% endif %}
     </ul>
-    <p><a href="{{ installerBeta.releaseUrl }}">Release Notes</a></p>
+    <p class="installer-beta-meta"><a href="{{ installerBeta.releaseUrl }}">Release Notes</a></p>
 </details>
 {% endif %}
