@@ -51,7 +51,10 @@ done
 total=$(echo "$all_releases" | jq 'length')
 echo "Fetched ${total} releases total"
 
-# Fetch installer release
+map_releases=$(mktemp -d)
+trap 'rm -rf "$map_releases"' EXIT
+
+# Fetch the stable installer separately from its prereleases.
 installer_data=$(gh_api \
   "https://api.github.com/repos/librescoot/installer/releases/latest")
 
@@ -66,10 +69,21 @@ else
   echo "installer: failed to fetch"
 fi
 
+installer_releases='[]'
+page=1
+while :; do
+  page_data=$(gh_api "https://api.github.com/repos/librescoot/installer/releases?per_page=100&page=$page")
+  installer_releases=$(printf '%s\n%s\n' "$installer_releases" "$page_data" | jq -s '.[0] + .[1]')
+  [ "$(echo "$page_data" | jq 'length')" -eq 100 ] || break
+  page=$((page + 1))
+done
+printf '%s\n' "$installer_releases" > "$map_releases/installer.json"
+python3 "$(dirname "${BASH_SOURCE[0]}")/build-installer-beta-index.py" \
+  "$OUTDIR/installer.json" "$map_releases/installer.json" "$OUTDIR/installer-beta.json"
+echo "installer beta: $(jq -r '.tag_name // "none newer than stable"' "$OUTDIR/installer-beta.json")"
+
 # Build the per-region index from all retained tile releases. Partial builds
 # contain only their selected regions; unchanged regions keep their older URLs.
-map_releases=$(mktemp -d)
-trap 'rm -rf "$map_releases"' EXIT
 for repo in osm-tiles valhalla-tiles; do
   echo '[]' > "$map_releases/$repo.json"
   page=1

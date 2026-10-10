@@ -35,6 +35,7 @@ jobs:
           .github/test-tiles-index.sh
           python3 .github/test-map-index.py
           .github/test-installer-index.sh
+          python3 .github/test-installer-beta-index.py
 
       - name: Fetch release data
         run: .github/generate-release-index.sh
@@ -43,6 +44,9 @@ jobs:
 
       - name: Build site
         run: npm run build
+
+      - name: Test generated beta downloads
+        run: python3 .github/test-installer-beta.py
 
       - uses: actions/configure-pages@v5
 

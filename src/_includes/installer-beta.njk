@@ -2,11 +2,26 @@
 <details class="installer-meta">
     <summary>Installer v{{ installerBeta.version }} — Beta</summary>
     {% if betaLanguage == "en" %}
-    <p>For testing: connection recovery, dashboard installation retries, firmware updates over the dashboard fallback link, compact channel selection and audible feedback for rejected keycards. The dashboard handoff and LED/front-ring signals still require physical hardware validation. Automated tests and simulated recordings do not establish hardware safety. Use the stable download above for normal installations.</p>
-    <p><a href="{{ installerBeta.releaseUrl }}">Beta downloads for Linux, macOS and Windows · Release notes</a></p>
+    <p>For testing. The dashboard handoff and LED/front-ring signals still require physical hardware validation. Automated tests and simulated recordings do not establish hardware safety. Use the stable download above for normal installations.</p>
     {% else %}
-    <p>Zum Testen: Verbindungsaufbau und erneute Dashboard-Installation, Firmware-Updates über die Reserveverbindung zum Dashboard, kompakte Kanalauswahl und akustische Rückmeldung bei abgelehnten Schlüsselkarten. Die Dashboard-Übergabe sowie LED- und Leuchtring-Signale müssen noch an echter Hardware geprüft werden. Automatisierte Tests und simulierte Aufnahmen belegen keine Hardware-Sicherheit. Für normale Installationen den stabilen Download oben verwenden.</p>
-    <p><a href="{{ installerBeta.releaseUrl }}">Beta-Downloads für Linux, macOS und Windows · Release Notes</a></p>
+    <p>Zum Testen. Die Dashboard-Übergabe sowie LED- und Leuchtring-Signale müssen noch an echter Hardware geprüft werden. Automatisierte Tests und simulierte Aufnahmen belegen keine Hardware-Sicherheit. Für normale Installationen den stabilen Download oben verwenden.</p>
     {% endif %}
+    {% set betaPlatforms = installerBeta.assets | byPlatform %}
+    <ul>
+        {% if betaPlatforms.windowsExe or betaPlatforms.windowsZip %}
+        <li>Windows:
+            {% if betaPlatforms.windowsExe %}<a href="{{ betaPlatforms.windowsExe.url }}" class="windows-download">.exe</a>{% endif %}
+            {% if betaPlatforms.windowsZip %}<a href="{{ betaPlatforms.windowsZip.url }}" class="windows-download">.zip</a>{% endif %}
+        </li>
+        {% endif %}
+        {% if betaPlatforms.macos %}<li>macOS: <a href="{{ betaPlatforms.macos.url }}">.dmg</a></li>{% endif %}
+        {% if betaPlatforms.linuxAppImage or betaPlatforms.linux %}
+        <li>Linux:
+            {% if betaPlatforms.linuxAppImage %}<a href="{{ betaPlatforms.linuxAppImage.url }}">AppImage</a>{% endif %}
+            {% if betaPlatforms.linux %}<a href="{{ betaPlatforms.linux.url }}">.tar.gz</a>{% endif %}
+        </li>
+        {% endif %}
+    </ul>
+    <p><a href="{{ installerBeta.releaseUrl }}">Release Notes</a></p>
 </details>
 {% endif %}
