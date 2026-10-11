@@ -2,9 +2,9 @@
 <details class="installer-beta">
     <summary><span class="installer-beta-badge">Beta</span> Installer v{{ installerBeta.version }}</summary>
     {% if betaLanguage == "en" %}
-    <p>For testing: the dashboard handoff and LED/front-ring signals still require physical hardware validation. Use the stable download above for normal installations.</p>
+    <p>Preview version for testing. For normal installations, use the stable download above. See the release notes for details.</p>
     {% else %}
-    <p>Zum Testen: Die Dashboard-Übergabe sowie LED- und Leuchtring-Signale müssen noch an echter Hardware geprüft werden. Für normale Installationen den stabilen Download oben verwenden.</p>
+    <p>Vorabversion zum Testen. Für normale Installationen den stabilen Download oben verwenden. Details stehen in den Release Notes.</p>
     {% endif %}
     {% set betaPlatforms = installerBeta.assets | byPlatform %}
     <ul class="installer-beta-downloads">
