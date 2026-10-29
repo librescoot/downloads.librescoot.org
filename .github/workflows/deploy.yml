@@ -36,6 +36,7 @@ jobs:
           python3 .github/test-map-index.py
           .github/test-installer-index.sh
           python3 .github/test-installer-beta-index.py
+          python3 .github/test-installer-beta-validation.py
 
       - name: Fetch release data
         run: .github/generate-release-index.sh
