@@ -101,11 +101,7 @@ permalink: /en/
         }
         @media (max-width: 768px) {
             .installer-top { display: flex; flex-direction: column-reverse; gap: 0.75rem; }
-            .installer-video { float: none; align-self: flex-start; width: auto; margin: 0; border: 0; border-radius: 0; background: none; }
-            .installer-video-thumb { display: none; }
-            .installer-video-label { padding: 0; font-size: 0.82rem; }
-            .installer-video-label strong, .installer-video-action { display: inline; color: var(--accent); }
-            .installer-video-action::before { content: ' · '; }
+            .installer-video { float: none; align-self: flex-start; width: min(100%, 20rem); margin: 0; }
             .channels { grid-template-columns: 1fr; }
             .installer-platform { display: flex; width: 100%; margin-right: 0; }
             .installer-buttons > .installer-btn { margin-right: 0; }
