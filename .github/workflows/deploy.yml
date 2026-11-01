@@ -32,6 +32,7 @@ jobs:
       # Validate index transformations before fetching live release data.
       - name: Test release index generation
         run: |
+          python3 .github/test-filter-firmware-releases.py
           .github/test-tiles-index.sh
           python3 .github/test-map-index.py
           .github/test-installer-index.sh

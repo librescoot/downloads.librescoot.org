@@ -51,6 +51,9 @@ done
 total=$(echo "$all_releases" | jq 'length')
 echo "Fetched ${total} releases total"
 
+# Filter before building any firmware index, including bootstrap and latest.
+all_releases=$(printf '%s\n' "$all_releases" | jq -f "$(dirname "${BASH_SOURCE[0]}")/filter-firmware-releases.jq")
+
 map_releases=$(mktemp -d)
 trap 'rm -rf "$map_releases"' EXIT
 
