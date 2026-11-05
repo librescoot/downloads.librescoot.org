@@ -32,10 +32,10 @@ gh_api() {
 }
 
 
-# Fetch all releases (paginated, up to 300 — enough for months of nightlies)
+# Match the bounded release history used by the cross-channel delta builder.
 all_releases="[]"
 page=1
-while [ "$page" -le 3 ]; do
+while [ "$page" -le 10 ]; do
   page_data=$(gh_api \
     "${API_URL}?per_page=100&page=${page}")
 
@@ -45,6 +45,13 @@ while [ "$page" -le 3 ]; do
   fi
 
   all_releases=$(echo "$all_releases" "$page_data" | jq -s '.[0] + .[1]')
+  if [ "$count" -lt 100 ]; then
+    break
+  fi
+  if [ "$page" -eq 10 ]; then
+    echo "ERROR: firmware release history exceeds the 1000-release limit" >&2
+    exit 1
+  fi
   page=$((page + 1))
 done
 
