@@ -29,7 +29,7 @@ def validate_artifact(a):
     for field in ['manifest_sha256', 'header_sha256', 'rootfs_sha256', 'payload_tar_sha256']:
         if not HEX.fullmatch(a[field]):
             raise ValueError('invalid artifact digest')
-    if a['artifact_name'] != 'release-' + a['version'] or a['full']['size'] <= 0 or not HEX.fullmatch(a['full']['sha256']):
+    if a['payload_tar_size'] <= 0 or a['artifact_name'] != 'release-' + a['version'] or a['full']['size'] <= 0 or not HEX.fullmatch(a['full']['sha256']):
         raise ValueError('invalid artifact name/full object')
 
 

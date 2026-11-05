@@ -12,7 +12,7 @@ spec.loader.exec_module(catalog)
 def artifact(version, variant='unu-mdb'):
     a = dict(variant_id=variant, version=version, artifact_name='release-' + version,
              device_types=[variant], manifest_sha256='a' * 64, header_sha256='b' * 64,
-             rootfs_sha256='c' * 64, payload_tar_sha256='d' * 64,
+             rootfs_sha256='c' * 64, payload_tar_sha256='d' * 64, payload_tar_size=2048,
              full=dict(url='https://example/image.mender', size=1000, sha256='e' * 64))
     a['id'] = hashlib.sha256(f'{variant}\nrelease-{version}\n{"a" * 64}\n{"b" * 64}\n'.encode()).hexdigest()
     return a
