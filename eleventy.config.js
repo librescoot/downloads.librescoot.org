@@ -5,6 +5,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/og-en.png");
   eleventyConfig.addPassthroughCopy("src/installation-video-preview.jpg");
   eleventyConfig.addPassthroughCopy("src/releases");
+  eleventyConfig.addPassthroughCopy("src/updates");
 
   eleventyConfig.addFilter("fmt", function (bytes) {
     if (bytes >= 1e9) return (bytes / 1e9).toFixed(1) + " GB";

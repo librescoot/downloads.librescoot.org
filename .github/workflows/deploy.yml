@@ -33,6 +33,7 @@ jobs:
       - name: Test release index generation
         run: |
           python3 .github/test-filter-firmware-releases.py
+          python3 .github/test-ota-catalog.py
           .github/test-tiles-index.sh
           python3 .github/test-map-index.py
           .github/test-installer-index.sh

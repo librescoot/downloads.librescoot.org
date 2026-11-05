@@ -193,5 +193,10 @@ jq -n \
 echo "latest.json: combined latest-per-channel manifest written"
 
 printf '%s\n' "$all_releases" > "$map_releases/firmware.json"
+V2_OUTDIR="${V2_DEST:-$(dirname "$OUTDIR")/updates/v2}"
 python3 "$(dirname "${BASH_SOURCE[0]}")/build-ota-catalog.py" \
-  "$map_releases/firmware.json" "$OUTDIR/ota-v2.json"
+  "$map_releases/firmware.json" "$V2_OUTDIR/releases.json"
+python3 "$(dirname "${BASH_SOURCE[0]}")/build-ota-catalog.py" \
+  "$map_releases/firmware.json" "$V2_OUTDIR/canary.json" --feed canary
+# Compatibility for clients built against the initial additive v2 endpoint.
+cp "$V2_OUTDIR/releases.json" "$OUTDIR/ota-v2.json"

@@ -12,12 +12,20 @@ STABLE = re.compile(r'^v[0-9]+\.[0-9]+\.[0-9]+$')
 TESTING = re.compile(r'^testing-[0-9]{8}T[0-9]{6}$')
 
 
-def channel(release):
+def release_version(release):
+    return release['tag_name'].removeprefix('canary-')
+
+
+def channel(release, feed='releases'):
     if release.get('draft'):
         return None
-    if not release['prerelease'] and STABLE.fullmatch(release['tag_name']):
+    canary = release['tag_name'].startswith('canary-')
+    if canary != (feed == 'canary'):
+        return None
+    version = release_version(release)
+    if (canary or not release['prerelease']) and STABLE.fullmatch(version):
         return 'stable'
-    if release['prerelease'] and TESTING.fullmatch(release['tag_name']):
+    if release['prerelease'] and TESTING.fullmatch(version):
         return 'testing'
     return None
 
@@ -33,7 +41,7 @@ def validate_artifact(a):
         raise ValueError('invalid artifact name/full object')
 
 
-def build(releases, documents):
+def build(releases, documents, feed='releases'):
     artifacts, edges = {}, {}
     for doc in documents:
         if doc['schema_version'] != 2:
@@ -61,15 +69,15 @@ def build(releases, documents):
     for ch in targets:
         for variant in ['unu-mdb', 'unu-dbc']:
             for release in ordered:
-                if channel(release) != ch:
+                if channel(release, feed) != ch:
                     continue
-                name = f'librescoot-{variant}-{release["tag_name"]}.mender'
+                name = f'librescoot-{variant}-{release_version(release)}.mender'
                 if not any(a['name'] == name for a in release['assets']):
                     continue
-                matches = [a for a in artifacts.values() if a['variant_id'] == variant and a['version'] == release['tag_name']]
+                matches = [a for a in artifacts.values() if a['variant_id'] == variant and a['version'] == release_version(release)]
                 if len(matches) > 1:
                     raise ValueError('ambiguous target version')
-                if matches:
+                if matches and matches[0].get('updater_protocol') == 2:
                     targets[ch][variant] = matches[0]['id']
                 break
     # Keep only objects in the bounded descriptor window. Full fallback is
@@ -87,12 +95,13 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('releases', type=Path)
     parser.add_argument('output', type=Path)
+    parser.add_argument('--feed', choices=['releases', 'canary'], default='releases')
     args = parser.parse_args()
     releases = json.loads(args.releases.read_text())
     documents = []
     selected = []
     for ch in ['stable', 'testing']:
-        selected.extend(sorted([r for r in releases if channel(r) == ch], key=lambda r: r['published_at'], reverse=True)[:10])
+        selected.extend(sorted([r for r in releases if channel(r, args.feed) == ch], key=lambda r: r['published_at'], reverse=True)[:10])
     for release in selected:
         for asset in release['assets']:
             if not (asset['name'].startswith('ota-v2-') or ('-from-' in asset['name'] and '-to-' in asset['name'])) or not asset['name'].endswith('.json'):
@@ -116,7 +125,8 @@ def main():
                 if remote is None or remote['size'] != obj['size'] or remote.get('digest') != 'sha256:' + obj['sha256']:
                     raise ValueError('descriptor references missing/changed transfer object')
             documents.append(doc)
-    result = build(releases, documents)
+    result = build(releases, documents, args.feed)
+    args.output.parent.mkdir(parents=True, exist_ok=True)
     temporary = args.output.with_suffix('.tmp')
     temporary.write_text(json.dumps(result, sort_keys=True, indent=2) + '\n')
     temporary.replace(args.output)

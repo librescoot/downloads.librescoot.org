@@ -14,7 +14,7 @@ spec.loader.exec_module(catalog)
 def artifact(version, variant='unu-mdb'):
     a = dict(variant_id=variant, version=version, artifact_name='release-' + version,
              device_types=[variant], manifest_sha256='a' * 64, header_sha256='b' * 64,
-             rootfs_sha256='c' * 64, payload_tar_sha256='d' * 64, payload_tar_size=2048,
+             rootfs_sha256='c' * 64, payload_tar_sha256='d' * 64, payload_tar_size=2048, updater_protocol=2,
              full=dict(url='https://example/image.mender', size=1000, sha256='e' * 64))
     a['id'] = hashlib.sha256(f'{variant}\nrelease-{version}\n{"a" * 64}\n{"b" * 64}\n'.encode()).hexdigest()
     return a
@@ -33,6 +33,16 @@ class IndexTests(unittest.TestCase):
         releases.append(release('v1.4.2', 'unu-mdb'))
         self.assertNotIn('unu-mdb', catalog.build(releases, [doc])['targets']['stable'])
         self.assertEqual(index, catalog.build(releases[:2], [doc]))
+
+    def test_canary_is_not_a_regular_target(self):
+        a = artifact('testing-20261105T120000')
+        release = dict(tag_name='canary-testing-20261105T120000', prerelease=True,
+                       published_at='2026-11-05', assets=[dict(name='librescoot-unu-mdb-testing-20261105T120000.mender')])
+        doc = dict(schema_version=2, artifacts=[a], deltas=[])
+        self.assertEqual(catalog.build([release], [doc])['targets']['testing'], {})
+        self.assertEqual(catalog.build([release], [doc], 'canary')['targets']['testing']['unu-mdb'], a['id'])
+        a['updater_protocol'] = 0
+        self.assertEqual(catalog.build([release], [doc], 'canary')['targets']['testing'], {})
 
     def test_prerelease_never_stable(self):
         self.assertIsNone(catalog.channel(dict(tag_name='v1.4.2-beta.1', prerelease=True)))
