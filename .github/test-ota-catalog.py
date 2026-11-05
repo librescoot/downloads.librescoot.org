@@ -1,7 +1,9 @@
 import copy
 import hashlib
 import importlib.util
+import json
 from pathlib import Path
+import subprocess
 import unittest
 
 spec = importlib.util.spec_from_file_location('catalog', Path(__file__).with_name('build-ota-catalog.py'))
@@ -35,6 +37,17 @@ class IndexTests(unittest.TestCase):
     def test_prerelease_never_stable(self):
         self.assertIsNone(catalog.channel(dict(tag_name='v1.4.2-beta.1', prerelease=True)))
         self.assertIsNone(catalog.channel(dict(tag_name='v1.4.2-beta.1', prerelease=False)))
+
+    def test_legacy_stable_index_excludes_beta_tags(self):
+        script = Path(__file__).with_name('generate-release-index.sh').read_text()
+        start = script.index('[.[] | select(.tag_name | startswith($prefix))')
+        end = script.index("' >", start)
+        releases = [dict(tag_name=tag, prerelease=pre, published_at=date, assets=[]) for tag, pre, date in [
+            ('v1.4.1', False, '2026-01-01'), ('v1.4.2-beta.1', True, '2026-01-02'),
+            ('v1.4.2-beta.2', False, '2026-01-03')]]
+        result = subprocess.run(['jq', '--arg', 'prefix', 'v', '--argjson', 'limit', '30', script[start:end]],
+                                input=json.dumps(releases), text=True, capture_output=True, check=True)
+        self.assertEqual([r['tag_name'] for r in json.loads(result.stdout)], ['v1.4.1'])
 
     def test_conflicting_identity_rejected(self):
         a = artifact('v1.4.1')
