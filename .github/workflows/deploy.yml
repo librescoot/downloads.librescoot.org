@@ -13,12 +13,28 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: pages-${{ github.event_name == 'repository_dispatch' && 'dispatch' || 'deploy' }}
   cancel-in-progress: true
 
 jobs:
-  build:
+  dispatch:
+    if: github.event_name == 'repository_dispatch'
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      # Pages can acknowledge repository_dispatch deployments without serving
+      # their artifact. A workflow_dispatch of the same source deploys it.
+      - name: Start deploy through workflow dispatch
+        run: gh workflow run deploy.yml --repo "$GITHUB_REPOSITORY" --ref "$GITHUB_REF_NAME"
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+  build:
+    if: github.event_name != 'repository_dispatch'
+    runs-on: ubuntu-latest
+    outputs:
+      manifest_sha256: ${{ steps.manifest.outputs.sha256 }}
     steps:
       - uses: actions/checkout@v4
 
@@ -33,6 +49,7 @@ jobs:
       - name: Test release index generation
         run: |
           python3 .github/test-filter-firmware-releases.py
+          python3 .github/test-live-release-index.py
           .github/test-tiles-index.sh
           python3 .github/test-map-index.py
           .github/test-installer-index.sh
@@ -52,6 +69,10 @@ jobs:
           python3 .github/test-installer-beta.py
           node .github/test-installer-beta-layout.js
 
+      - name: Record expected release manifest
+        id: manifest
+        run: echo "sha256=$(sha256sum _site/releases/latest.json | cut -d ' ' -f1)" >> "$GITHUB_OUTPUT"
+
       - uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v3
@@ -65,5 +86,13 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - uses: actions/checkout@v4
+
       - id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Verify live release discovery
+        run: python3 .github/verify-live-release-index.py
+        env:
+          SITE_URL: ${{ steps.deployment.outputs.page_url }}
+          EXPECTED_MANIFEST_SHA256: ${{ needs.build.outputs.manifest_sha256 }}
