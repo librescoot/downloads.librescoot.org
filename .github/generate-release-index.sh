@@ -121,7 +121,8 @@ for channel in nightly testing stable; do
   esac
 
   echo "$all_releases" | jq --arg prefix "$prefix" --argjson limit "$RELEASES_PER_CHANNEL" '
-    [.[] | select(.tag_name | startswith($prefix))]
+    [.[] | select(.tag_name | startswith($prefix))
+      | select(if $prefix == "v" then (.prerelease == false and (.tag_name | test("^v[0-9]+\\.[0-9]+\\.[0-9]+$"))) else .prerelease == true end)]
     | sort_by(.published_at) | reverse
     | .[:$limit]
     | [.[] | {
@@ -183,3 +184,7 @@ jq -n \
   }
 ' > "${OUTDIR}/latest.json"
 echo "latest.json: combined latest-per-channel manifest written"
+
+printf '%s\n' "$all_releases" > "$map_releases/firmware.json"
+python3 "$(dirname "${BASH_SOURCE[0]}")/build-ota-catalog.py" \
+  "$map_releases/firmware.json" "$OUTDIR/ota-v2.json"
