@@ -28,6 +28,14 @@ The current release cleanup only removes nightlies; it does not remove regular
 or canary stable/testing assets. Objects referenced by an offered route must not
 be deleted manually while clients may still be using that route.
 
+For branch-only testing, `.github/publish-canary-feed.sh` publishes only
+`updates/v2/canary.json` on a separate `canary-feed` branch of the caller's
+`GITHUB_REPOSITORY`. The firmware workflow runs it after a canary release using
+its repository-scoped token. That feed is served through raw.githubusercontent.com;
+normal Pages deployments and production branches are not changed. Enroll a test
+board with the explicit raw URL while the canonical versioned site endpoint is
+not deployed.
+
 Run the offline tests with:
 
 ```sh
