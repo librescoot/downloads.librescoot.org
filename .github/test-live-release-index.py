@@ -21,10 +21,11 @@ class LiveReleaseIndexTest(unittest.TestCase):
             self.files[f"/releases/{channel}.json"] = json.dumps([release]).encode()
         html = " ".join(release["tag_name"] for release in self.latest.values()).encode()
         self.files.update({"/": html, "/en/": html})
-        self.digest = hashlib.sha256(self.files["/releases/latest.json"]).hexdigest()
+        self.digests = {name: hashlib.sha256(self.files[f"/releases/{name}.json"]).hexdigest()
+                        for name in ("latest", "stable", "testing", "nightly")}
 
     def verify(self):
-        return module.verify("https://example.test", self.digest,
+        return module.verify("https://example.test", self.digests,
                              lambda url: self.files[url.removeprefix("https://example.test")])
 
     def test_matching_deployment(self):
@@ -38,6 +39,12 @@ class LiveReleaseIndexTest(unittest.TestCase):
     def test_stale_channel_index(self):
         self.files["/releases/testing.json"] = b'[{"tag_name":"testing-20261103T102714"}]'
         with self.assertRaisesRegex(ValueError, "testing.json"):
+            self.verify()
+
+    def test_stale_historical_asset(self):
+        stale = [self.latest["stable"], {"tag_name": "v1.2.0", "assets": [{"sha256": "old"}]}]
+        self.files["/releases/stable.json"] = json.dumps(stale).encode()
+        with self.assertRaisesRegex(ValueError, "stable.json"):
             self.verify()
 
     def test_empty_channel_index(self):
@@ -56,7 +63,7 @@ class LiveReleaseIndexTest(unittest.TestCase):
 
     def test_malformed_manifest(self):
         self.files["/releases/latest.json"] = b'not json'
-        self.digest = hashlib.sha256(self.files["/releases/latest.json"]).hexdigest()
+        self.digests["latest"] = hashlib.sha256(self.files["/releases/latest.json"]).hexdigest()
         with self.assertRaises(ValueError):
             self.verify()
 

@@ -34,7 +34,10 @@ jobs:
     if: github.event_name != 'repository_dispatch'
     runs-on: ubuntu-latest
     outputs:
-      manifest_sha256: ${{ steps.manifest.outputs.sha256 }}
+      latest_sha256: ${{ steps.manifest.outputs.latest }}
+      stable_sha256: ${{ steps.manifest.outputs.stable }}
+      testing_sha256: ${{ steps.manifest.outputs.testing }}
+      nightly_sha256: ${{ steps.manifest.outputs.nightly }}
     steps:
       - uses: actions/checkout@v4
 
@@ -71,7 +74,10 @@ jobs:
 
       - name: Record expected release manifest
         id: manifest
-        run: echo "sha256=$(sha256sum _site/releases/latest.json | cut -d ' ' -f1)" >> "$GITHUB_OUTPUT"
+        run: |
+          for channel in latest stable testing nightly; do
+            echo "$channel=$(sha256sum "_site/releases/$channel.json" | cut -d ' ' -f1)" >> "$GITHUB_OUTPUT"
+          done
 
       - uses: actions/configure-pages@v5
 
@@ -95,4 +101,7 @@ jobs:
         run: python3 .github/verify-live-release-index.py
         env:
           SITE_URL: ${{ steps.deployment.outputs.page_url }}
-          EXPECTED_MANIFEST_SHA256: ${{ needs.build.outputs.manifest_sha256 }}
+          EXPECTED_LATEST_SHA256: ${{ needs.build.outputs.latest_sha256 }}
+          EXPECTED_STABLE_SHA256: ${{ needs.build.outputs.stable_sha256 }}
+          EXPECTED_TESTING_SHA256: ${{ needs.build.outputs.testing_sha256 }}
+          EXPECTED_NIGHTLY_SHA256: ${{ needs.build.outputs.nightly_sha256 }}
