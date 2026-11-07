@@ -2,6 +2,7 @@
 """Fixture tests for selecting map assets across partial releases."""
 
 import importlib.util
+import hashlib
 import unittest
 from pathlib import Path
 
@@ -11,7 +12,7 @@ spec.loader.exec_module(module)
 
 
 def asset(name, tag):
-    return {"name": name, "size": 12, "digest": "sha256:" + tag,
+    return {"name": name, "size": 12, "digest": "sha256:" + hashlib.sha256(tag.encode()).hexdigest(),
             "updated_at": "2026-09-26T00:00:00Z",
             "browser_download_url": f"https://example.invalid/{tag}/{name}"}
 
@@ -55,6 +56,26 @@ class PartialReleaseTest(unittest.TestCase):
                          ["FR-67", "FR-68"])
         self.assertEqual(manifest["regions"]["alsace"]["routing"]["compressed"]["codec"], "zstd")
         self.assertIsNone(manifest["regions"]["bayern"]["map"])
+
+    def test_versioned_routing_delta_uses_matching_base_region(self):
+        name = "valhalla_tiles_bayern.tar"
+        old = release("tiles-20261001T000000Z", "2026-10-01T00:00:00Z", asset(name, "base"))
+        new = release("tiles-20261101T000000Z", "2026-11-01T00:00:00Z",
+                      asset(name, "target"), asset(name + ".zst", "compressed"),
+                      asset("valhalla_tiles_bayern.from-tiles-20261001T000000Z.hdelta", "patch"),
+                      asset("valhalla_tiles_alsace.from-tiles-20261001T000000Z.hdelta", "wrong"))
+        selected = module.select_assets([new, old], "valhalla-tiles")
+        entry = next(a for a in selected if a["name"] == name)
+        self.assertEqual(entry["version"], "tiles-20261101T000000Z")
+        self.assertEqual(len(entry["deltas"]), 1)
+        delta = entry["deltas"][0]
+        self.assertEqual(delta["base_version"], "tiles-20261001T000000Z")
+        self.assertEqual(delta["base_sha256"], hashlib.sha256(b"base").hexdigest())
+        self.assertEqual(delta["sha256"], hashlib.sha256(b"patch").hexdigest())
+        manifest = module.build_manifest([], [], selected)
+        self.assertEqual(manifest["regions"]["bayern"]["routing"]["deltas"], entry["deltas"])
+        old["assets"][0]["digest"] = None
+        self.assertNotIn("deltas", module.select_assets([new, old], "valhalla-tiles")[0])
 
     def test_draft_releases_are_ignored(self):
         releases = [release("tiles-1", "2026-08-01T00:00:00Z", asset("tiles_alsace.mbtiles", "old")),

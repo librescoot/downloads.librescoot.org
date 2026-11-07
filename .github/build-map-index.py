@@ -9,6 +9,8 @@ from pathlib import Path
 MAP = re.compile(r"^tiles_(.+)\.mbtiles$")
 ROUTING = re.compile(r"^valhalla_tiles_(.+)\.tar$")
 COMPRESSED = re.compile(r"^valhalla_tiles_(.+)\.tar\.zst$")
+DELTA = re.compile(r"^valhalla_tiles_(.+)\.from-(tiles-[A-Za-z0-9]+)\.hdelta$")
+SHA256 = re.compile(r"^sha256:[0-9a-f]{64}$")
 
 
 def release_order(releases, repo):
@@ -18,7 +20,7 @@ def release_order(releases, repo):
     return sorted(eligible, key=lambda r: r.get("published_at") or "", reverse=True)
 
 
-def asset_info(asset):
+def asset_info(asset, version=None):
     digest = asset.get("digest")
     return {
         "name": asset["name"],
@@ -26,27 +28,48 @@ def asset_info(asset):
         "sha256": digest.removeprefix("sha256:") if digest else None,
         "updated_at": asset.get("updated_at"),
         "url": asset["browser_download_url"],
+        **({"version": version} if version else {}),
     }
 
 
 def select_assets(releases, repo):
     selected = {}
-    for release in release_order(releases, repo):
+    ordered = release_order(releases, repo)
+    by_tag = {release["tag_name"]: release for release in ordered}
+    for release in ordered:
         assets = release.get("assets", [])
         if repo == "osm-tiles":
             for asset in assets:
                 match = MAP.fullmatch(asset["name"])
                 if match and match.group(1) not in selected:
-                    selected[match.group(1)] = [asset_info(asset)]
+                    selected[match.group(1)] = [asset_info(asset, release["tag_name"])]
         else:
             by_name = {a["name"]: a for a in assets}
             for asset in assets:
                 match = ROUTING.fullmatch(asset["name"])
                 if match and match.group(1) not in selected:
                     compressed = by_name.get(asset["name"] + ".zst")
-                    selected[match.group(1)] = [asset_info(asset)]
+                    entry = asset_info(asset, release["tag_name"])
+                    deltas = []
+                    for candidate in assets:
+                        delta = DELTA.fullmatch(candidate["name"])
+                        if not delta or delta.group(1) != match.group(1):
+                            continue
+                        base_version = delta.group(2)
+                        base_release = by_tag.get(base_version, {})
+                        base = next((a for a in base_release.get("assets", [])
+                                     if a["name"] == asset["name"]), None)
+                        base_hash = base.get("digest") if base else None
+                        if not SHA256.fullmatch(base_hash or "") or not SHA256.fullmatch(candidate.get("digest") or ""):
+                            continue
+                        deltas.append({**asset_info(candidate), "algorithm": "hdiffpatch",
+                                       "base_version": base_version,
+                                       "base_sha256": base_hash.removeprefix("sha256:")})
+                    if deltas:
+                        entry["deltas"] = deltas
+                    selected[match.group(1)] = [entry]
                     if compressed:
-                        selected[match.group(1)].append(asset_info(compressed))
+                        selected[match.group(1)].append(asset_info(compressed, release["tag_name"]))
     return [asset for region in sorted(selected) for asset in selected[region]]
 
 

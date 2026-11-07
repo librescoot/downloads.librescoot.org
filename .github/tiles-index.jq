@@ -14,7 +14,7 @@ def by_region(prefix; suffix):
    | select(.name | endswith(suffix))
    | {
        key: (.name | ltrimstr(prefix) | rtrimstr(suffix)),
-       value: {sha256, size, updated_at, url}
+       value: ({sha256, size, updated_at, url} + (if .version then {version} else {} end) + (if .deltas then {deltas} else {} end))
      }
   ] | from_entries;
 
