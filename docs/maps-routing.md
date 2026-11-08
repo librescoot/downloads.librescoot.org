@@ -19,7 +19,15 @@ release. A release may contain regions from several countries.
         "size": 123,
         "sha256": "...",
         "version": "tiles-20260926T000000Z",
-        "updated_at": "2026-09-26T00:00:00Z"
+        "updated_at": "2026-09-26T00:00:00Z",
+        "deltas": [{
+          "algorithm": "hdiffpatch",
+          "base_version": "tiles-20260826T000000Z",
+          "base_sha256": "...",
+          "url": "https://github.com/librescoot/osm-tiles/releases/download/tiles-.../tiles_graz.from-tiles-20260826T000000Z.hdelta",
+          "size": 12,
+          "sha256": "..."
+        }]
       },
       "routing": {
         "url": "https://github.com/librescoot/valhalla-tiles/releases/download/tiles-.../valhalla_tiles_graz.tar",
@@ -61,7 +69,12 @@ scope. This metadata is for online download selection, not offline routing.
 clients should offer installation only when both are present. `routing.compressed` is optional. SHA-256 may be
 null for older GitHub release assets that have no server-provided digest.
 Each asset's `version` is the immutable release tag, scoped to its region and
-kind. A routing `deltas` entry is optional and belongs to the enclosing target
+kind. A map `deltas` entry is optional and names the base release whose
+`tiles_<region>.mbtiles` the patch applies to. Releases are never rewritten or
+deleted, so a delta stays downloadable for as long as its release exists, and a
+client behind by a month can still find a patch. The patch file starts with a
+short header carrying the base and target canonical hashes; clients verify the
+base, the patch and the reconstructed file before replacing anything. A routing `deltas` entry is optional and belongs to the enclosing target
 version and target SHA-256. Its base version and base SHA-256 identify the
 required installed tar. Clients must verify the base, patch and reconstructed
 target, and use the full archive if a delta is unavailable or fails.

@@ -9,7 +9,8 @@ trap 'rm -rf "$tmp"' EXIT
 cat > "$tmp/osm.json" <<'JSON'
 [
   {"name":"tiles_bayern.mbtiles","size":428474368,"sha256":"osm-bayern","updated_at":"2026-08-01T03:00:30Z","url":"https://example.invalid/tiles_bayern.mbtiles"},
-  {"name":"tiles_bremen.mbtiles","size":15000000,"sha256":"osm-bremen","updated_at":"2026-08-01T03:00:00Z","url":"https://example.invalid/tiles_bremen.mbtiles"}
+  {"name":"tiles_bremen.mbtiles","size":15000000,"sha256":"osm-bremen","updated_at":"2026-08-01T03:00:00Z","url":"https://example.invalid/tiles_bremen.mbtiles"},
+  {"name":"tiles_bremen.from-tiles-20260701T000000Z.hdelta","size":18523,"sha256":"osm-bremen-patch","updated_at":"2026-08-01T03:00:00Z","url":"https://example.invalid/tiles_bremen.from-tiles-20260701T000000Z.hdelta"}
 ]
 JSON
 
@@ -47,6 +48,12 @@ check "compressed sha"                  '.bayern.valhalla.compressed.sha256'    
 check "compressed size"                 '.bayern.valhalla.compressed.size'       "224400000"
 check "region without zst has none"     '.bremen.valhalla.compressed // "absent"' "absent"
 check "map entry preserved"             '.bayern.map.sha256'                     "osm-bayern"
+check "map delta listed"                '.bremen.map.deltas | length'            "1"
+check "map delta base version"          '.bremen.map.deltas[0].base_version'     "tiles-20260701T000000Z"
+check "map delta base sha comes from the map asset" '.bremen.map.deltas[0].base_sha256' "osm-bremen"
+check "map delta is not a phantom region" '.map_deltas_count // "none"'          "none"
+check "delta adds no region key"        'keys | length'                          "2"
+check "no key carries the delta suffix" '[keys[] | select(test("hdelta|from-"))] | length' "0"
 
 if [ "$fails" -ne 0 ]; then
   echo "$fails check(s) failed"

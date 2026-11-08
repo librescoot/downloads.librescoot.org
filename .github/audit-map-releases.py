@@ -52,12 +52,16 @@ def live_urls(repo, listing, manifest, legacy):
         if repo == "osm-tiles":
             if region.get("map"):
                 selected.add(region["map"]["url"])
+                for delta in region["map"].get("deltas", []):
+                    selected.add(delta["url"])
         else:
             routing = region.get("routing")
             if routing:
                 selected.add(routing["url"])
                 if routing.get("compressed"):
                     selected.add(routing["compressed"]["url"])
+                for delta in routing.get("deltas", []):
+                    selected.add(delta["url"])
     if flat != selected:
         raise ValueError(f"flat and maps-routing indexes disagree for {repo}")
     if not isinstance(legacy, dict) or not legacy:
@@ -69,6 +73,8 @@ def live_urls(repo, listing, manifest, legacy):
             old.add(entry["url"])
             if repo == "valhalla-tiles" and entry.get("compressed"):
                 old.add(entry["compressed"]["url"])
+            for delta in entry.get("deltas", []):
+                old.add(delta["url"])
     if flat != old:
         raise ValueError(f"flat and legacy tiles indexes disagree for {repo}")
     return flat

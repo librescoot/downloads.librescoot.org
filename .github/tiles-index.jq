@@ -18,14 +18,34 @@ def by_region(prefix; suffix):
      }
   ] | from_entries;
 
+# Map deltas name their base release in the file name:
+# tiles_<region>.from-<base-version>.hdelta. Their base hash comes from the
+# base region asset in the same flat list, so the index never guesses it.
+def map_deltas($osm_map):
+  [ .[]
+    | select(.name | test("^tiles_.+\\.from-tiles-[A-Za-z0-9]+\\.hdelta$"))
+    | (.name | capture("^tiles_(?<region>.+)\\.from-(?<base>tiles-[A-Za-z0-9]+)\\.hdelta$")) as $m
+    | {region: $m.region, base: $m.base,
+       entry: ({sha256, size, updated_at, url}
+               + {algorithm: "hdiffpatch", base_version: $m.base,
+                  base_sha256: $osm_map[$m.region].sha256})}
+  ]
+  | group_by(.region)
+  | map({key: .[0].region, value: map(.entry)})
+  | from_entries;
+
 ($osm[0]      | by_region("tiles_";          ".mbtiles")) as $osm_map |
+($osm[0]      | map_deltas($osm_map))                     as $osm_delta |
 ($valhalla[0] | by_region("valhalla_tiles_"; ".tar"))     as $val_map |
 ($valhalla[0] | by_region("valhalla_tiles_"; ".tar.zst")) as $val_zst |
 
 ($osm_map | keys) + ($val_map | keys) | unique | map({
   key: .,
   value: {
-    map: ($osm_map[.] // null),
+    map: (if $osm_map[.] == null then null
+          else $osm_map[.]
+               + (if $osm_delta[.] == null then {} else {deltas: $osm_delta[.]} end)
+          end),
     valhalla: (
       . as $slug
       | if $val_map[$slug] == null then null

@@ -10,6 +10,7 @@ MAP = re.compile(r"^tiles_(.+)\.mbtiles$")
 ROUTING = re.compile(r"^valhalla_tiles_(.+)\.tar$")
 COMPRESSED = re.compile(r"^valhalla_tiles_(.+)\.tar\.zst$")
 DELTA = re.compile(r"^valhalla_tiles_(.+)\.from-(tiles-[A-Za-z0-9]+)\.hdelta$")
+MAP_DELTA = re.compile(r"^tiles_(.+)\.from-(tiles-[A-Za-z0-9]+)\.hdelta$")
 SHA256 = re.compile(r"^sha256:[0-9a-f]{64}$")
 
 
@@ -32,6 +33,25 @@ def asset_info(asset, version=None):
     }
 
 
+def region_deltas(assets, by_tag, pattern, target_name, region):
+    """Deltas in this release whose base is the same region at an older tag."""
+    deltas = []
+    for candidate in assets:
+        match = pattern.fullmatch(candidate["name"])
+        if not match or match.group(1) != region:
+            continue
+        base_version = match.group(2)
+        base = next((a for a in by_tag.get(base_version, {}).get("assets", [])
+                     if a["name"] == target_name), None)
+        base_hash = base.get("digest") if base else None
+        if not SHA256.fullmatch(base_hash or "") or not SHA256.fullmatch(candidate.get("digest") or ""):
+            continue
+        deltas.append({**asset_info(candidate), "algorithm": "hdiffpatch",
+                       "base_version": base_version,
+                       "base_sha256": base_hash.removeprefix("sha256:")})
+    return deltas
+
+
 def select_assets(releases, repo):
     selected = {}
     ordered = release_order(releases, repo)
@@ -41,8 +61,13 @@ def select_assets(releases, repo):
         if repo == "osm-tiles":
             for asset in assets:
                 match = MAP.fullmatch(asset["name"])
-                if match and match.group(1) not in selected:
-                    selected[match.group(1)] = [asset_info(asset, release["tag_name"])]
+                if not match or match.group(1) in selected:
+                    continue
+                entry = asset_info(asset, release["tag_name"])
+                deltas = region_deltas(assets, by_tag, MAP_DELTA, asset["name"], match.group(1))
+                if deltas:
+                    entry["deltas"] = deltas
+                selected[match.group(1)] = [entry]
         else:
             by_name = {a["name"]: a for a in assets}
             for asset in assets:
@@ -50,21 +75,7 @@ def select_assets(releases, repo):
                 if match and match.group(1) not in selected:
                     compressed = by_name.get(asset["name"] + ".zst")
                     entry = asset_info(asset, release["tag_name"])
-                    deltas = []
-                    for candidate in assets:
-                        delta = DELTA.fullmatch(candidate["name"])
-                        if not delta or delta.group(1) != match.group(1):
-                            continue
-                        base_version = delta.group(2)
-                        base_release = by_tag.get(base_version, {})
-                        base = next((a for a in base_release.get("assets", [])
-                                     if a["name"] == asset["name"]), None)
-                        base_hash = base.get("digest") if base else None
-                        if not SHA256.fullmatch(base_hash or "") or not SHA256.fullmatch(candidate.get("digest") or ""):
-                            continue
-                        deltas.append({**asset_info(candidate), "algorithm": "hdiffpatch",
-                                       "base_version": base_version,
-                                       "base_sha256": base_hash.removeprefix("sha256:")})
+                    deltas = region_deltas(assets, by_tag, DELTA, asset["name"], match.group(1))
                     if deltas:
                         entry["deltas"] = deltas
                     selected[match.group(1)] = [entry]
@@ -89,11 +100,12 @@ def build_manifest(catalog, osm_assets, routing_assets):
                 routing["compressed"] = {"codec": "zstd", **{
                     k: v for k, v in compressed[slug].items() if k != "name"
                 }}
+        region_map = {k: v for k, v in maps[slug].items() if k != "name"} if slug in maps else None
         regions[slug] = {
             "country": metadata.get("country"),
             "name": metadata.get("name", slug.replace("-", " ").replace("_", " ").title()),
             "location": metadata.get("location"),
-            "map": {k: v for k, v in maps[slug].items() if k != "name"} if slug in maps else None,
+            "map": region_map,
             "routing": routing,
         }
     return {"version": 1, "regions": regions}

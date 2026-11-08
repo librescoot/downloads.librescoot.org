@@ -77,6 +77,32 @@ class PartialReleaseTest(unittest.TestCase):
         old["assets"][0]["digest"] = None
         self.assertNotIn("deltas", module.select_assets([new, old], "valhalla-tiles")[0])
 
+    def test_map_delta_is_indexed_with_its_base(self):
+        name = "tiles_bremen.mbtiles"
+        old = release("tiles-20261001T000000Z", "2026-10-01", asset(name, "base"))
+        new = release("tiles-20261101T000000Z", "2026-11-01",
+                      asset(name, "target"),
+                      asset("tiles_bremen.from-tiles-20261001T000000Z.hdelta", "patch"),
+                      asset("tiles_alsace.from-tiles-20261001T000000Z.hdelta", "wrong"))
+        selected = module.select_assets([new, old], "osm-tiles")
+        entry = next(a for a in selected if a["name"] == name)
+        self.assertEqual(entry["version"], "tiles-20261101T000000Z")
+        self.assertEqual(len(entry["deltas"]), 1)
+        delta = entry["deltas"][0]
+        self.assertEqual(delta["base_version"], "tiles-20261001T000000Z")
+        self.assertEqual(delta["base_sha256"], hashlib.sha256(b"base").hexdigest())
+        self.assertEqual(delta["algorithm"], "hdiffpatch")
+        manifest = module.build_manifest([], selected, [])
+        self.assertEqual(manifest["regions"]["bremen"]["map"]["deltas"], entry["deltas"])
+        self.assertNotIn("alsace", manifest["regions"])
+
+    def test_map_delta_without_known_base_is_dropped(self):
+        new = release("tiles-20261101T000000Z", "2026-11-01",
+                      asset("tiles_bremen.mbtiles", "target"),
+                      asset("tiles_bremen.from-tiles-20250101T000000Z.hdelta", "patch"))
+        entry = module.select_assets([new], "osm-tiles")[0]
+        self.assertNotIn("deltas", entry)
+
     def test_draft_releases_are_ignored(self):
         releases = [release("tiles-1", "2026-08-01T00:00:00Z", asset("tiles_alsace.mbtiles", "old")),
                     {**release("tiles-2", "2026-09-01T00:00:00Z", asset("tiles_alsace.mbtiles", "draft")), "draft": True}]
