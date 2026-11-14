@@ -193,6 +193,10 @@ NIGHTLY_BRIDGE_TAG="${NIGHTLY_BRIDGE_TAG:-}"
 # republish it to the legacy feed on the next automated site deployment.
 printf '%s\n' "$all_releases" | STABLE_BRIDGE_TAG="$STABLE_BRIDGE_TAG" TESTING_BRIDGE_TAG="$TESTING_BRIDGE_TAG" \
   NIGHTLY_BRIDGE_TAG="$NIGHTLY_BRIDGE_TAG" bash "$(dirname "${BASH_SOURCE[0]}")/check-ota-bridge-config.sh"
+# Bridge clients select v2 immediately after commit. Publish a mirror while
+# all releases are still gzip, before any channel bridge has been qualified.
+STABLE_BRIDGE_TAG="$STABLE_BRIDGE_TAG" TESTING_BRIDGE_TAG="$TESTING_BRIDGE_TAG" \
+  NIGHTLY_BRIDGE_TAG="$NIGHTLY_BRIDGE_TAG" bash "$(dirname "${BASH_SOURCE[0]}")/prepare-v2-mirror.sh" "$OUTDIR"
 if [ -n "$STABLE_BRIDGE_TAG$TESTING_BRIDGE_TAG$NIGHTLY_BRIDGE_TAG" ]; then
   for channel in stable testing nightly; do
     case "$channel" in

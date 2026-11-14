@@ -46,6 +46,16 @@ class LiveReleaseIndexTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'v2 nightly.json'):
             self.verify()
 
+    def test_v2_mirror_without_qualified_bridges(self):
+        for name in ('latest', 'stable', 'testing', 'nightly'):
+            self.files[f'/releases/v2/{name}.json'] = self.files[f'/releases/{name}.json']
+            self.digests[f'v2_{name}'] = self.digests[name]
+        self.assertEqual(len(self.verify()), 3)
+        self.files['/releases/v2/latest.json'] = b'{"stable":{"tag_name":"v1.5.0"}}'
+        self.digests['v2_latest'] = hashlib.sha256(self.files['/releases/v2/latest.json']).hexdigest()
+        with self.assertRaisesRegex(ValueError, 'must mirror legacy'):
+            self.verify()
+
     def test_partial_expected_v2_is_rejected(self):
         self.digests['v2_latest'] = 'a' * 64
         with self.assertRaisesRegex(ValueError, 'incomplete expected v2'):

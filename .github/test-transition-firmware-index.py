@@ -76,6 +76,22 @@ class TransitionTest(unittest.TestCase):
             self.assertEqual(manifest['version'], 1)
             self.assertEqual({c: manifest['bridges'][c]['tag_name'] for c in TAGS}, TAGS)
 
+    def test_unpinned_v2_mirrors_gzip_legacy_without_bridge_manifest(self):
+        mirror = path.with_name('prepare-v2-mirror.sh')
+        with tempfile.TemporaryDirectory() as root:
+            out = Path(root)
+            for name in ('latest', 'stable', 'testing', 'nightly'):
+                (out / f'{name}.json').write_text(f'{name} fixture')
+            env = {**os.environ, 'STABLE_BRIDGE_TAG': '', 'TESTING_BRIDGE_TAG': '', 'NIGHTLY_BRIDGE_TAG': ''}
+            subprocess.run(['bash', str(mirror), str(out)], env=env, check=True)
+            for name in ('latest', 'stable', 'testing', 'nightly'):
+                self.assertEqual((out / f'{name}.json').read_bytes(), (out / 'v2' / f'{name}.json').read_bytes())
+            self.assertFalse((out / 'v2/bridge.json').exists())
+            (out / 'v2/bridge.json').write_text('stale')
+            result = subprocess.run(['bash', str(mirror), str(out)], env=env, capture_output=True)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertEqual((out / 'v2/bridge.json').read_text(), 'stale')
+
     def test_bridge_configuration_fails_closed_after_zstd_publication(self):
         guard = path.with_name('check-ota-bridge-config.sh')
         base_env = {**os.environ, 'STABLE_BRIDGE_TAG': '', 'TESTING_BRIDGE_TAG': '', 'NIGHTLY_BRIDGE_TAG': ''}
