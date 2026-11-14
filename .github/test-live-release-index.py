@@ -31,6 +31,25 @@ class LiveReleaseIndexTest(unittest.TestCase):
     def test_matching_deployment(self):
         self.assertEqual(len(self.verify()), 3)
 
+    def test_v2_index_and_site_are_verified_independently(self):
+        v2 = {channel: {'tag_name': f'next-{channel}'} for channel in self.latest}
+        self.files['/releases/v2/latest.json'] = json.dumps(v2).encode()
+        for channel, release in v2.items():
+            self.files[f'/releases/v2/{channel}.json'] = json.dumps([release]).encode()
+        html = ' '.join(release['tag_name'] for release in v2.values()).encode()
+        self.files.update({'/': html, '/en/': html})
+        for name in ('latest', 'stable', 'testing', 'nightly'):
+            self.digests[f'v2_{name}'] = hashlib.sha256(self.files[f'/releases/v2/{name}.json']).hexdigest()
+        self.assertEqual(self.verify(), ['next-stable', 'next-testing', 'next-nightly'])
+        self.files['/releases/v2/nightly.json'] = b'[]'
+        with self.assertRaisesRegex(ValueError, 'v2 nightly.json'):
+            self.verify()
+
+    def test_partial_expected_v2_is_rejected(self):
+        self.digests['v2_latest'] = 'a' * 64
+        with self.assertRaisesRegex(ValueError, 'incomplete expected v2'):
+            self.verify()
+
     def test_old_manifest_after_green_deployment(self):
         self.files["/releases/latest.json"] = b'{"testing":{"tag_name":"testing-20261103T102714"}}'
         with self.assertRaisesRegex(ValueError, "differs"):

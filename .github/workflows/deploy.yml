@@ -38,6 +38,10 @@ jobs:
       stable_sha256: ${{ steps.manifest.outputs.stable }}
       testing_sha256: ${{ steps.manifest.outputs.testing }}
       nightly_sha256: ${{ steps.manifest.outputs.nightly }}
+      v2_latest_sha256: ${{ steps.manifest.outputs.v2_latest }}
+      v2_stable_sha256: ${{ steps.manifest.outputs.v2_stable }}
+      v2_testing_sha256: ${{ steps.manifest.outputs.v2_testing }}
+      v2_nightly_sha256: ${{ steps.manifest.outputs.v2_nightly }}
     steps:
       - uses: actions/checkout@v4
 
@@ -53,6 +57,8 @@ jobs:
         run: |
           python3 .github/test-filter-firmware-releases.py
           python3 .github/test-live-release-index.py
+          python3 .github/test-transition-firmware-index.py
+          node .github/test-firmware-index.js
           .github/test-tiles-index.sh
           python3 .github/test-map-index.py
           .github/test-installer-index.sh
@@ -63,6 +69,9 @@ jobs:
         run: .github/generate-release-index.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          STABLE_BRIDGE_TAG: ${{ vars.OTA_STABLE_BRIDGE_TAG }}
+          TESTING_BRIDGE_TAG: ${{ vars.OTA_TESTING_BRIDGE_TAG }}
+          NIGHTLY_BRIDGE_TAG: ${{ vars.OTA_NIGHTLY_BRIDGE_TAG }}
 
       - name: Build site
         run: npm run build
@@ -77,6 +86,9 @@ jobs:
         run: |
           for channel in latest stable testing nightly; do
             echo "$channel=$(sha256sum "_site/releases/$channel.json" | cut -d ' ' -f1)" >> "$GITHUB_OUTPUT"
+            if [ -f "_site/releases/v2/$channel.json" ]; then
+              echo "v2_$channel=$(sha256sum "_site/releases/v2/$channel.json" | cut -d ' ' -f1)" >> "$GITHUB_OUTPUT"
+            fi
           done
 
       - uses: actions/configure-pages@v5
@@ -105,3 +117,7 @@ jobs:
           EXPECTED_STABLE_SHA256: ${{ needs.build.outputs.stable_sha256 }}
           EXPECTED_TESTING_SHA256: ${{ needs.build.outputs.testing_sha256 }}
           EXPECTED_NIGHTLY_SHA256: ${{ needs.build.outputs.nightly_sha256 }}
+          EXPECTED_V2_LATEST_SHA256: ${{ needs.build.outputs.v2_latest_sha256 }}
+          EXPECTED_V2_STABLE_SHA256: ${{ needs.build.outputs.v2_stable_sha256 }}
+          EXPECTED_V2_TESTING_SHA256: ${{ needs.build.outputs.v2_testing_sha256 }}
+          EXPECTED_V2_NIGHTLY_SHA256: ${{ needs.build.outputs.v2_nightly_sha256 }}

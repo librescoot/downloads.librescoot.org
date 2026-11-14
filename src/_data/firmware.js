@@ -4,7 +4,8 @@ const path = require("path");
 module.exports = function () {
   const dir = path.join(__dirname, "..", "releases");
   try {
-    const latest = JSON.parse(fs.readFileSync(path.join(dir, "latest.json"), "utf8"));
+    const v2 = path.join(dir, "v2", "latest.json");
+    const latest = JSON.parse(fs.readFileSync(fs.existsSync(v2) ? v2 : path.join(dir, "latest.json"), "utf8"));
     return Object.fromEntries(["stable", "testing", "nightly"].map((ch) =>
       [ch, latest[ch] ? [latest[ch]] : []]));
   } catch {
