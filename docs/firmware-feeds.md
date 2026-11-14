@@ -2,7 +2,9 @@
 
 The legacy firmware indexes are `/releases/latest.json` and `/releases/<channel>.json`. The optional versioned indexes use the same JSON shape under `/releases/v2/`. `/releases/v2/bridge.json` records the exact immutable bridge release and asset digests for each channel.
 
-Before the split is activated, v2 is a gzip-only mirror of legacy with no `bridge.json`. This lets a feed-aware bridge use v2 immediately after commit while blocking zstd-only publication.
+Before the split is activated, v2 offers the same gzip releases as legacy, with additional per-asset `ota` capability metadata and no `bridge.json`. This lets a feed-aware bridge use v2 immediately after commit while blocking zstd-only publication.
+
+Release CI inspects each Mender image and delta and publishes a `.ota-v2.json` sidecar. The indexer verifies its size and SHA-256 against the release, then checks each described asset's size, hash, identity and mandatory capability declarations before adding its policy to v2. Reviewed historical metadata is pinned in `.github/ota-v2-backfill.json` to exact artifact hashes. Assets without metadata remain visible for other consumers but are ineligible for capability-aware OTA clients; their compression is not guessed from filenames. Legacy indexes are unchanged.
 
 The split is disabled until all three repository variables are set: `OTA_STABLE_BRIDGE_TAG`, `OTA_TESTING_BRIDGE_TAG` and `OTA_NIGHTLY_BRIDGE_TAG`. The stable tag must be `v1.4.3`; the others must be published Testing and Nightly tags. A partial configuration, missing release, unpublished bridge, missing board artifact or missing digest fails generation. The script fetches each bridge by exact tag, independently of the rolling release-list limit.
 

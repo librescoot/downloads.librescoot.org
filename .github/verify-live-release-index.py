@@ -9,18 +9,28 @@ import time
 import urllib.request
 
 
+def without_ota(value):
+    if isinstance(value, list):
+        return [without_ota(item) for item in value]
+    if isinstance(value, dict):
+        return {key: without_ota(item) for key, item in value.items() if key != "ota"}
+    return value
+
+
 def verify(base_url, expected_digests, fetch):
     manifest = fetch(f"{base_url}/releases/latest.json")
     if hashlib.sha256(manifest).hexdigest() != expected_digests["latest"]:
         raise ValueError("live latest.json differs from the built manifest")
     latest = json.loads(manifest)
     tags = []
+    legacy_indexes = {}
     for channel in ("stable", "testing", "nightly"):
         release = latest.get(channel)
         data = fetch(f"{base_url}/releases/{channel}.json")
         if hashlib.sha256(data).hexdigest() != expected_digests[channel]:
             raise ValueError(f"live {channel}.json differs from the built index")
         entries = json.loads(data)
+        legacy_indexes[channel] = entries
         if release is None:
             if entries:
                 raise ValueError(f"live {channel}.json is not empty")
@@ -44,7 +54,7 @@ def verify(base_url, expected_digests, fetch):
             bridges = json.loads(bridge_data)
             if bridges.get("version") != 1 or any(bridges.get("bridges", {}).get(c) != latest.get(c) for c in ("stable", "testing", "nightly")):
                 raise ValueError("live v2 bridge identities differ from the legacy manifest")
-        elif v2_latest != latest:
+        elif without_ota(v2_latest) != latest:
             raise ValueError("v2 without bridge pins must mirror legacy")
         tags = []
         for channel in ("stable", "testing", "nightly"):
@@ -52,6 +62,8 @@ def verify(base_url, expected_digests, fetch):
             if hashlib.sha256(data).hexdigest() != expected_digests[f"v2_{channel}"]:
                 raise ValueError(f"live v2 {channel}.json differs from the built index")
             entries = json.loads(data)
+            if not expected_digests.get("v2_bridge") and without_ota(entries) != legacy_indexes[channel]:
+                raise ValueError(f"v2 {channel} without bridge pins must mirror legacy")
             release = v2_latest.get(channel)
             if release is None:
                 if entries:

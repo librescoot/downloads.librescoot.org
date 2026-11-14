@@ -59,6 +59,7 @@ jobs:
           python3 .github/test-filter-firmware-releases.py
           python3 .github/test-live-release-index.py
           python3 .github/test-transition-firmware-index.py
+          python3 .github/test-annotate-ota-v2.py
           node .github/test-firmware-index.js
           .github/test-tiles-index.sh
           python3 .github/test-map-index.py

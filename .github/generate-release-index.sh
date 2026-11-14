@@ -210,3 +210,6 @@ if [ -n "$STABLE_BRIDGE_TAG$TESTING_BRIDGE_TAG$NIGHTLY_BRIDGE_TAG" ]; then
     "$OUTDIR" "$map_releases" "$STABLE_BRIDGE_TAG" "$TESTING_BRIDGE_TAG" "$NIGHTLY_BRIDGE_TAG"
   echo "Firmware indexes split at the three pinned bridge releases"
 fi
+python3 "$(dirname "${BASH_SOURCE[0]}")/annotate-ota-v2.py" \
+  "$OUTDIR/v2" "$(dirname "${BASH_SOURCE[0]}")/ota-v2-backfill.json"
+echo "V2 indexes annotated with verified OTA capability metadata"

@@ -1,0 +1,26 @@
+{
+  "v1.4.2": {
+    "version": 1,
+    "tag": "v1.4.2",
+    "assets": {
+      "librescoot-unu-dbc-v1.4.2.mender": {"size": 221137920, "sha256": "ca3cbfa920d33c695cc42366932b38743870c964203636660146798f60f268e3", "ota": {"schema": 1, "kind": "full", "variant": "unu-dbc", "artifact": "release-v1.4.2", "payload_compression": "gzip", "requires": ["artifact.mender-v3", "payload.gzip"]}},
+      "librescoot-unu-mdb-v1.4.2.mender": {"size": 181715456, "sha256": "dad6e49180096c73ec50c6cd7cf46285bc965f5a66bf588d56cae10b55b9cc9e", "ota": {"schema": 1, "kind": "full", "variant": "unu-mdb", "artifact": "release-v1.4.2", "payload_compression": "gzip", "requires": ["artifact.mender-v3", "payload.gzip"]}}
+    }
+  },
+  "testing-20261114T120842": {
+    "version": 1,
+    "tag": "testing-20261114T120842",
+    "assets": {
+      "librescoot-unu-dbc-testing-20261114T120842.mender": {"size": 221422592, "sha256": "34fcb71edaad4dcc4ff34cfe3cc5535daa93a5e9c54193a84b10a40c734753c0", "ota": {"schema": 1, "kind": "full", "variant": "unu-dbc", "artifact": "release-testing-20261114T120842", "payload_compression": "gzip", "requires": ["artifact.mender-v3", "payload.gzip"]}},
+      "librescoot-unu-mdb-testing-20261114T120842.mender": {"size": 175034880, "sha256": "d07060af836e07e1174101619606fafdbd2356b99cf5b456c6ef8ff56a94daba", "ota": {"schema": 1, "kind": "full", "variant": "unu-mdb", "artifact": "release-testing-20261114T120842", "payload_compression": "gzip", "requires": ["artifact.mender-v3", "payload.gzip"]}}
+    }
+  },
+  "nightly-20261113T033947": {
+    "version": 1,
+    "tag": "nightly-20261113T033947",
+    "assets": {
+      "librescoot-unu-dbc-nightly-20261113T033947.mender": {"size": 221421568, "sha256": "400bd1c1afc9201d3ffc0dd8519f4687750721fbb42af9d5bf1e6c73cd6bac7b", "ota": {"schema": 1, "kind": "full", "variant": "unu-dbc", "artifact": "release-nightly-20261113T033947", "payload_compression": "gzip", "requires": ["artifact.mender-v3", "payload.gzip"]}},
+      "librescoot-unu-mdb-nightly-20261113T033947.mender": {"size": 175034880, "sha256": "d60e928721c60ba395b82f5e1cfb96468e7870dcea37cbff1eef68f53a12577a", "ota": {"schema": 1, "kind": "full", "variant": "unu-mdb", "artifact": "release-nightly-20261113T033947", "payload_compression": "gzip", "requires": ["artifact.mender-v3", "payload.gzip"]}}
+    }
+  }
+}

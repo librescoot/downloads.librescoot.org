@@ -56,6 +56,31 @@ class LiveReleaseIndexTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'must mirror legacy'):
             self.verify()
 
+    def test_unpinned_v2_can_add_only_ota_annotations(self):
+        for channel, release in self.latest.items():
+            release['assets'] = [{'name': 'image.mender', 'sha256': 'abc'}]
+            data = json.dumps([release]).encode()
+            self.files[f'/releases/{channel}.json'] = data
+            self.digests[channel] = hashlib.sha256(data).hexdigest()
+        self.files['/releases/latest.json'] = json.dumps(self.latest).encode()
+        self.digests['latest'] = hashlib.sha256(self.files['/releases/latest.json']).hexdigest()
+        v2 = json.loads(json.dumps(self.latest))
+        for channel in v2:
+            v2[channel]['assets'][0]['ota'] = {'schema': 1}
+            data = json.dumps([v2[channel]]).encode()
+            self.files[f'/releases/v2/{channel}.json'] = data
+            self.digests[f'v2_{channel}'] = hashlib.sha256(data).hexdigest()
+        data = json.dumps(v2).encode()
+        self.files['/releases/v2/latest.json'] = data
+        self.digests['v2_latest'] = hashlib.sha256(data).hexdigest()
+        self.assertEqual(len(self.verify()), 3)
+        v2['stable']['assets'][0]['sha256'] = 'changed'
+        data = json.dumps([v2['stable']]).encode()
+        self.files['/releases/v2/stable.json'] = data
+        self.digests['v2_stable'] = hashlib.sha256(data).hexdigest()
+        with self.assertRaisesRegex(ValueError, 'must mirror legacy'):
+            self.verify()
+
     def test_partial_expected_v2_is_rejected(self):
         self.digests['v2_latest'] = 'a' * 64
         with self.assertRaisesRegex(ValueError, 'incomplete expected v2'):
