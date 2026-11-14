@@ -34,11 +34,12 @@ class LiveReleaseIndexTest(unittest.TestCase):
     def test_v2_index_and_site_are_verified_independently(self):
         v2 = {channel: {'tag_name': f'next-{channel}'} for channel in self.latest}
         self.files['/releases/v2/latest.json'] = json.dumps(v2).encode()
+        self.files['/releases/v2/bridge.json'] = json.dumps({'version': 1, 'bridges': self.latest}).encode()
         for channel, release in v2.items():
             self.files[f'/releases/v2/{channel}.json'] = json.dumps([release]).encode()
         html = ' '.join(release['tag_name'] for release in v2.values()).encode()
         self.files.update({'/': html, '/en/': html})
-        for name in ('latest', 'stable', 'testing', 'nightly'):
+        for name in ('latest', 'stable', 'testing', 'nightly', 'bridge'):
             self.digests[f'v2_{name}'] = hashlib.sha256(self.files[f'/releases/v2/{name}.json']).hexdigest()
         self.assertEqual(self.verify(), ['next-stable', 'next-testing', 'next-nightly'])
         self.files['/releases/v2/nightly.json'] = b'[]'

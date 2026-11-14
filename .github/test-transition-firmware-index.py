@@ -71,6 +71,9 @@ class TransitionTest(unittest.TestCase):
                 self.assertEqual(json.loads((out / 'v2' / f'{channel}.json').read_text()), self.indexes[channel])
                 self.assertEqual(json.loads((out / f'{channel}.json').read_text())[0]['tag_name'], TAGS[channel])
             self.assertEqual(json.loads((out / 'v2/latest.json').read_text()), self.latest)
+            manifest = json.loads((out / 'v2/bridge.json').read_text())
+            self.assertEqual(manifest['version'], 1)
+            self.assertEqual({c: manifest['bridges'][c]['tag_name'] for c in TAGS}, TAGS)
 
     def test_refuses_partial_or_incomplete_bridges(self):
         cases = []

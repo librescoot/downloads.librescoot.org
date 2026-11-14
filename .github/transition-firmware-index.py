@@ -84,6 +84,7 @@ def main():
     for channel in CHANNELS:
         (v2 / f"{channel}.json").write_text(json.dumps(indexes[channel], indent=2) + "\n")
     (v2 / "latest.json").write_text(json.dumps(latest, indent=2) + "\n")
+    (v2 / "bridge.json").write_text(json.dumps({"version": 1, "bridges": {c: legacy[c][0] for c in CHANNELS}}, indent=2) + "\n")
     for channel in CHANNELS:
         (out / f"{channel}.json").write_text(json.dumps(legacy[channel], indent=2) + "\n")
     (out / "latest.json").write_text(json.dumps(legacy_latest, indent=2) + "\n")

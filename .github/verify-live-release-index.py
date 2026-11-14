@@ -29,7 +29,7 @@ def verify(base_url, expected_digests, fetch):
         if not entries or entries[0]["tag_name"] != tag:
             raise ValueError(f"live {channel}.json does not start with {tag}")
         tags.append(tag)
-    v2_names = ("v2_latest", "v2_stable", "v2_testing", "v2_nightly")
+    v2_names = ("v2_latest", "v2_stable", "v2_testing", "v2_nightly", "v2_bridge")
     if any(name in expected_digests for name in v2_names):
         if not all(expected_digests.get(name) for name in v2_names):
             raise ValueError("incomplete expected v2 release indexes")
@@ -37,6 +37,12 @@ def verify(base_url, expected_digests, fetch):
         if hashlib.sha256(v2_manifest).hexdigest() != expected_digests["v2_latest"]:
             raise ValueError("live v2 latest.json differs from the built manifest")
         v2_latest = json.loads(v2_manifest)
+        bridge_data = fetch(f"{base_url}/releases/v2/bridge.json")
+        if hashlib.sha256(bridge_data).hexdigest() != expected_digests["v2_bridge"]:
+            raise ValueError("live v2 bridge.json differs from the built index")
+        bridges = json.loads(bridge_data)
+        if bridges.get("version") != 1 or any(bridges.get("bridges", {}).get(c) != latest.get(c) for c in ("stable", "testing", "nightly")):
+            raise ValueError("live v2 bridge identities differ from the legacy manifest")
         tags = []
         for channel in ("stable", "testing", "nightly"):
             data = fetch(f"{base_url}/releases/v2/{channel}.json")
@@ -64,7 +70,7 @@ def main():
     base_url = os.environ["SITE_URL"].rstrip("/")
     expected_digests = {name: os.environ[f"EXPECTED_{name.upper()}_SHA256"]
                         for name in ("latest", "stable", "testing", "nightly")}
-    for name in ("v2_latest", "v2_stable", "v2_testing", "v2_nightly"):
+    for name in ("v2_latest", "v2_stable", "v2_testing", "v2_nightly", "v2_bridge"):
         value = os.environ.get(f"EXPECTED_{name.upper()}_SHA256", "")
         if value:
             expected_digests[name] = value

@@ -42,6 +42,7 @@ jobs:
       v2_stable_sha256: ${{ steps.manifest.outputs.v2_stable }}
       v2_testing_sha256: ${{ steps.manifest.outputs.v2_testing }}
       v2_nightly_sha256: ${{ steps.manifest.outputs.v2_nightly }}
+      v2_bridge_sha256: ${{ steps.manifest.outputs.v2_bridge }}
     steps:
       - uses: actions/checkout@v4
 
@@ -90,6 +91,9 @@ jobs:
               echo "v2_$channel=$(sha256sum "_site/releases/v2/$channel.json" | cut -d ' ' -f1)" >> "$GITHUB_OUTPUT"
             fi
           done
+          if [ -f "_site/releases/v2/bridge.json" ]; then
+            echo "v2_bridge=$(sha256sum "_site/releases/v2/bridge.json" | cut -d ' ' -f1)" >> "$GITHUB_OUTPUT"
+          fi
 
       - uses: actions/configure-pages@v5
 
@@ -121,3 +125,4 @@ jobs:
           EXPECTED_V2_STABLE_SHA256: ${{ needs.build.outputs.v2_stable_sha256 }}
           EXPECTED_V2_TESTING_SHA256: ${{ needs.build.outputs.v2_testing_sha256 }}
           EXPECTED_V2_NIGHTLY_SHA256: ${{ needs.build.outputs.v2_nightly_sha256 }}
+          EXPECTED_V2_BRIDGE_SHA256: ${{ needs.build.outputs.v2_bridge_sha256 }}
