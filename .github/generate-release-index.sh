@@ -189,11 +189,11 @@ echo "latest.json: combined latest-per-channel manifest written"
 STABLE_BRIDGE_TAG="${STABLE_BRIDGE_TAG:-}"
 TESTING_BRIDGE_TAG="${TESTING_BRIDGE_TAG:-}"
 NIGHTLY_BRIDGE_TAG="${NIGHTLY_BRIDGE_TAG:-}"
+# Once a zstd-only release exists, losing bridge configuration must never
+# republish it to the legacy feed on the next automated site deployment.
+printf '%s\n' "$all_releases" | STABLE_BRIDGE_TAG="$STABLE_BRIDGE_TAG" TESTING_BRIDGE_TAG="$TESTING_BRIDGE_TAG" \
+  NIGHTLY_BRIDGE_TAG="$NIGHTLY_BRIDGE_TAG" bash "$(dirname "${BASH_SOURCE[0]}")/check-ota-bridge-config.sh"
 if [ -n "$STABLE_BRIDGE_TAG$TESTING_BRIDGE_TAG$NIGHTLY_BRIDGE_TAG" ]; then
-  if [ -z "$STABLE_BRIDGE_TAG" ] || [ -z "$TESTING_BRIDGE_TAG" ] || [ -z "$NIGHTLY_BRIDGE_TAG" ]; then
-    echo 'ERROR: stable, testing and nightly bridge tags must all be set' >&2
-    exit 1
-  fi
   for channel in stable testing nightly; do
     case "$channel" in
       stable) tag=$STABLE_BRIDGE_TAG ;;

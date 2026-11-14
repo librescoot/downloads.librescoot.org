@@ -2,6 +2,7 @@
 import copy
 import importlib.util
 import json
+import os
 import subprocess
 import tempfile
 import unittest
@@ -74,6 +75,34 @@ class TransitionTest(unittest.TestCase):
             manifest = json.loads((out / 'v2/bridge.json').read_text())
             self.assertEqual(manifest['version'], 1)
             self.assertEqual({c: manifest['bridges'][c]['tag_name'] for c in TAGS}, TAGS)
+
+    def test_bridge_configuration_fails_closed_after_zstd_publication(self):
+        guard = path.with_name('check-ota-bridge-config.sh')
+        base_env = {**os.environ, 'STABLE_BRIDGE_TAG': '', 'TESTING_BRIDGE_TAG': '', 'NIGHTLY_BRIDGE_TAG': ''}
+        gzip_only = [{'assets': [{'name': 'firmware.mender'}]}]
+        zstd_release = [{'assets': [{'name': 'librescoot-v1.5.0.ota-zstd.json'}]}]
+        cases = [(gzip_only, {}, 0), (zstd_release, {}, 1),
+                 (gzip_only, {'STABLE_BRIDGE_TAG': 'v1.4.3'}, 1),
+                 (zstd_release, {'STABLE_BRIDGE_TAG': TAGS['stable'], 'TESTING_BRIDGE_TAG': TAGS['testing'],
+                                 'NIGHTLY_BRIDGE_TAG': TAGS['nightly']}, 0)]
+        for releases, env, expected in cases:
+            with self.subTest(releases=releases, env=env):
+                result = subprocess.run(['bash', str(guard)], input=json.dumps(releases), text=True,
+                                        capture_output=True, env={**base_env, **env})
+                self.assertEqual(result.returncode, expected, result.stderr)
+
+    def test_never_exposes_zstd_marked_releases_to_legacy(self):
+        future = self.indexes['nightly'][0]
+        future['assets'] = [{'name': 'librescoot-nightly-future.ota-zstd.json'}]
+        legacy, _ = index.transition(self.indexes, self.latest, self.bridges, TAGS)
+        self.assertNotIn(future, legacy['nightly'])
+        self.indexes['nightly'][2]['assets'] = [{'name': 'librescoot-nightly-old.ota-zstd.json'}]
+        with self.assertRaisesRegex(ValueError, 'zstd-only'):
+            index.transition(self.indexes, self.latest, self.bridges, TAGS)
+        self.indexes['nightly'][2]['assets'] = []
+        self.bridges['nightly']['assets'].append({'name': 'librescoot-nightly-bridge.ota-zstd.json'})
+        with self.assertRaisesRegex(ValueError, 'zstd-only'):
+            index.transition(self.indexes, self.latest, self.bridges, TAGS)
 
     def test_refuses_partial_or_incomplete_bridges(self):
         cases = []

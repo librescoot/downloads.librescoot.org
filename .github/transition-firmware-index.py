@@ -32,6 +32,8 @@ def validate_bridge(channel, bridge, tag):
         digest = asset.get("digest") or ""
         sha = digest.removeprefix("sha256:") if digest.startswith("sha256:") else None
         converted.append({"name": name, "size": asset.get("size"), "sha256": sha, "url": asset.get("browser_download_url")})
+    if any(a["name"].endswith(".ota-zstd.json") for a in converted):
+        raise ValueError(f"{channel}: bridge release is marked zstd-only")
     for board in ("mdb", "dbc"):
         expected = f"librescoot-unu-{board}-{tag}.mender"
         matches = [a for a in converted if a["name"] == expected]
@@ -62,6 +64,8 @@ def transition(indexes, latest, bridges, tags):
         older = [r for r in entries if r.get("tag_name") != tags[channel] and
                  isinstance(r.get("published_at"), str) and r["published_at"] < anchors[channel]["published_at"]]
         legacy[channel] = [anchors[channel], *older][:30]
+        if any(any(a.get("name", "").endswith(".ota-zstd.json") for a in r.get("assets", [])) for r in legacy[channel]):
+            raise ValueError(f"{channel}: zstd-only release would be exposed on the legacy feed")
     if not isinstance(latest, dict) or not isinstance(latest.get("bootstrap"), dict):
         raise ValueError("latest index has no bootstrap release")
     legacy_latest = dict(latest)
