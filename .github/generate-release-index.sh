@@ -183,3 +183,26 @@ jq -n \
   }
 ' > "${OUTDIR}/latest.json"
 echo "latest.json: combined latest-per-channel manifest written"
+
+# No split is activated until all immutable, qualified bridge releases are
+# explicitly configured. A partial configuration must never publish a feed.
+STABLE_BRIDGE_TAG="${STABLE_BRIDGE_TAG:-}"
+TESTING_BRIDGE_TAG="${TESTING_BRIDGE_TAG:-}"
+NIGHTLY_BRIDGE_TAG="${NIGHTLY_BRIDGE_TAG:-}"
+if [ -n "$STABLE_BRIDGE_TAG$TESTING_BRIDGE_TAG$NIGHTLY_BRIDGE_TAG" ]; then
+  if [ -z "$STABLE_BRIDGE_TAG" ] || [ -z "$TESTING_BRIDGE_TAG" ] || [ -z "$NIGHTLY_BRIDGE_TAG" ]; then
+    echo 'ERROR: stable, testing and nightly bridge tags must all be set' >&2
+    exit 1
+  fi
+  for channel in stable testing nightly; do
+    case "$channel" in
+      stable) tag=$STABLE_BRIDGE_TAG ;;
+      testing) tag=$TESTING_BRIDGE_TAG ;;
+      nightly) tag=$NIGHTLY_BRIDGE_TAG ;;
+    esac
+    gh_api "${API_URL}/tags/${tag}" > "$map_releases/bridge-${channel}.json"
+  done
+  python3 "$(dirname "${BASH_SOURCE[0]}")/transition-firmware-index.py" \
+    "$OUTDIR" "$map_releases" "$STABLE_BRIDGE_TAG" "$TESTING_BRIDGE_TAG" "$NIGHTLY_BRIDGE_TAG"
+  echo "Firmware indexes split at the three pinned bridge releases"
+fi
