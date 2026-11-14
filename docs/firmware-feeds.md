@@ -11,3 +11,5 @@ Zstd-only releases carry a `.ota-zstd.json` marker. If any such release is visib
 The split must only be activated after the bridge artifacts are confirmed gzip-compatible, the necessary releases are retained, and both MDB and DBC have booted and committed a bridge in acceptance testing. A delta chain that merely reconstructs a bridge as an intermediate file is not a bridge boot. Do not replace or modify published bridge assets. Protect the Nightly bridge from release/tag cleanup for as long as any legacy client may need it.
 
 A feed-aware updater switches only after its rootfs marker, running image and committed Mender identity agree and there is no unresolved activation. Until v2 exists, its 404 fallback remains on legacy. Custom updater feeds are not changed.
+
+The automatic legacy-feed bridge supports the stable v1.0.0 and later client line. Pre-v1.0 update-service versions that query GitHub Releases directly do not consult this index and are outside the automatic migration guarantee; they need separate migration or recovery.
